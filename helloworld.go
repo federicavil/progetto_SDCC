@@ -7,7 +7,7 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.Ctx.WriteString("hello world")
+	this.TplName = "home.html"
 }
 
 func main() {
