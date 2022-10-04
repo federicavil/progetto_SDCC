@@ -2,9 +2,10 @@ package routers
 
 import (
 	"github.com/beego/beego/v2/server/web"
-	"progetto_SDCC/controllers"
+	controllers2 "progetto_SDCC/controllers"
 )
 
 func init() {
-	web.Router("/", &controllers.MainController{})
+	web.Router("/", &controllers2.MainController{})
+	web.Router("/searchPath", &controllers2.SearchController{})
 }
