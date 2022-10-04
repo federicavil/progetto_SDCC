@@ -1,11 +1,11 @@
 package routers
 
 import (
-	controllers2 "frontend/controllers"
+	controllers "frontend/controllers"
 	"github.com/beego/beego/v2/server/web"
 )
 
 func init() {
-	web.Router("/", &controllers2.MainController{})
-	web.Router("/searchPath", &controllers2.SearchController{})
+	web.Router("/", &controllers.MainController{})
+	web.Router("/searchPath", &controllers.SearchController{})
 }
