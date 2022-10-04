@@ -1,4 +1,4 @@
-module progetto_SDCC
+module frontend
 
 go 1.19
 

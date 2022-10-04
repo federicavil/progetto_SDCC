@@ -1,8 +1,8 @@
 package routers
 
 import (
+	controllers2 "frontend/controllers"
 	"github.com/beego/beego/v2/server/web"
-	controllers2 "progetto_SDCC/controllers"
 )
 
 func init() {
