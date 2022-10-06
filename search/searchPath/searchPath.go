@@ -57,6 +57,5 @@ func (t *Search) SimpleSearch(args *Args, reply *[]MountainPath) error {
 		Historical: false,
 	}
 	*reply = []MountainPath{path_1, path_2}
-	fmt.Println(*reply)
 	return nil
 }
