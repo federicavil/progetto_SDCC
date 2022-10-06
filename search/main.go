@@ -4,11 +4,11 @@ import (
 	"log"
 	"net"
 	"net/rpc"
-	"search/searchPath"
+	"search/controller"
 )
 
 func main() {
-	search := new(searchPath.Search)
+	search := new(controller.Search)
 	err := rpc.Register(search)
 	if err != nil {
 		return
