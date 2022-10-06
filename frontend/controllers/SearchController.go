@@ -9,10 +9,6 @@ type SearchController struct {
 	web.Controller
 }
 
-const (
-	EE string = "EE"
-)
-
 func (this *SearchController) Get() {
 	this.TplName = "searchPath.html"
 }
