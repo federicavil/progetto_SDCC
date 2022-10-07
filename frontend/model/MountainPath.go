@@ -13,6 +13,20 @@ type MountainPath struct {
 	Historical bool
 }
 
+type SimpleSearchStruct struct {
+	Name string
+}
+
+type AdvancedSearchStruct struct {
+	City       string
+	Province   string
+	Region     string
+	Level      string
+	Cyclable   int
+	Family     int
+	Historical int
+}
+
 const (
 	T   string = "T"
 	E   string = "E"
