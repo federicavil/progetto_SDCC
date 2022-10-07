@@ -7,16 +7,12 @@ import (
 	"net/rpc"
 )
 
-type Args struct {
-	Name string
-}
-
 func SearchMountainPaths(name string) []model.MountainPath {
 	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
-	param := Args{name}
+	param := model.SimpleSearchStruct{name}
 	results := []model.MountainPath{}
 	//args := &search.Args{name}
 	fmt.Println(param)
@@ -25,6 +21,21 @@ func SearchMountainPaths(name string) []model.MountainPath {
 		log.Fatal("arith error:", err)
 	}
 	fmt.Println(results)
-	fmt.Println(param)
+	fmt.Println(name)
+	return results
+}
+
+func AdvancedSearchMountainPaths(filters model.AdvancedSearchStruct) []model.MountainPath {
+	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
+	if err != nil {
+		log.Fatal("dialing:", err)
+	}
+	results := []model.MountainPath{}
+	//args := &search.Args{name}
+	err = client.Call("Search.AdvancedSearch", &filters, &results)
+	if err != nil {
+		log.Fatal("arith error:", err)
+	}
+	fmt.Println(results)
 	return results
 }
