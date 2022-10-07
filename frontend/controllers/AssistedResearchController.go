@@ -21,6 +21,6 @@ func (this *AssistedResearchController) Post() {
 		return
 	}
 	pathList := api_gw_funcs.AdvancedSearchMountainPaths(filters)
-	this.Data["pathList"] = pathList
-	this.TplName = "assistedResearch.html"
+	this.Data["paths"] = pathList
+	this.TplName = "searchPath.html"
 }

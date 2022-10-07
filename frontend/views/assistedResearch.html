@@ -19,14 +19,13 @@
     <div class="col-4" align="center"><img src="../static/img/montagna_2.png" class="img-responsive"></div>
   </div>
 
-  <form class="form" method="post">
     <div class="row background-orange justify-content-between">
       <div class="col-10">
         <ul class="nav navbar background-orange">
           <li>
             <button type="submit" name="HOME" value="HOME" class="btn btn-primary btn-nav" style="background-color: #f69155">Home</button>
           <li>
-            <button type="submit" onclick= "window.open('searchPath')" name="VIEW_INFO" value="VIEW_INFO" class="btn btn-primary btn-nav" style="background-color: #f69155">Search path e view info</button>
+            <button type="submit" onclick= "window.open('searchPath','_self')" name="VIEW_INFO" value="VIEW_INFO" class="btn btn-primary btn-nav" style="background-color: #f69155">Search path e view info</button>
           <li>
             <button type="submit" name="ADD_PATH" value="ADD_PATH" class="btn btn-primary btn-nav" style="background-color: #f69155">Add new path</button>
           <li>
@@ -44,7 +43,6 @@
         </ul>
       </div>
     </div>
-  </form>
 </div>
 <div class="row fill">
   <div class="col-3 background-orange">
@@ -59,14 +57,7 @@
 
   <div class="col-9">
     <div class="container" style="padding-top: 3%">
-        <div class="container" style="padding-top: 3%;">
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>System error</strong>Ops, there was a system error. Retry later.
-            <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
-          </div>
-        </div>
-
-        <form class="form-inline" method="post">
+      <form class="form-inline" method="post">
           <div class="row mx-auto" style="padding-bottom: 3%;">
             <div class="col-3 black-text">Location</div>
             <div class="col-3"><input type="text" class="form-control" id="region" name="region" placeholder="Region"></div>
