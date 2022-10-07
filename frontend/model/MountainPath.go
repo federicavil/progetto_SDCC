@@ -18,13 +18,13 @@ type SimpleSearchStruct struct {
 }
 
 type AdvancedSearchStruct struct {
-	City       string
-	Province   string
-	Region     string
-	Level      string
-	Cyclable   int
-	Family     int
-	Historical int
+	City       string ` form:"city"`
+	Province   string ` form:"province"`
+	Region     string ` form:"region"`
+	Level      string ` form:"level"`
+	Cyclable   int    ` form:"cycleble"`
+	Family     int    ` form:"historicalElements"`
+	Historical int    ` form:"familySuitable"`
 }
 
 const (

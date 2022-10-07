@@ -51,10 +51,10 @@
   <div class="row fill">
     <div class="col-3 background-orange">
       <!-- form to insert path name to search -->
-      <form class="form-inline search-form" id="myForm" method="post">
+      <form class="form-inline search-form" id="myForm" method="get">
         <div class="d-flex">
           <input type="text" class="form-control" name="pathName" placeholder="Search for a path...">
-          <button type="submit" name="btnSearchPath" class="btn btn-dark-orange"><img src="../static/img/icons8-search-52.png" width="50%"></button>
+          <button type="submit" name="btnSearchPath" onclick= "window.open('searchPath')" class="btn btn-dark-orange"><img src="../static/img/icons8-search-52.png" width="50%"></button>
         </div>
       </form>
 
@@ -65,8 +65,8 @@
         </div>
         <div class="row mx-auto" style="padding-top: 5%;">
           <div class="col" align="center">
-            <form id="assistedResearchForm" method="post">
-              <button type="submit" class="btn btn-ass-research" id="assistedResearch">
+            <form id="assistedResearchForm">
+              <button type="submit" onclick= "window.open('assistedResearch')" class="btn btn-ass-research" id="assistedResearch">
                 Assisted research
               </button>
             </form>

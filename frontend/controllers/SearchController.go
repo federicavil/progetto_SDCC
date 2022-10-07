@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"frontend/api_gw_funcs"
 	"github.com/beego/beego/v2/server/web"
 )
@@ -14,36 +15,8 @@ func (this *SearchController) Get() {
 }
 
 func (this *SearchController) Post() {
+	fmt.Println("POST CHIAMATO")
 	// Chiama il metodo di ricerca
-	//path_1 := MountainPath{
-	//	Name:     "Gran Sasso",
-	//	Altitude: 1234,
-	//	Location: Location{
-	//		City:     "pippo",
-	//		Province: "Aquila",
-	//		Region:   "Abruzzo",
-	//	},
-	//	Length:     1094,
-	//	Level:      "EE",
-	//	Cyclable:   false,
-	//	Family:     false,
-	//	Historical: false,
-	//}
-	//path_2 := MountainPath{
-	//	Name:     "Piccolo Sasso",
-	//	Altitude: 1234,
-	//	Location: Location{
-	//		City:     "pippo",
-	//		Province: "Aquila",
-	//		Region:   "Abruzzo",
-	//	},
-	//	Length:     1094,
-	//	Level:      "EE",
-	//	Cyclable:   false,
-	//	Family:     true,
-	//	Historical: false,
-	//}
-	//pathList := []MountainPath{path_1, path_2}
 	name := this.GetString("pathName")
 	pathlist := api_gw_funcs.SearchMountainPaths(name)
 	this.Data["paths"] = pathlist

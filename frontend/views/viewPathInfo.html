@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PeakLand</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- import our CSS for header of our site -->
+    <link rel="stylesheet" href="../static/css/header.css" type="text/css"/>
+
+    <!-- import our CSS for body of the page -->
+    <link rel="stylesheet" href="../static/css/body.css" type="text/css"/>
+</head>
+<body>
+<div>
+    <div class="row mx-auto background-green">
+        <div class="col-4" align="center"><img src="../static/img/montagna.png" class="img-responsive"></div>
+        <div class="col-4" align="center"><img src="../static/img/Logo.png" class="img-responsive-logo"></div>
+        <div class="col-4" align="center"><img src="../static/img/montagna_2.png" class="img-responsive"></div>
+    </div>
+
+    <form class="form" method="post">
+        <div class="row background-orange justify-content-between">
+            <div class="col-10">
+                <ul class="nav navbar background-orange">
+                    <li>
+                        <button type="submit" name="HOME" value="HOME" class="btn btn-primary btn-nav" style="background-color: #f69155">Home</button>
+                    <li>
+                        <button type="submit" onclick= "window.open('searchPath')" name="VIEW_INFO" value="VIEW_INFO" class="btn btn-primary btn-nav" style="background-color: #f69155">Search path e view info</button>
+                    <li>
+                        <button type="submit" name="ADD_PATH" value="ADD_PATH" class="btn btn-primary btn-nav" style="background-color: #f69155">Add new path</button>
+                    <li>
+                        <button type="submit" name="ADD_PATH" value="ADD_VISIT" class="btn btn-primary btn-nav" style="background-color: #f69155">Schedule path visit</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-2">
+                <ul class="nav navbar background-orange">
+                    <li>
+                        <button type="submit" name="PROFILE" value="PROFILE" class="btn btn-primary btn-nav" style="float: right;" style="background-color: #f69155">
+                            <img src="../static/img/icons8-male-user-64.png" style="max-height: 25%; max-width: 30%;">
+                        </button>
+                    <li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+{{/*<div class="row fill">
+    <div class="col-3 background-orange">
+        <form class="form" action="viewMountainPathInfo.jsp" method="post">
+            <button type="submit" name="back" class="btn justify-content-start align-items-center" style="display: flex; justify-content: flex-start;"><img src="Images/back.png" width="35%"></button>
+        </form>
+        <%
+        if (path != null) {
+        %>
+        <div class="container">
+            <div class="row mx-auto" style="padding-top: 6%;">
+                <div class="col-xs-1 center-block" align="center">
+                    <span class="path-name-font"><%=path.getName()%></span>
+                </div>
+            </div>
+            <div class="row mx-auto" style="padding-top: 15%;">
+                <div class="col-5" align="center">
+                    <%=path.getRegionAsText()%>
+                </div>
+                <div class="col" align="center">-</div>
+                <div class="col-5" align="center">
+                    <%=path.getProvinceAsText()%>
+                </div>
+            </div>
+            <div class="row mx-auto" style="padding-top: 5%;">
+                <div class="col" align="center">
+                    <%=path.getCityAsText()%>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center align-items-center" style="padding-top: 15%;">
+                <div class="p-2 flex-item-photos">
+                    <% if (!base64.isEmpty()) { %>
+                    <img src="data:image/png;base64,<%=base64.get(0)%>" class="img-responsive photo">
+                    <% } else { %>
+                    <img src="Images/mountain_path.png" class="img-responsive photo">
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <%
+        }
+        %>
+    </div>
+
+    <div class="col-9">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <br>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="p-2 flex-item-icon">
+                            <img src="Images/info.png" class="img-responsive icons">
+                        </div>
+                        <div class="p-2 flex-item-text pull-left text">About the mountain path</div>
+                    </div>
+
+                    <br>
+
+                    <div class="container">
+                        <div class="row">
+                            <p class="green-text">Altitude&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getAltitudeAsText() %></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Lenght&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getLenghtAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Level&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getLevelAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Landscape&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getLandscapeAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Ground&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getGroundAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Cycleable&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getCyclableAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Presence of historical elements&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getHistoricalElementsAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Family suitable&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text"><%=path.getFamilySuitableAsText()%></span></p>
+                        </div>
+                        <div class="row">
+                            <p class="green-text">Travel Time&nbsp;&nbsp;&nbsp;&nbsp;<span class="black-text">
+										<%=path.getHoursAsText()%> : <%=path.getMinutesAsText()%>
+									</span></p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+
+                <div class="col-sm">
+
+                    <br>
+
+                    <div class="container">
+                        <form class="form" action="viewMountainPathInfo.jsp" method="post">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="p-2 flex-item-link">
+                                    <img src="Images/google-maps.png" class="img-responsive">
+                                </div>
+                                <div class="p-2 flex-item-link">
+                                    <img src="Images/apple-weather.png" class="img-responsive">
+                                </div>
+                                <div class="p-2" style="max-width: 30%; max-height: 30%;">
+                                    <button type="submit" class="btn" name="viewReviews" value="viewReviews"><img src="Images/list.png" class="img-responsive flex-item-link"></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="black-text" style="text-align: center;">View path on Google Maps</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="black-text" style="text-align: center;">View weather forecast</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="black-text" style="text-align: center;">View reviews</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <br><br>
+
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="p-2 flex-item-icon">
+                            <img src="Images/camera.png" class="img-responsive icons">
+                        </div>
+                        <div class="p-2 flex-item-text pull-left text">Photos</div>
+                    </div>
+
+                    <form class="form-inline" action="viewMountainPathInfo.jsp" method="post">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="p-2 flex-item-arrow">
+                                <input type="image" name="prev" value="prev" src="Images/right-arrow.png" class="img-responsive rotate-180" ${ sessionScope.disablePrev eq true  ? 'style="display: none;"' : ''}>
+                            </div>
+                            <div class="p-2 flex-item-photos w-50 h-50">
+                                <% if (!base64.isEmpty()) { %>
+                                <img src="data:image/png;base64,<%=base64.get((int)session.getAttribute("currImgNum"))%>" class="img-responsive photo">
+                                <% } else { %>
+                                <img src="Images/mountain_path.png" class="img-responsive photo">
+                                <% } %>
+                            </div>
+                            <div class="p-2 flex-item-arrow">
+                                <input type="image" name="next" value="next" src="Images/right-arrow.png" class="img-responsive" ${ sessionScope.disableNext eq true  ? 'style="display: none;"' : ''}>
+                            </div>
+                        </div>
+                    </form>
+
+                    <br><br>
+
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="p-2 flex-item-icon">
+                            <img src="Images/filled-like.png" class="img-responsive icons">
+                        </div>
+                        <div class="p-2 flex-item-text pull-left text">Vote</div>
+
+                        <%	if (path.getVote() != 0) {
+                        for(int i = 0; i < path.getVote(); i++) {
+                        %>
+                        <div class="p-2 flex-item-stars">
+                            <img src="Images/star.png" class="img-responsive icons">
+                        </div>
+                        <%
+                        }
+                        }
+                        else {
+                        %>
+                        <div class="p-2 black-text"><%=path.getVoteAsText()%></div>
+                        <%
+                        }
+                        %>
+
+                    </div>
+
+                    <div class="container" style="padding-left: 5%;">
+                        <div class="row">
+                            <p class="green-text">Number of votes&nbsp;
+                                <span class="black-text"><%=path.getNumberOfVotesAsText()%></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>*/}}
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
