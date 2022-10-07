@@ -82,6 +82,22 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		}
 	}(db) // Defer Closing the database
 
+	if pathreq.Family == -1 {
+		pathreq.Family = 0
+	} else if pathreq.Family == 0 {
+		pathreq.Family = -1
+	}
+	if pathreq.Cyclable == -1 {
+		pathreq.Cyclable = 0
+	} else if pathreq.Cyclable == 0 {
+		pathreq.Cyclable = -1
+	}
+	if pathreq.Historical == -1 {
+		pathreq.Historical = 0
+	} else if pathreq.Historical == 0 {
+		pathreq.Historical = -1
+	}
+
 	var query = "SELECT * FROM Paths"
 	if pathreq.City != "" || pathreq.Province != "" || pathreq.Region != "" ||
 		pathreq.Level != "" || pathreq.Cyclable != -1 || pathreq.Family != -1 || pathreq.Historical != -1 {
@@ -95,7 +111,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "city LIKE '%" + pathreq.City + "%'"
+		query = query + " city LIKE '%" + pathreq.City + "%'"
 	}
 	if pathreq.Province != "" {
 		if and == 0 {
@@ -103,7 +119,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "province LIKE '%" + pathreq.Province + "%'"
+		query = query + " province LIKE '%" + pathreq.Province + "%'"
 	}
 	if pathreq.Region != "" {
 		if and == 0 {
@@ -111,7 +127,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "region LIKE '%" + pathreq.Region + "%'"
+		query = query + " region LIKE '%" + pathreq.Region + "%'"
 	}
 
 	if pathreq.Level != "" {
@@ -120,7 +136,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "level LIKE '%" + pathreq.Level + "%'"
+		query = query + " level LIKE '%" + pathreq.Level + "%'"
 	}
 	if pathreq.Cyclable != -1 {
 		if and == 0 {
@@ -128,7 +144,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "cyclable = '%" + strconv.Itoa(pathreq.Cyclable) + "%'"
+		query = query + " cyclable = '" + strconv.Itoa(pathreq.Cyclable) + "'"
 	}
 	if pathreq.Family != -1 {
 		if and == 0 {
@@ -136,7 +152,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "family = '%" + strconv.Itoa(pathreq.Family) + "%'"
+		query = query + " family = '" + strconv.Itoa(pathreq.Family) + "'"
 	}
 	if pathreq.Historical != -1 {
 		if and == 0 {
@@ -144,7 +160,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 		} else {
 			query = query + " AND"
 		}
-		query = query + "historical = '%" + strconv.Itoa(pathreq.Historical) + "%'"
+		query = query + " historical = '" + strconv.Itoa(pathreq.Historical) + "'"
 	}
 
 	fmt.Println(query)
