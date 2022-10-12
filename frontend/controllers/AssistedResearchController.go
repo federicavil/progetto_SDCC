@@ -3,15 +3,22 @@ package controllers
 import (
 	"frontend/api_gw_funcs"
 	"frontend/model"
-	"github.com/beego/beego/v2/server/web"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/session"
 )
 
 type AssistedResearchController struct {
-	web.Controller
+	beego.Controller
+	session session.Store
+}
+
+func (this *AssistedResearchController) Prepare() {
+	this.session = this.StartSession()
+	this.TplName = "assistedResearch.html"
 }
 
 func (this *AssistedResearchController) Get() {
-	this.TplName = "assistedResearch.html"
+
 }
 
 func (this *AssistedResearchController) Post() {
@@ -21,6 +28,9 @@ func (this *AssistedResearchController) Post() {
 		return
 	}
 	pathList := api_gw_funcs.AdvancedSearchMountainPaths(filters)
-	this.Data["paths"] = pathList
-	this.TplName = "searchPath.html"
+	err = this.session.Set("pathList", pathList)
+	if err != nil {
+		return
+	}
+	this.Redirect("searchPath", 302)
 }

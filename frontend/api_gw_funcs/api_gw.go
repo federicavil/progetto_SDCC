@@ -15,13 +15,10 @@ func SearchMountainPaths(name string) []model.MountainPath {
 	param := model.SimpleSearchStruct{name}
 	results := []model.MountainPath{}
 	//args := &search.Args{name}
-	fmt.Println(param)
 	err = client.Call("Search.SimpleSearch", &param, &results)
 	if err != nil {
 		log.Fatal("arith error:", err)
 	}
-	fmt.Println(results)
-	fmt.Println(name)
 	return results
 }
 

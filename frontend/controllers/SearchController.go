@@ -3,22 +3,59 @@ package controllers
 import (
 	"fmt"
 	"frontend/api_gw_funcs"
-	"github.com/beego/beego/v2/server/web"
+	"frontend/model"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/session"
 )
 
 type SearchController struct {
-	web.Controller
+	beego.Controller
+	pathlist []model.MountainPath
+	session  session.Store
+}
+
+func (this *SearchController) Prepare() {
+	this.session = this.StartSession()
+	this.TplName = "searchPath.html"
 }
 
 func (this *SearchController) Get() {
-	this.TplName = "searchPath.html"
+	paths := this.session.Get("pathList")
+	if paths != nil {
+		this.pathlist = paths.([]model.MountainPath)
+		this.Data["paths"] = this.pathlist
+	}
 }
 
 func (this *SearchController) Post() {
-	fmt.Println("POST CHIAMATO")
-	// Chiama il metodo di ricerca
 	name := this.GetString("pathName")
-	pathlist := api_gw_funcs.SearchMountainPaths(name)
-	this.Data["paths"] = pathlist
-	this.TplName = "searchPath.html"
+	selected := this.GetString("path")
+	fmt.Println("name " + name)
+	fmt.Println("selected " + selected)
+	if name != "" {
+		this.pathlist = api_gw_funcs.SearchMountainPaths(name)
+		this.Data["paths"] = this.pathlist
+		err := this.session.Set("pathList", this.pathlist)
+		if err != nil {
+			return
+		}
+		this.TplName = "searchPath.html"
+	}
+	if selected != "" {
+		selectedPath := model.MountainPath{}
+		this.pathlist = this.session.Get("pathList").([]model.MountainPath)
+		for i := 0; i < len(this.pathlist); i++ {
+			if this.pathlist[i].Name == selected {
+				selectedPath = this.pathlist[i]
+				fmt.Println(selectedPath)
+				break
+			}
+		}
+		err := this.session.Set("selectedPath", selectedPath)
+		if err != nil {
+			return
+		}
+		this.Redirect("viewInfo", 302)
+	}
+
 }

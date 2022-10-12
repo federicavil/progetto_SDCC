@@ -5,21 +5,9 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
+	"search/model"
 	"strconv"
 )
-
-type MountainPath struct {
-	Name       string
-	Altitude   int
-	City       string
-	Province   string
-	Region     string
-	Length     int
-	Level      string
-	Cyclable   bool
-	Family     bool
-	Historical bool
-}
 
 type Args struct {
 	Name string
@@ -37,7 +25,7 @@ type AdvancedSearchStruct struct {
 
 type Search int
 
-func (t *Search) SimpleSearch(args *Args, reply *[]MountainPath) error {
+func (t *Search) SimpleSearch(args *Args, reply *[]model.MountainPath) error {
 	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
@@ -59,7 +47,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]MountainPath) error {
 			log.Fatal(err)
 		}
 	}(row)
-	var path = MountainPath{}
+	var path = model.MountainPath{}
 	for row.Next() { // Iterate and fetch the records from result cursor
 		err := row.Scan(&path.Name, &path.Altitude, &path.Length, &path.Level,
 			&path.Cyclable, &path.Family, &path.Historical,
@@ -73,7 +61,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]MountainPath) error {
 	return nil
 }
 
-func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]MountainPath) error {
+func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.MountainPath) error {
 	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
@@ -175,7 +163,7 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]Mountain
 			log.Fatal(err)
 		}
 	}(row)
-	var path = MountainPath{}
+	var path = model.MountainPath{}
 	for row.Next() { // Iterate and fetch the records from result cursor
 		err := row.Scan(&path.Name, &path.Altitude, &path.Length, &path.Level,
 			&path.Cyclable, &path.Family, &path.Historical,
