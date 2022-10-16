@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"frontend/model"
-	"github.com/beego/beego/v2/client/httplib"
-	"github.com/beego/beego/v2/server/web"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
+	"github.com/beego/beego/v2/client/httplib"
 )
 
 type SearchController struct {
@@ -49,10 +49,12 @@ func (this *SearchController) Post() {
 	// Chiama il metodo di ricerca
 	name := this.GetString("pathName")
 	selected := this.GetString("path")
+	fmt.Println(name)
+	fmt.Println(selected)
 	if name != "" {
 		pathlist := SimplePost(name)
 		pathlist = pathlist[:len(pathlist)-4]
-		var paths []model.MountainPathRet
+		var paths []model.MountainPath
 		_ = json.Unmarshal([]byte(pathlist), &paths)
 		this.Data["paths"] = paths
 		err := this.session.Set("pathList", paths)
@@ -60,13 +62,13 @@ func (this *SearchController) Post() {
 			return
 		}
 		this.TplName = "searchPath.html"
+	}
 	if selected != "" {
 		selectedPath := model.MountainPath{}
 		this.pathlist = this.session.Get("pathList").([]model.MountainPath)
 		for i := 0; i < len(this.pathlist); i++ {
 			if this.pathlist[i].Name == selected {
 				selectedPath = this.pathlist[i]
-				fmt.Println(selectedPath)
 				break
 			}
 		}

@@ -3,7 +3,6 @@ package controllers
 import (
 	"frontend/api_gw_funcs"
 	"frontend/model"
-	"github.com/beego/beego/v2/server/web"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 )

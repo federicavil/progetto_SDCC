@@ -49,7 +49,6 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	}(db) // Defer Closing the database
 
 	var query = "SELECT * FROM Paths WHERE name LIKE " + "'%" + args.Name + "%'"
-	fmt.Println(query)
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
@@ -73,8 +72,6 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 		paths = append(paths, path)
 	}
 	*reply, _ = json.Marshal(paths)
-	fmt.Println(paths)
-	fmt.Println(*reply)
 	return nil
 }
 
@@ -168,7 +165,6 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.Mo
 		query = query + " historical = '" + strconv.Itoa(pathreq.Historical) + "'"
 	}
 
-	fmt.Println(query)
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
@@ -190,6 +186,5 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.Mo
 		}
 		*reply = append(*reply, path)
 	}
-	fmt.Println(*reply)
 	return nil
 }
