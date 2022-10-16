@@ -2,9 +2,19 @@ package main
 
 import (
 	_ "frontend/routers"
-	"github.com/beego/beego/v2/server/web"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/session"
 )
 
 func main() {
-	web.Run()
+	sessionconf := &session.ManagerConfig{
+		CookieName:     "begoosessionID",
+		Gclifetime:     3600,
+		ProviderConfig: "./tmp",
+	}
+	beego.GlobalSessions, _ = session.NewManager("file", sessionconf)
+	go beego.GlobalSessions.GC()
+
+	beego.Run()
+
 }

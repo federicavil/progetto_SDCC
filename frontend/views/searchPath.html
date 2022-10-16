@@ -73,7 +73,7 @@
 
     <div class="col-9">
       <!-- search results -->
-      <form class="form" method="post">
+
         <div class="container" id="resultsContainer">
           <div id=results class="row justify-content-center" style="padding-top:10%"></div>
           <script> if (paths.length === 0){
@@ -83,7 +83,8 @@
           {{range $val := .paths}}
 
           <div class="container">
-            <button type="submit" class="btn" name="path" value={{$val.Name}} style="min-width: 100%;">
+            <form class="form" method="post">
+              <button type=submit class="btn" name="path" value={{$val.Name}} style="min-width: 100%;">
               <div class="row card-view-simple-path rounded">
                 <div class="col align-items-center">
                   <div class="row justify-content-center" style="padding-bottom: 1%; padding-top:1%">
@@ -123,15 +124,13 @@
                 </div>
               </div>
             </button>
-
+            </form>
           </div>
         </div>
         {{end}}
-      </form>
     </div>
 
   </div>
-
   <script>includeHTML()</script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
