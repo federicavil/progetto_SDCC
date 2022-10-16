@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"frontend/api_gw_funcs"
+	//"frontend/api_gw_funcs"
 	"frontend/model"
 	"github.com/beego/beego/v2/server/web"
 )
@@ -20,7 +20,7 @@ func (this *AssistedResearchController) Post() {
 	if err != nil {
 		return
 	}
-	pathList := api_gw_funcs.AdvancedSearchMountainPaths(filters)
-	this.Data["paths"] = pathList
+	//pathList := api_gw_funcs.AdvancedSearchMountainPaths(filters)
+	//this.Data["paths"] = pathList
 	this.TplName = "searchPath.html"
 }
