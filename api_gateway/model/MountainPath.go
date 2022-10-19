@@ -22,9 +22,9 @@ type AdvancedSearchStruct struct {
 	Province   string ` form:"province"`
 	Region     string ` form:"region"`
 	Level      string ` form:"level"`
-	Cyclable   int    ` form:"cycleble"`
-	Family     int    ` form:"historicalElements"`
-	Historical int    ` form:"familySuitable"`
+	Cyclable   int    ` form:"cyclable"`
+	Family     int    ` form:"familySuitable"`
+	Historical int    ` form:"historicalElements"`
 }
 
 const (

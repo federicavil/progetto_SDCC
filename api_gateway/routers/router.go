@@ -8,5 +8,6 @@ import (
 func init() {
 	web.Router("/", &controllers.MainController{})
 	web.Router("/simplesearch", &controllers.SearchController{})
+	web.Router("/assistedsearch", &controllers.AssistedSearchController{})
 	web.Router("/addNewPath", &controllers.AddNewPathController{})
 }

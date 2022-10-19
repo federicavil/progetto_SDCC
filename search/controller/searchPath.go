@@ -52,7 +52,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	return nil
 }
 
-func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]model.MountainPath) error {
+func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]byte) error {
 	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
@@ -154,6 +154,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]mo
 		}
 	}(row)
 	var path = model.MountainPath{}
+	var paths = []model.MountainPath{}
 	for row.Next() { // Iterate and fetch the records from result cursor
 		err := row.Scan(&path.Name, &path.Altitude, &path.Length, &path.Level,
 			&path.Cyclable, &path.Family, &path.Historical,
@@ -161,7 +162,8 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]mo
 		if err != nil {
 			return err
 		}
-		*reply = append(*reply, path)
+		paths = append(paths, path)
 	}
+	*reply, _ = json.Marshal(paths)
 	return err
 }
