@@ -10,31 +10,8 @@ import (
 	"strconv"
 )
 
-type MountainPath struct {
-	Name       string
-	Altitude   int
-	City       string
-	Province   string
-	Region     string
-	Length     int
-	Level      string
-	Cyclable   bool
-	Family     bool
-	Historical bool
-}
-
 type Args struct {
 	Name string
-}
-
-type AdvancedSearchStruct struct {
-	City       string
-	Province   string
-	Region     string
-	Level      string
-	Cyclable   int
-	Family     int
-	Historical int
 }
 
 type Search int
@@ -60,8 +37,8 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 			log.Fatal(err)
 		}
 	}(row)
-	var path = MountainPath{}
-	var paths = []MountainPath{}
+	var path = model.MountainPath{}
+	var paths = []model.MountainPath{}
 	for row.Next() { // Iterate and fetch the records from result cursor
 		err := row.Scan(&path.Name, &path.Altitude, &path.Length, &path.Level,
 			&path.Cyclable, &path.Family, &path.Historical,
@@ -75,7 +52,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	return nil
 }
 
-func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.MountainPath) error {
+func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]model.MountainPath) error {
 	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
@@ -186,5 +163,5 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.Mo
 		}
 		*reply = append(*reply, path)
 	}
-	return nil
+	return err
 }

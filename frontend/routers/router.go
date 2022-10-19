@@ -10,4 +10,5 @@ func init() {
 	beego.Router("/searchPath", &controllers.SearchController{})
 	beego.Router("/assistedResearch", &controllers.AssistedResearchController{})
 	beego.Router("/viewInfo", &controllers.ViewPathInfoController{})
+	beego.Router("/addPath", &controllers.AddNewPathController{})
 }

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -49,9 +48,8 @@ func (this *SearchController) Post() {
 	// Chiama il metodo di ricerca
 	name := this.GetString("pathName")
 	selected := this.GetString("path")
-	fmt.Println(name)
-	fmt.Println(selected)
-	if name != "" {
+	viewAll := this.GetString("viewAll")
+	if name != "" || viewAll != "" {
 		pathlist := SimplePost(name)
 		pathlist = pathlist[:len(pathlist)-4]
 		var paths []model.MountainPath

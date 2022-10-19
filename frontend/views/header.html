@@ -17,32 +17,29 @@
         <div class="col-4" align="center"><img src="../static/img/montagna_2.png" class="img-responsive"></div>
     </div>
 
-    <form class="form" method="post">
-        <div class="row background-orange justify-content-between">
-            <div class="col-10">
-                <ul class="nav navbar background-orange">
-                    <li>
-                        <button type="submit" name="HOME" value="HOME" class="btn btn-primary btn-nav" style="background-color: #f69155">Home</button>
-                    <li>
-                        <button type="submit" onclick="location.href = '/searchPath';" name="VIEW_INFO" value="VIEW_INFO" class="btn btn-primary btn-nav" style="background-color: #f69155">Search path e view info</button>
-                    <li>
-                        <button type="submit" name="ADD_PATH" value="ADD_PATH" class="btn btn-primary btn-nav" style="background-color: #f69155">Add new path</button>
-                    <li>
-                        <button type="submit" name="ADD_PATH" value="ADD_VISIT" class="btn btn-primary btn-nav" style="background-color: #f69155">Schedule path visit</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-2">
-                <ul class="nav navbar background-orange">
-                    <li>
-                        <button type="submit" name="PROFILE" value="PROFILE" class="btn btn-primary btn-nav" style="float: right;" style="background-color: #f69155">
-                        <img src="../static/img/icons8-male-user-64.png" style="max-height: 25%; max-width: 30%;">
-                        </button>
-                    <li>
-                </ul>
-            </div>
+    <div class="row background-orange justify-content-between">
+        <div class="col-10">
+            <ul class="nav navbar background-orange">
+                <li>
+                    <button type="submit" name="HOME" value="HOME" class="btn btn-primary btn-nav" style="background-color: #f69155">Home</button>
+                <li>
+                    <button onclick= "window.open('searchPath','_self')" name="VIEW_INFO" value="VIEW_INFO" class="btn btn-primary btn-nav" style="background-color: #f69155">Search path e view info</button>
+                <li>
+                    <button onclick= "window.open('addPath','_self')" name="ADD_PATH" value="ADD_PATH" class="btn btn-primary btn-nav" style="background-color: #f69155">Add new path</button>
+                <li>
+                    <button type="submit" name="ADD_VISIT" value="ADD_VISIT" class="btn btn-primary btn-nav" style="background-color: #f69155">Schedule path visit</button>
+                </li>
+            </ul>
         </div>
-    </form>
+        <div class="col-2">
+            <ul class="nav navbar background-orange">
+                <li>
+                    <button type="submit" name="PROFILE" value="PROFILE" class="btn btn-primary btn-nav" style="float: right;" style="background-color: #f69155">
+                        <img src="../static/img/icons8-male-user-64.png" style="max-height: 25%; max-width: 30%;">
+                    </button>
+                <li>
+            </ul>
+        </div>
     </div>
-</body>
+</div>
 </html>
