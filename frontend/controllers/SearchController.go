@@ -33,7 +33,6 @@ func SimplePost(name string) []byte {
 	_ = json.Unmarshal([]byte(str), &data)
 	//fmt.Println("STRINGA OTTENUTA DA APIGW: " + str)
 	//strings.Index(str, name)
-
 	return str
 }
 
@@ -53,7 +52,9 @@ func (this *SearchController) Post() {
 	fmt.Println(selected)
 	if name != "" {
 		pathlist := SimplePost(name)
-		pathlist = pathlist[:len(pathlist)-4]
+		if pathlist != nil {
+			pathlist = pathlist[:len(pathlist)-4]
+		}
 		var paths []model.MountainPath
 		_ = json.Unmarshal([]byte(pathlist), &paths)
 		this.Data["paths"] = paths

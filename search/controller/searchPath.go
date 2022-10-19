@@ -6,7 +6,6 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
-	"search/model"
 	"strconv"
 )
 
@@ -75,7 +74,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	return nil
 }
 
-func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.MountainPath) error {
+func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]byte) error {
 	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
@@ -176,7 +175,8 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.Mo
 			log.Fatal(err)
 		}
 	}(row)
-	var path = model.MountainPath{}
+	var path = MountainPath{}
+	var paths = []MountainPath{}
 	for row.Next() { // Iterate and fetch the records from result cursor
 		err := row.Scan(&path.Name, &path.Altitude, &path.Length, &path.Level,
 			&path.Cyclable, &path.Family, &path.Historical,
@@ -184,7 +184,8 @@ func (t *Search) AdvancedSearch(pathreq *AdvancedSearchStruct, reply *[]model.Mo
 		if err != nil {
 			return err
 		}
-		*reply = append(*reply, path)
+		paths = append(paths, path)
 	}
+	*reply, _ = json.Marshal(paths)
 	return nil
 }
