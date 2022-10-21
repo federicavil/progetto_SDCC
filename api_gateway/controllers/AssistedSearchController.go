@@ -13,21 +13,6 @@ type AssistedSearchController struct {
 	web.Controller
 }
 
-//func SearchMountainPaths(name string) []byte {
-//	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
-//	if err != nil {
-//		log.Fatal("dialing:", err)
-//	}
-//	param := model.SimpleSearchStruct{name}
-//	var results []byte
-//	//args := &search.Args{name}
-//	err = client.Call("Search.SimpleSearch", &param, &results)
-//	if err != nil {
-//		log.Fatal("SimpleSearch error:", err)
-//	}
-//	return results
-//}
-
 func AssistedSearchMountainPaths(filters model.AdvancedSearchStruct) []byte {
 	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
 	if err != nil {

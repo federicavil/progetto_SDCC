@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
 	"pathManager/model"
 	"strconv"
@@ -20,23 +21,24 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	}(db) // Defer Closing the database
 
 	newPath := *newPathPointer
-	query := "INSERT INTO Paths VALUES (" +
-		newPath.Name + "," +
-		strconv.Itoa(newPath.Altitude) + "," +
-		strconv.Itoa(newPath.Length) + "," +
-		newPath.Level + "," +
-		strconv.Itoa(t.boolToInt(newPath.Cyclable)) + "," +
-		strconv.Itoa(t.boolToInt(newPath.Family)) + "," +
-		strconv.Itoa(t.boolToInt(newPath.Historical)) + "," +
-		newPath.Region + "," +
-		newPath.Province + "," +
-		newPath.City + ",);"
+	query := "INSERT INTO Paths VALUES" + "('" +
+		newPath.Name + "', '" +
+		strconv.Itoa(newPath.Altitude) + "', '" +
+		strconv.Itoa(newPath.Length) + "', '" +
+		newPath.Level + "', '" +
+		strconv.Itoa(t.boolToInt(newPath.Cyclable)) + "', '" +
+		strconv.Itoa(t.boolToInt(newPath.Family)) + "', '" +
+		strconv.Itoa(t.boolToInt(newPath.Historical)) + "', '" +
+		newPath.Region + "', '" +
+		newPath.Province + "', '" +
+		newPath.City + "')"
 
-	_, err := db.Query(query)
+	_, err := db.Exec(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
 		log.Fatal(err)
 	}
+	*reply = []byte("Okay")
 	return err
 }
 

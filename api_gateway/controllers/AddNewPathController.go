@@ -20,25 +20,27 @@ func AddNewPath(newPath model.MountainPath) error {
 	}
 	var results []byte
 	//args := &search.Args{name}
-	err = client.Call("pathManager.AddNewPath", &newPath, &results)
+	err = client.Call("Add.AddNewPath", &newPath, &results)
 	if err != nil {
-		log.Fatal("SimpleSearch error:", err)
+		log.Fatal("AddPath error:", err)
 	}
 	return err
 }
 
 func (this *AddNewPathController) Post() {
 	defer this.ServeJSON()
-	newPathJson := this.Ctx.Input.Query("newPath")
+	newPathJson := this.Ctx.Input.Query("path")
+	fmt.Println(newPathJson)
 	newPath := model.MountainPath{}
 	err := json.Unmarshal([]byte(newPathJson), &newPath)
 	if err != nil {
 		fmt.Println("Unmarshal error")
 	}
+	fmt.Println(newPath)
 	// Controllo se già c'è un sentiero con quel nome
 	err = AddNewPath(newPath)
 	if err != nil {
 		fmt.Println("Add error")
 	}
-
+	this.Ctx.WriteString("OKAY")
 }

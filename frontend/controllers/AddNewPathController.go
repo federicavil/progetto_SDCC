@@ -14,11 +14,10 @@ type AddNewPathController struct {
 
 func (this *AddNewPathController) Prepare() {
 	this.TplName = "addNewPath.html"
-
 }
 
 func (this *AddNewPathController) Get() {
-	//TO DO : CONTROLLARE SE L'UTENTE E' LOGGATO E IN CASO MANDARLO SULLA PAGINA DI LOGIN
+	//CONTROLLARE SE L'UTENTE E' LOGGATO E IN CASO MANDARLO SULLA PAGINA DI LOGIN
 
 }
 
@@ -28,11 +27,10 @@ func (this *AddNewPathController) Post() {
 	if err != nil {
 		return
 	}
-	fmt.Println(newPath)
-
-	newPathJson, _ := json.Marshal(newPath)
+	pathJson, _ := json.Marshal(newPath)
+	pathString := string(pathJson)
 	req := httplib.Post("http://127.0.0.1:5000/addNewPath")
-	req.Param("newPath", string(newPathJson))
-
-	this.TplName = "addNewPath.html"
+	req.Param("path", pathString)
+	str, _ := req.Bytes()
+	fmt.Println(str)
 }

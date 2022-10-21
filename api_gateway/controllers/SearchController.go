@@ -27,20 +27,6 @@ func SearchMountainPaths(name string) []byte {
 	return results
 }
 
-//func AdvancedSearchMountainPaths(filters model.AdvancedSearchStruct) []model.MountainPath {
-//	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
-//	if err != nil {
-//		log.Fatal("dialing:", err)
-//	}
-//	results := []model.MountainPath{}
-//	//args := &search.Args{name}
-//	err = client.Call("Search.AdvancedSearch", &filters, &results)
-//	if err != nil {
-//		log.Fatal("AdvancedSearch error:", err)
-//	}
-//	return results
-//}
-
 func (this *SearchController) Post() {
 	defer this.ServeJSON()
 	var paths []byte
