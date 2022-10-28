@@ -6,7 +6,7 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
-	"search/model"
+	"pathManager/model"
 	"strconv"
 )
 
@@ -17,7 +17,8 @@ type Args struct {
 type Search int
 
 func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
-	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
+	fmt.Println("CHIAMAtO SIMPLESEARCH")
+	var db, _ = sql.Open("sqlite3", "./pathManager.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
@@ -49,11 +50,12 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 		paths = append(paths, path)
 	}
 	*reply, _ = json.Marshal(paths)
+	fmt.Println(*reply)
 	return nil
 }
 
 func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]byte) error {
-	var db, _ = sql.Open("sqlite3", "./search.db") // Open the created SQLite File
+	var db, _ = sql.Open("sqlite3", "./pathManager.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
