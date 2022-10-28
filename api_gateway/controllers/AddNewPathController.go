@@ -14,7 +14,7 @@ type AddNewPathController struct {
 }
 
 func AddNewPath(newPath model.MountainPath) error {
-	client, err := rpc.Dial("tcp", "127.0.0.1:8082")
+	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}

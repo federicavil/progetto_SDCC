@@ -11,6 +11,10 @@ import (
 
 type Add int
 
+func SagaAddOnSearchDB(query string) {
+
+}
+
 func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) error {
 	var db, _ = sql.Open("sqlite3", "./pathManager.db") // Open the created SQLite File
 	defer func(db *sql.DB) {
@@ -21,7 +25,7 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	}(db) // Defer Closing the database
 
 	newPath := *newPathPointer
-	query := "INSERT INTO Paths VALUES" + "('" +
+	query := "INSERT INTO Paths VALUES ('" +
 		newPath.Name + "', '" +
 		strconv.Itoa(newPath.Altitude) + "', '" +
 		strconv.Itoa(newPath.Length) + "', '" +
