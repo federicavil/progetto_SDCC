@@ -30,7 +30,8 @@ func AddNewPath(newPath model.MountainPath) error {
 
 func (this *AddNewPathController) Get() {
 	userId := this.Ctx.Input.Query("userId")
-	isLogged := CheckLogin(userId)
+	loginController := LoginController{}
+	isLogged := loginController.CheckLogin(userId)
 	if isLogged {
 		//userProfile := getUserProfile(userId)
 		//this.Ctx.WriteString(string(userProfile))

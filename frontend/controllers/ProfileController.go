@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
@@ -38,5 +39,15 @@ func (this *ProfileController) Get() {
 }
 
 func (this *ProfileController) Post() {
+	logOutBtn := this.GetString("logOut")
+	if logOutBtn != "" {
+		req := httplib.Post("http://127.0.0.1:5000/profile")
+		userid := this.session.Get("userId").(string)
+		req.Param("logOut", userid)
+		_, _ = req.Bytes()
+		this.session.Set("userId", "")
+		fmt.Println("Redirection")
+		this.Redirect("login", 302)
+	}
 
 }

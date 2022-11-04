@@ -50,7 +50,7 @@ func (this *LoginController) Post() {
 			return
 		} else {
 			if len(loginForm.Credential.Password) <= 0 {
-				fmt.Println("ERRORE DA GESTIRE 1")
+				fmt.Println("ERRORE DA GESTIRE 2")
 				return
 			}
 		}
@@ -62,6 +62,7 @@ func (this *LoginController) Post() {
 	if userId != "" {
 		error := this.session.Set("userId", userId)
 		if error != nil {
+			fmt.Println("Errore session")
 			return
 		}
 		prevPage := this.session.Get("prevPage")
