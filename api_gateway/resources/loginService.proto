@@ -21,9 +21,20 @@ message CheckResponse{
   bool isLogged = 1;
 }
 
+message ProfileRequest{
+  string userId = 1;
+  string profile = 2;
+}
+
+message ProfileResponse{
+  string profile = 1;
+}
+
 service LoginService {
   rpc login(LoginRequest) returns (LoginResponse);
   rpc signin(LoginRequest) returns (LoginResponse);
   rpc checkLogin(CheckRequest) returns (CheckResponse);
   rpc logOut(CheckRequest) returns (CheckResponse);
+  rpc getProfile(ProfileRequest) returns(ProfileResponse);
+  rpc updateProfile(ProfileRequest) returns(ProfileResponse);
 }

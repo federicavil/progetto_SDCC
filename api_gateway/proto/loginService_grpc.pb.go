@@ -26,6 +26,8 @@ type LoginServiceClient interface {
 	Signin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	CheckLogin(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error)
 	LogOut(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error)
+	GetProfile(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
+	UpdateProfile(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
 }
 
 type loginServiceClient struct {
@@ -72,6 +74,24 @@ func (c *loginServiceClient) LogOut(ctx context.Context, in *CheckRequest, opts 
 	return out, nil
 }
 
+func (c *loginServiceClient) GetProfile(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*ProfileResponse, error) {
+	out := new(ProfileResponse)
+	err := c.cc.Invoke(ctx, "/it.progetto.progetto_sdcc.proto.LoginService/getProfile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *loginServiceClient) UpdateProfile(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*ProfileResponse, error) {
+	out := new(ProfileResponse)
+	err := c.cc.Invoke(ctx, "/it.progetto.progetto_sdcc.proto.LoginService/updateProfile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LoginServiceServer is the server API for LoginService service.
 // All implementations must embed UnimplementedLoginServiceServer
 // for forward compatibility
@@ -80,6 +100,8 @@ type LoginServiceServer interface {
 	Signin(context.Context, *LoginRequest) (*LoginResponse, error)
 	CheckLogin(context.Context, *CheckRequest) (*CheckResponse, error)
 	LogOut(context.Context, *CheckRequest) (*CheckResponse, error)
+	GetProfile(context.Context, *ProfileRequest) (*ProfileResponse, error)
+	UpdateProfile(context.Context, *ProfileRequest) (*ProfileResponse, error)
 	mustEmbedUnimplementedLoginServiceServer()
 }
 
@@ -98,6 +120,12 @@ func (UnimplementedLoginServiceServer) CheckLogin(context.Context, *CheckRequest
 }
 func (UnimplementedLoginServiceServer) LogOut(context.Context, *CheckRequest) (*CheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LogOut not implemented")
+}
+func (UnimplementedLoginServiceServer) GetProfile(context.Context, *ProfileRequest) (*ProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProfile not implemented")
+}
+func (UnimplementedLoginServiceServer) UpdateProfile(context.Context, *ProfileRequest) (*ProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProfile not implemented")
 }
 func (UnimplementedLoginServiceServer) mustEmbedUnimplementedLoginServiceServer() {}
 
@@ -184,6 +212,42 @@ func _LoginService_LogOut_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LoginService_GetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginServiceServer).GetProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/it.progetto.progetto_sdcc.proto.LoginService/getProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginServiceServer).GetProfile(ctx, req.(*ProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LoginService_UpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginServiceServer).UpdateProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/it.progetto.progetto_sdcc.proto.LoginService/updateProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginServiceServer).UpdateProfile(ctx, req.(*ProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LoginService_ServiceDesc is the grpc.ServiceDesc for LoginService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +270,14 @@ var LoginService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "logOut",
 			Handler:    _LoginService_LogOut_Handler,
+		},
+		{
+			MethodName: "getProfile",
+			Handler:    _LoginService_GetProfile_Handler,
+		},
+		{
+			MethodName: "updateProfile",
+			Handler:    _LoginService_UpdateProfile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

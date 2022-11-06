@@ -59,7 +59,10 @@ func (this *LoginController) Post() {
 		userId = login("login", loginForm.Credential)
 	}
 	fmt.Println(userId)
-	if userId != "" {
+	if userId == "-1" {
+		this.Data["login_error"] = "error"
+
+	} else if userId != "" {
 		error := this.session.Set("userId", userId)
 		if error != nil {
 			fmt.Println("Errore session")
