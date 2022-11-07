@@ -201,6 +201,37 @@ public final class LoginServiceGrpc {
     return getUpdateProfileMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<it.progetto.login.grpc.CheckUsernameRequest,
+      it.progetto.login.grpc.CheckUsernameResponse> getCheckUsernameMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "checkUsername",
+      requestType = it.progetto.login.grpc.CheckUsernameRequest.class,
+      responseType = it.progetto.login.grpc.CheckUsernameResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<it.progetto.login.grpc.CheckUsernameRequest,
+      it.progetto.login.grpc.CheckUsernameResponse> getCheckUsernameMethod() {
+    io.grpc.MethodDescriptor<it.progetto.login.grpc.CheckUsernameRequest, it.progetto.login.grpc.CheckUsernameResponse> getCheckUsernameMethod;
+    if ((getCheckUsernameMethod = LoginServiceGrpc.getCheckUsernameMethod) == null) {
+      synchronized (LoginServiceGrpc.class) {
+        if ((getCheckUsernameMethod = LoginServiceGrpc.getCheckUsernameMethod) == null) {
+          LoginServiceGrpc.getCheckUsernameMethod = getCheckUsernameMethod =
+              io.grpc.MethodDescriptor.<it.progetto.login.grpc.CheckUsernameRequest, it.progetto.login.grpc.CheckUsernameResponse>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "checkUsername"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  it.progetto.login.grpc.CheckUsernameRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  it.progetto.login.grpc.CheckUsernameResponse.getDefaultInstance()))
+              .setSchemaDescriptor(new LoginServiceMethodDescriptorSupplier("checkUsername"))
+              .build();
+        }
+      }
+    }
+    return getCheckUsernameMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -291,6 +322,13 @@ public final class LoginServiceGrpc {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getUpdateProfileMethod(), responseObserver);
     }
 
+    /**
+     */
+    public void checkUsername(it.progetto.login.grpc.CheckUsernameRequest request,
+        io.grpc.stub.StreamObserver<it.progetto.login.grpc.CheckUsernameResponse> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCheckUsernameMethod(), responseObserver);
+    }
+
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
@@ -335,6 +373,13 @@ public final class LoginServiceGrpc {
                 it.progetto.login.grpc.ProfileRequest,
                 it.progetto.login.grpc.ProfileResponse>(
                   this, METHODID_UPDATE_PROFILE)))
+          .addMethod(
+            getCheckUsernameMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+              new MethodHandlers<
+                it.progetto.login.grpc.CheckUsernameRequest,
+                it.progetto.login.grpc.CheckUsernameResponse>(
+                  this, METHODID_CHECK_USERNAME)))
           .build();
     }
   }
@@ -400,6 +445,14 @@ public final class LoginServiceGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getUpdateProfileMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void checkUsername(it.progetto.login.grpc.CheckUsernameRequest request,
+        io.grpc.stub.StreamObserver<it.progetto.login.grpc.CheckUsernameResponse> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getCheckUsernameMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -456,6 +509,13 @@ public final class LoginServiceGrpc {
     public it.progetto.login.grpc.ProfileResponse updateProfile(it.progetto.login.grpc.ProfileRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getUpdateProfileMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public it.progetto.login.grpc.CheckUsernameResponse checkUsername(it.progetto.login.grpc.CheckUsernameRequest request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getCheckUsernameMethod(), getCallOptions(), request);
     }
   }
 
@@ -520,6 +580,14 @@ public final class LoginServiceGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getUpdateProfileMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<it.progetto.login.grpc.CheckUsernameResponse> checkUsername(
+        it.progetto.login.grpc.CheckUsernameRequest request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getCheckUsernameMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_LOGIN = 0;
@@ -528,6 +596,7 @@ public final class LoginServiceGrpc {
   private static final int METHODID_LOG_OUT = 3;
   private static final int METHODID_GET_PROFILE = 4;
   private static final int METHODID_UPDATE_PROFILE = 5;
+  private static final int METHODID_CHECK_USERNAME = 6;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -569,6 +638,10 @@ public final class LoginServiceGrpc {
         case METHODID_UPDATE_PROFILE:
           serviceImpl.updateProfile((it.progetto.login.grpc.ProfileRequest) request,
               (io.grpc.stub.StreamObserver<it.progetto.login.grpc.ProfileResponse>) responseObserver);
+          break;
+        case METHODID_CHECK_USERNAME:
+          serviceImpl.checkUsername((it.progetto.login.grpc.CheckUsernameRequest) request,
+              (io.grpc.stub.StreamObserver<it.progetto.login.grpc.CheckUsernameResponse>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -637,6 +710,7 @@ public final class LoginServiceGrpc {
               .addMethod(getLogOutMethod())
               .addMethod(getGetProfileMethod())
               .addMethod(getUpdateProfileMethod())
+              .addMethod(getCheckUsernameMethod())
               .build();
         }
       }
