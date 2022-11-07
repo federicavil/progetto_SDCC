@@ -5,19 +5,39 @@ import (
 	"fmt"
 	"frontend/model"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
+	"strconv"
 )
 
 type AddNewPathController struct {
 	beego.Controller
+	session session.Store
 }
 
 func (this *AddNewPathController) Prepare() {
 	this.TplName = "addNewPath.html"
+	this.session = this.StartSession()
 }
 
 func (this *AddNewPathController) Get() {
-	//CONTROLLARE SE L'UTENTE E' LOGGATO E IN CASO MANDARLO SULLA PAGINA DI LOGIN
+	var userid string
+	if this.session.Get("userId") == nil {
+		userid = ""
+	} else {
+		userid = this.session.Get("userId").(string)
+	}
+	req := httplib.Get("http://127.0.0.1:5000/addNewPath")
+	req.Param("userId", userid)
+	str, _ := req.Bytes()
+	isLogged, _ := strconv.ParseBool(string(str))
+	if !isLogged {
+		err := this.session.Set("prevPage", "addPath")
+		if err != nil {
+			return
+		}
+		this.Redirect("login", 302)
+	}
 
 }
 

@@ -13,19 +13,6 @@ type MountainPath struct {
 	Historical bool   `db:"Historical" json:"Historical" form:"historicalElements"`
 }
 
-//type MountainPathRet struct {
-//	Name       string `db:"Name" json:"Name"`
-//	Altitude   int    `db:"Altitude" json:"Altitude"`
-//	City       string `db:"City" json:"City"`
-//	Province   string `db:"Province" json:"Province"`
-//	Region     string `db:"Region" json:"Region"`
-//	Length     int    `db:"Length" json:"Length"`
-//	Level      string `db:"Level" json:"Level"`
-//	Cyclable   string `db:"Cyclable" json:"Cyclable"`
-//	Family     string `db:"Family" json:"Family"`
-//	Historical string `db:"Historical" json:"Historical"`
-//}
-
 type SimpleSearchStruct struct {
 	Name string
 }

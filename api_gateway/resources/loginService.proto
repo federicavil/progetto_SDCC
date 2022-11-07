@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option go_package = "api_gateway/proto";
+
+package it.progetto.progetto_sdcc.proto;
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string user = 1;
+}
+
+message CheckRequest{
+  string userId = 1;
+}
+
+message CheckResponse{
+  bool isLogged = 1;
+}
+
+message ProfileRequest{
+  string userId = 1;
+  string profile = 2;
+}
+
+message ProfileResponse{
+  string profile = 1;
+}
+
+service LoginService {
+  rpc login(LoginRequest) returns (LoginResponse);
+  rpc signin(LoginRequest) returns (LoginResponse);
+  rpc checkLogin(CheckRequest) returns (CheckResponse);
+  rpc logOut(CheckRequest) returns (CheckResponse);
+  rpc getProfile(ProfileRequest) returns(ProfileResponse);
+  rpc updateProfile(ProfileRequest) returns(ProfileResponse);
+}

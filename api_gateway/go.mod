@@ -2,7 +2,12 @@ module api_gateway
 
 go 1.19
 
-require github.com/beego/beego/v2 v2.0.0
+require (
+	github.com/beego/beego/v2 v2.0.0
+	google.golang.org/grpc v1.36.0
+	google.golang.org/grpc/examples v0.0.0-20221026183349-3c09650e0524
+	google.golang.org/protobuf v1.27.1
+)
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -24,6 +29,6 @@ require (
 	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/tools v0.0.0-20200825202427-b303f430e36d // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/protobuf v1.26.0 // indirect
+	google.golang.org/genproto v0.0.0-20200825200019-8632dd797987 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

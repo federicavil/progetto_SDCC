@@ -7,6 +7,7 @@ import (
 	"github.com/beego/beego/v2/server/web"
 	"log"
 	"net/rpc"
+	"strconv"
 )
 
 type AddNewPathController struct {
@@ -27,6 +28,16 @@ func AddNewPath(newPath model.MountainPath) error {
 	return err
 }
 
+func (this *AddNewPathController) Get() {
+	userId := this.Ctx.Input.Query("userId")
+	loginController := LoginController{}
+	isLogged := loginController.CheckLogin(userId)
+	if isLogged {
+		//userProfile := getUserProfile(userId)
+		//this.Ctx.WriteString(string(userProfile))
+	}
+	this.Ctx.WriteString(strconv.FormatBool(isLogged))
+}
 func (this *AddNewPathController) Post() {
 	defer this.ServeJSON()
 	newPathJson := this.Ctx.Input.Query("path")
