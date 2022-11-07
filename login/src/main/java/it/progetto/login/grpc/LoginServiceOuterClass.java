@@ -44,6 +44,16 @@ public final class LoginServiceOuterClass {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_it_progetto_progetto_sdcc_proto_ProfileResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameRequest_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameResponse_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -60,25 +70,30 @@ public final class LoginServiceOuterClass {
       "heckRequest\022\016\n\006userId\030\001 \001(\t\"!\n\rCheckResp" +
       "onse\022\020\n\010isLogged\030\001 \001(\010\"1\n\016ProfileRequest" +
       "\022\016\n\006userId\030\001 \001(\t\022\017\n\007profile\030\002 \001(\t\"\"\n\017Pro" +
-      "fileResponse\022\017\n\007profile\030\001 \001(\t2\232\005\n\014LoginS" +
-      "ervice\022f\n\005login\022-.it.progetto.progetto_s" +
-      "dcc.proto.LoginRequest\032..it.progetto.pro" +
-      "getto_sdcc.proto.LoginResponse\022g\n\006signin" +
-      "\022-.it.progetto.progetto_sdcc.proto.Login" +
-      "Request\032..it.progetto.progetto_sdcc.prot" +
-      "o.LoginResponse\022k\n\ncheckLogin\022-.it.proge" +
-      "tto.progetto_sdcc.proto.CheckRequest\032..i" +
-      "t.progetto.progetto_sdcc.proto.CheckResp" +
-      "onse\022g\n\006logOut\022-.it.progetto.progetto_sd" +
-      "cc.proto.CheckRequest\032..it.progetto.prog" +
-      "etto_sdcc.proto.CheckResponse\022o\n\ngetProf" +
-      "ile\022/.it.progetto.progetto_sdcc.proto.Pr" +
-      "ofileRequest\0320.it.progetto.progetto_sdcc" +
-      ".proto.ProfileResponse\022r\n\rupdateProfile\022" +
-      "/.it.progetto.progetto_sdcc.proto.Profil" +
-      "eRequest\0320.it.progetto.progetto_sdcc.pro" +
-      "to.ProfileResponseB\032\n\026it.progetto.login." +
-      "grpcP\001b\006proto3"
+      "fileResponse\022\017\n\007profile\030\001 \001(\t\"(\n\024CheckUs" +
+      "ernameRequest\022\020\n\010username\030\001 \001(\t\"-\n\025Check" +
+      "UsernameResponse\022\024\n\014isRegistered\030\001 \001(\0102\232" +
+      "\006\n\014LoginService\022f\n\005login\022-.it.progetto.p" +
+      "rogetto_sdcc.proto.LoginRequest\032..it.pro" +
+      "getto.progetto_sdcc.proto.LoginResponse\022" +
+      "g\n\006signin\022-.it.progetto.progetto_sdcc.pr" +
+      "oto.LoginRequest\032..it.progetto.progetto_" +
+      "sdcc.proto.LoginResponse\022k\n\ncheckLogin\022-" +
+      ".it.progetto.progetto_sdcc.proto.CheckRe" +
+      "quest\032..it.progetto.progetto_sdcc.proto." +
+      "CheckResponse\022g\n\006logOut\022-.it.progetto.pr" +
+      "ogetto_sdcc.proto.CheckRequest\032..it.prog" +
+      "etto.progetto_sdcc.proto.CheckResponse\022o" +
+      "\n\ngetProfile\022/.it.progetto.progetto_sdcc" +
+      ".proto.ProfileRequest\0320.it.progetto.prog" +
+      "etto_sdcc.proto.ProfileResponse\022r\n\rupdat" +
+      "eProfile\022/.it.progetto.progetto_sdcc.pro" +
+      "to.ProfileRequest\0320.it.progetto.progetto" +
+      "_sdcc.proto.ProfileResponse\022~\n\rcheckUser" +
+      "name\0225.it.progetto.progetto_sdcc.proto.C" +
+      "heckUsernameRequest\0326.it.progetto.proget" +
+      "to_sdcc.proto.CheckUsernameResponseB\032\n\026i" +
+      "t.progetto.login.grpcP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -120,6 +135,18 @@ public final class LoginServiceOuterClass {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_it_progetto_progetto_sdcc_proto_ProfileResponse_descriptor,
         new java.lang.String[] { "Profile", });
+    internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameRequest_descriptor =
+      getDescriptor().getMessageTypes().get(6);
+    internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameRequest_descriptor,
+        new java.lang.String[] { "Username", });
+    internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameResponse_descriptor =
+      getDescriptor().getMessageTypes().get(7);
+    internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameResponse_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_it_progetto_progetto_sdcc_proto_CheckUsernameResponse_descriptor,
+        new java.lang.String[] { "IsRegistered", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
