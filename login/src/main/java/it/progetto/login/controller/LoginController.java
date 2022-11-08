@@ -1,7 +1,6 @@
 package it.progetto.login.controller;
 
 import it.progetto.login.dao.CredentialDao;
-import it.progetto.login.dao.UserDao;
 import it.progetto.login.model.UserCredential;
 import it.progetto.login.model.LoggedUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +67,9 @@ public class LoginController {
                 return;
             }
         }
+    }
+
+    public Boolean isRegistered(String username){
+        return (credentialDao.findByUsername(username) != null);
     }
 }

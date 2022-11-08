@@ -80,4 +80,15 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    @Override
+    public void checkUsername(CheckUsernameRequest request, StreamObserver<CheckUsernameResponse> responseObserver){
+        System.out.println("CHECK USERNAME");
+        Boolean isRegistered = loginController.isRegistered(request.getUsername());
+        CheckUsernameResponse response = CheckUsernameResponse.newBuilder()
+                .setIsRegistered(isRegistered).build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+
+    }
+
 }

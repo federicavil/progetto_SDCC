@@ -28,6 +28,7 @@ type LoginServiceClient interface {
 	LogOut(ctx context.Context, in *CheckRequest, opts ...grpc.CallOption) (*CheckResponse, error)
 	GetProfile(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
 	UpdateProfile(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*ProfileResponse, error)
+	CheckUsername(ctx context.Context, in *CheckUsernameRequest, opts ...grpc.CallOption) (*CheckUsernameResponse, error)
 }
 
 type loginServiceClient struct {
@@ -92,6 +93,15 @@ func (c *loginServiceClient) UpdateProfile(ctx context.Context, in *ProfileReque
 	return out, nil
 }
 
+func (c *loginServiceClient) CheckUsername(ctx context.Context, in *CheckUsernameRequest, opts ...grpc.CallOption) (*CheckUsernameResponse, error) {
+	out := new(CheckUsernameResponse)
+	err := c.cc.Invoke(ctx, "/it.progetto.progetto_sdcc.proto.LoginService/checkUsername", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LoginServiceServer is the server API for LoginService service.
 // All implementations must embed UnimplementedLoginServiceServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type LoginServiceServer interface {
 	LogOut(context.Context, *CheckRequest) (*CheckResponse, error)
 	GetProfile(context.Context, *ProfileRequest) (*ProfileResponse, error)
 	UpdateProfile(context.Context, *ProfileRequest) (*ProfileResponse, error)
+	CheckUsername(context.Context, *CheckUsernameRequest) (*CheckUsernameResponse, error)
 	mustEmbedUnimplementedLoginServiceServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedLoginServiceServer) GetProfile(context.Context, *ProfileReque
 }
 func (UnimplementedLoginServiceServer) UpdateProfile(context.Context, *ProfileRequest) (*ProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProfile not implemented")
+}
+func (UnimplementedLoginServiceServer) CheckUsername(context.Context, *CheckUsernameRequest) (*CheckUsernameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUsername not implemented")
 }
 func (UnimplementedLoginServiceServer) mustEmbedUnimplementedLoginServiceServer() {}
 
@@ -248,6 +262,24 @@ func _LoginService_UpdateProfile_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LoginService_CheckUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUsernameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginServiceServer).CheckUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/it.progetto.progetto_sdcc.proto.LoginService/checkUsername",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginServiceServer).CheckUsername(ctx, req.(*CheckUsernameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LoginService_ServiceDesc is the grpc.ServiceDesc for LoginService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var LoginService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "updateProfile",
 			Handler:    _LoginService_UpdateProfile_Handler,
+		},
+		{
+			MethodName: "checkUsername",
+			Handler:    _LoginService_CheckUsername_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
