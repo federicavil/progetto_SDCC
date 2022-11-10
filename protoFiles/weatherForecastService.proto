@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+option go_package = "api_gateway/grpc";
+
+
+service ManageVisit {
+  rpc GetForecast(ForecastInput) returns (ForecastOutput) {}
+}
+
+//input: pathname del luogo
+//output: json con informazioni --> {time=[...], temperature=[...], humidity=[...], cloud_cover=[...], precipitation=[...], wind_speed=[...]}
+
+message ForecastInput {
+  required string Pathname = 1;
+}
+
+message ForecastOutput {
+  required string Return = 1;
+}
