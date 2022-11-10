@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
 	"pathManager/model"
@@ -16,9 +17,41 @@ type Args struct {
 
 type Search int
 
+const (
+	host     = "127.0.0.1"
+	port     = 50001
+	user     = "mattia971"
+	password = "niernier"
+	dbname   = "PathManager"
+)
+
+func pgConnect() (*sql.DB, error) {
+	// connection string
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	// open database
+	db, err := sql.Open("postgres", psqlconn)
+	CheckError(err)
+
+	// close database
+
+	// check db
+	err = db.Ping()
+	CheckError(err)
+
+	fmt.Println("Connected!")
+	return db, err
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
-	fmt.Println("CHIAMAtO SIMPLESEARCH")
-	var db, _ = sql.Open("sqlite3", "./pathManager.db") // Open the created SQLite File
+	var db, _ = pgConnect()
+
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
@@ -26,7 +59,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 		}
 	}(db) // Defer Closing the database
 
-	var query = "SELECT * FROM Paths WHERE name LIKE " + "'%" + args.Name + "%'"
+	var query = `SELECT * FROM public."Path" WHERE name LIKE ` + `'%` + args.Name + `%'`
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
@@ -55,7 +88,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 }
 
 func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]byte) error {
-	var db, _ = sql.Open("sqlite3", "./pathManager.db") // Open the created SQLite File
+	var db, _ = pgConnect()
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
@@ -79,7 +112,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		pathreq.Historical = -1
 	}
 
-	var query = "SELECT * FROM Paths"
+	var query = `SELECT * FROM public."Path"`
 	if pathreq.City != "" || pathreq.Province != "" || pathreq.Region != "" ||
 		pathreq.Level != "" || pathreq.Cyclable != -1 || pathreq.Family != -1 || pathreq.Historical != -1 {
 		query = query + " WHERE"

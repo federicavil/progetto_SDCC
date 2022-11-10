@@ -11,6 +11,8 @@ func init() {
 	web.Router("/assistedsearch", &controllers.AssistedSearchController{})
 	web.Router("/addNewPath", &controllers.AddNewPathController{})
 	web.Router("/addNewVisit", &controllers.AddNewVisitController{})
+	web.Router("/inviteUserToVisit", &controllers.InviteUserToVisitController{})
+	web.Router("/getAllVisits", &controllers.GetAllVisitsController{})
 	web.Router("/profile", &controllers.ProfileController{})
 	web.Router("/login", &controllers.LoginController{})
 	web.Router("/addReview", &controllers.AddReviewController{})

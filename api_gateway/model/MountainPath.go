@@ -13,6 +13,11 @@ type MountainPath struct {
 	Historical bool
 }
 
+type MountainVisit struct {
+	Path      MountainPath
+	Timestamp int
+}
+
 type SimpleSearchStruct struct {
 	Name string
 }

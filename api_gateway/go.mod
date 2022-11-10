@@ -4,8 +4,8 @@ go 1.19
 
 require (
 	github.com/beego/beego/v2 v2.0.0
+	github.com/lib/pq v1.0.0
 	google.golang.org/grpc v1.36.0
-	google.golang.org/grpc/examples v0.0.0-20221026183349-3c09650e0524
 	google.golang.org/protobuf v1.27.1
 )
 
