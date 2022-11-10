@@ -13,4 +13,6 @@ func init() {
 	beego.Router("/addPath", &controllers.AddNewPathController{})
 	beego.Router("/profile", &controllers.ProfileController{})
 	beego.Router("/login", &controllers.LoginController{})
+	beego.Router("/addReview", &controllers.AddReviewController{})
+	beego.Router("/viewReviews", &controllers.ViewReviewsController{})
 }

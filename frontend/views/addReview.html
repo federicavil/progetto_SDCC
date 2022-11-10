@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PeakLand</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- import our CSS for body of the page -->
+    <link rel="stylesheet" href="../static/css/body.css" type="text/css"/>
+</head>
+
+<body>
+
+    {{template "header.html"}}
+    <div class="row fill">
+        <div class="col-3 background-orange">
+                <button type="submit" name="backInfo" class="btn justify-content-start align-items-center" style="display: flex; justify-content: flex-start;"><img src="../static/img/back.png" onclick= "window.open('viewInfo','_self')" width="35%"></button>
+            <div class="container">
+                <div class="row mx-auto" style="padding-top: 40%; padding-left: 10%; padding-right: 10%">
+                    <div class="col" align="center" style="font-size: 150%;">Let other users know about your experience here!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="container">
+
+                {{/*<%
+                if (request.getParameter("addReviewBtn") != null) {
+                try {
+                review.setVote(vote);
+                addPathController.saveReview(review);
+                %>*/}}
+{{/*                <div class="container" style="padding-top: 3%;">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Review added successfully!</strong>
+                        <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
+                    </div>
+                </div>*/}}
+{{/*                <%
+                } catch(DatabaseException e) {
+                %>*/}}
+{{/*                <div class="container" style="padding-top: 3%;">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Database error</strong>Ops, there was an error connecting to database. Retry later
+                        <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
+                    </div>
+                </div>*/}}
+{{/*
+                <%
+                }
+                session.removeAttribute("name");
+                session.removeAttribute("vote");
+
+
+
+                }
+                %>
+*/}}
+
+{{/*                <form class="form-inline" method="post">*/}}
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="p-2 flex-item-text pull-left black-text">Vote</div>
+{{/*                        <%
+                        if (vote != null) {
+                        for (j = 1; j < vote+1; j++) {
+                        %>*/}}
+{{/*                        <div class="p-2 flex-item-stars">
+                            <button type="submit" name="<%=j.toString()%>" value="<%=j.toString()%>" class="btn">
+                                <img src="../static/img/star.png" class="img-responsive icons" width="30%">
+                            </button>
+                        </div>*/}}
+                        <script>
+                            function setVotes(id){
+                                var vote = parseInt(id)
+                                document.getElementById(id).value = id;
+                                for(let j = 1; j <= vote; j++){
+                                    document.getElementById(j.toString()).src = "../static/img/star.png";
+                                }
+                                for (let k = vote+1; k <= 5; k++) {
+                                    document.getElementById(k.toString()).src = "../static/img/emptystar.png";
+                                }
+                            }
+                        </script>
+
+                        <script>
+                            for(let i = 1; i<= 5; i++){
+                                document.write("<div class=\"p-2 flex-item-stars\">")
+                                document.write("<button type=\"submit\" name=\""+i+"\" value=\""+i+"\" class=\"btn\">")
+                                document.write("<img id=\""+i+"\" src=\"../static/img/emptystar.png\" class=\"img-responsive icons\" width=\"30%\" onclick=\"setVotes("+i+")\">")
+                                document.write("</button></div>")
+                            }
+                        </script>
+
+
+
+{{/*                        <div class="p-2 flex-item-stars">
+                            <button type="submit" name="<%=k.toString()%>" value="<%=k.toString()%>" class="btn">
+                                <img src="../static/img/emptystar.png" class="img-responsive icons" width="30%">
+                            </button>
+                        </div>*/}}
+{{/*                        <%
+                        }
+                        %>*/}}
+                    </div>
+{{/*                </form>*/}}
+
+                <form class="form-inline" method="post">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="p-2 flex-item-text pull-left black-text">Title </div>
+                        <div class="p-2 flex-item-text pull-left text">
+                            <input type="text" class="form-control" name="title" placeholder="Review title">
+                        </div>
+                    </div>
+                    <div class="container">
+                        <textarea maxlength="300" rows="10" cols="60" name="comment" placeholder="Write your comment here..." ></textarea>
+                    </div>
+                    <div class="container" style="pagging-top: 10%;">
+                        <button type="submit" name="addReviewBtn" value="addReviewBtn" class="btn btn-light-orange">Add review</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    </body>
+</html>
