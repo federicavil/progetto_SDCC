@@ -87,10 +87,10 @@ func (this *AddReviewController) Post() {
 
 		reviewJson, _ := json.Marshal(review)
 		fmt.Println(string(reviewJson))
-		/*req := httplib.Post("http://127.0.0.1:5000/addReview")
+		req := httplib.Post("http://127.0.0.1:5000/addReview")
 		req.Param("review", string(reviewJson))
 		str, _ := req.Bytes()
-		fmt.Println(str)*/
+		fmt.Println(str)
 	}
 
 }
