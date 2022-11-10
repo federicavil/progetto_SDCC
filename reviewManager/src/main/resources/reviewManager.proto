@@ -1,0 +1,26 @@
+syntax = "proto3";
+option java_multiple_files = true;
+
+option java_package = "it.progetto.reviewmanager.grpc";
+
+package it.progetto.progetto_sdcc.proto;
+
+message AddReviewRequest {
+  string review = 1;
+}
+
+message AddReviewResponse {
+  string addedReview = 1;
+}
+
+message GetReviewsRequest{
+  string mountainPathName = 1;
+}
+message GetReviewsResponse{
+  string reviewsList = 1;
+}
+
+service ReviewManagerService{
+  rpc addReview(AddReviewRequest) returns (AddReviewResponse);
+  rpc getReviews(GetReviewsRequest) returns (GetReviewsResponse);
+}
