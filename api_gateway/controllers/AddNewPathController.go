@@ -32,10 +32,6 @@ func (this *AddNewPathController) Get() {
 	userId := this.Ctx.Input.Query("userId")
 	loginController := LoginController{}
 	isLogged := loginController.CheckLogin(userId)
-	if isLogged {
-		//userProfile := getUserProfile(userId)
-		//this.Ctx.WriteString(string(userProfile))
-	}
 	this.Ctx.WriteString(strconv.FormatBool(isLogged))
 }
 func (this *AddNewPathController) Post() {

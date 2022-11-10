@@ -20,3 +20,13 @@ func (this *ViewPathInfoController) Get() {
 	this.Data["path"] = path
 	fmt.Println(path)
 }
+
+func (this *ViewPathInfoController) Post() {
+	if this.GetString("viewReviews") != "" {
+		fmt.Println("btn view review")
+		this.Redirect("viewReviews", 302)
+	} else if this.GetString("addReview") != "" {
+		fmt.Println("btn add review")
+		this.Redirect("addReview", 302)
+	}
+}

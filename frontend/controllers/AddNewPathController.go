@@ -42,15 +42,22 @@ func (this *AddNewPathController) Get() {
 }
 
 func (this *AddNewPathController) Post() {
-	newPath := model.MountainPath{}
-	err := this.ParseForm(&newPath)
-	if err != nil {
-		return
+	saveBtn := this.GetString("savePath")
+	addReviewBtn := this.GetString("addReview")
+	if saveBtn != "" {
+		newPath := model.MountainPath{}
+		err := this.ParseForm(&newPath)
+		if err != nil {
+			return
+		}
+		pathJson, _ := json.Marshal(newPath)
+		pathString := string(pathJson)
+		req := httplib.Post("http://127.0.0.1:5000/addNewPath")
+		req.Param("path", pathString)
+		str, _ := req.Bytes()
+		fmt.Println(str)
+		this.session.Set("selectedPath", newPath)
+	} else if addReviewBtn != "" {
+		this.Redirect("addReview", 302)
 	}
-	pathJson, _ := json.Marshal(newPath)
-	pathString := string(pathJson)
-	req := httplib.Post("http://127.0.0.1:5000/addNewPath")
-	req.Param("path", pathString)
-	str, _ := req.Bytes()
-	fmt.Println(str)
 }

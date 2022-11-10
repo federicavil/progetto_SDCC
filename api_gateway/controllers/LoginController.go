@@ -14,8 +14,8 @@ type LoginController struct {
 	web.Controller
 }
 
-func Dial() (*grpc.ClientConn, error) {
-	conn, err := grpc.Dial("127.0.0.1:9090", grpc.WithInsecure(), grpc.WithBlock())
+func Dial(port string) (*grpc.ClientConn, error) {
+	conn, err := grpc.Dial("127.0.0.1:"+port, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		fmt.Println("")
 	}
@@ -23,7 +23,7 @@ func Dial() (*grpc.ClientConn, error) {
 }
 func (this *LoginController) CheckLogin(userId string) bool {
 	if userId != "" {
-		conn, _ := Dial()
+		conn, _ := Dial("9090")
 		client := proto.NewLoginServiceClient(conn)
 		response, e := client.CheckLogin(context.TODO(), &proto.CheckRequest{UserId: userId})
 		if e != nil {
@@ -38,7 +38,7 @@ func (this *LoginController) CheckLogin(userId string) bool {
 
 func (this *LoginController) login(credentialJson string) string {
 	fmt.Println("LOGIN")
-	conn, _ := Dial()
+	conn, _ := Dial("9090")
 	client := proto.NewLoginServiceClient(conn)
 	fmt.Println("CONNECTION")
 	var credential = model.Credential{}
@@ -54,7 +54,7 @@ func (this *LoginController) login(credentialJson string) string {
 
 func (this *LoginController) signIn(credentialJson string) string {
 	fmt.Println("SIGNIN")
-	conn, _ := Dial()
+	conn, _ := Dial("9090")
 	client := proto.NewLoginServiceClient(conn)
 	fmt.Println("CONNECTION")
 	var credential = model.Credential{}
@@ -70,7 +70,7 @@ func (this *LoginController) signIn(credentialJson string) string {
 
 func (this *LoginController) LogOut(userId string) {
 	fmt.Println("logout " + userId)
-	conn, _ := Dial()
+	conn, _ := Dial("9090")
 	client := proto.NewLoginServiceClient(conn)
 	_, e := client.LogOut(context.TODO(), &proto.CheckRequest{UserId: userId})
 	if e != nil {

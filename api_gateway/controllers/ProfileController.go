@@ -17,7 +17,7 @@ func (this *ProfileController) Prepare() {
 }
 
 func getUserProfile(userId string) string {
-	conn, _ := Dial()
+	conn, _ := Dial("9090")
 	client := proto.NewLoginServiceClient(conn)
 	response, e := client.GetProfile(context.TODO(), &proto.ProfileRequest{UserId: userId, Profile: ""})
 	if e != nil {
@@ -28,7 +28,7 @@ func getUserProfile(userId string) string {
 }
 
 func setUserProfile(userId string, userProfile string) {
-	conn, _ := Dial()
+	conn, _ := Dial("9090")
 	client := proto.NewLoginServiceClient(conn)
 	_, e := client.UpdateProfile(context.TODO(), &proto.ProfileRequest{UserId: userId, Profile: userProfile})
 	if e != nil {

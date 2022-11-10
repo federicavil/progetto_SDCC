@@ -67,6 +67,7 @@ func (this *ProfileController) Post() {
 		req.Param("userId", userid)
 		req.Param("userProfile", string(userJson))
 		_, _ = req.Bytes()
+		this.Redirect("profile", 302)
 	}
 
 }

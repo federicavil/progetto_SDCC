@@ -13,4 +13,6 @@ func init() {
 	web.Router("/addNewVisit", &controllers.AddNewVisitController{})
 	web.Router("/profile", &controllers.ProfileController{})
 	web.Router("/login", &controllers.LoginController{})
+	web.Router("/addReview", &controllers.AddReviewController{})
+	web.Router("/getReviews", &controllers.ViewReviewsController{})
 }

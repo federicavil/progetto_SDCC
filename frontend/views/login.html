@@ -24,6 +24,12 @@
     </div>
 
     <div class="col-9">
+        <script> if (login_error != null){
+                document.write("<div class=\"container\" style=\"padding-top: 3%;\">")
+                document.write("<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">")
+                document.write("<strong>Login error</strong> Check your credential")
+                document.write("<a href=\"#\" class=\"close\" style=\"float: right;\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a></div>")
+            }</script>
         {{/*<%
         try {
         if (request.getParameter("login") != null) {

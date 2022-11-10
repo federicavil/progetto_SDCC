@@ -60,6 +60,7 @@ func (this *LoginController) Post() {
 	}
 	fmt.Println(userId)
 	if userId == "-1" {
+		fmt.Println("login error")
 		this.Data["login_error"] = "error"
 
 	} else if userId != "" {
