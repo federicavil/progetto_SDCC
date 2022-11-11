@@ -16,7 +16,10 @@ func SagaAddOnSearchDB(query string) {
 }
 
 func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) error {
-	var db, _ = sql.Open("sqlite3", "./pathManager.db") // Open the created SQLite File
+	db, err := pgConnect()
+	if err != nil {
+		return err
+	}
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
@@ -25,7 +28,7 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	}(db) // Defer Closing the database
 
 	newPath := *newPathPointer
-	query := "INSERT INTO Paths VALUES ('" +
+	query := `INSERT INTO public."Path" VALUES ('` +
 		newPath.Name + "', '" +
 		strconv.Itoa(newPath.Altitude) + "', '" +
 		strconv.Itoa(newPath.Length) + "', '" +
@@ -37,7 +40,7 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 		newPath.Province + "', '" +
 		newPath.City + "')"
 
-	_, err := db.Exec(query)
+	_, err = db.Exec(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
 		log.Fatal(err)
