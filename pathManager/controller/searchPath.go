@@ -19,9 +19,9 @@ type Search int
 
 const (
 	host     = "127.0.0.1"
-	port     = 50001
-	user     = "mattia971"
-	password = "niernier"
+	port     = 5432
+	user     = "pathmanager"
+	password = "password"
 	dbname   = "PathManager"
 )
 

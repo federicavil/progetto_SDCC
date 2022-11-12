@@ -145,12 +145,12 @@ html, body {
 }
 
 .p-2.flex-item-search-photo {
-    max-width: 70%;
-    max-height: 70%;
-    min-width: 70%;
-    min-height: 70%;
-    padding-left: 50%;
-    padding-right: 50%;
+    max-width: 30%;
+    max-height: 30%;
+    min-width: 30%;
+    min-height: 30%;
+    padding-left: 30%;
+    padding-right: 30%;
 }
 
 .custom-file-upload {

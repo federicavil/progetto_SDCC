@@ -28,5 +28,9 @@ func (this *ViewPathInfoController) Post() {
 	} else if this.GetString("addReview") != "" {
 		fmt.Println("btn add review")
 		this.Redirect("addReview", 302)
+	} else if this.GetString("viewForecast") != "" {
+		fmt.Println("btn view forecast")
+		this.Redirect("viewWeatherForecast", 302)
 	}
+
 }
