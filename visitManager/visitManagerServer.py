@@ -50,8 +50,14 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         cur = self.conn.cursor()
         username = request.Username
         pathname = request.Pathname
+        timestamp = request.Timestamp
+        print(timestamp)
+        from datetime import datetime
+        date_format = "%Y-%m-%dT%H:%M"
+        ts1 = datetime.strptime(timestamp, date_format)
         import pandas as pd
-        ts = pd.Timestamp.now()
+        ts = pd.Timestamp(ts1)
+        print(ts)
         sql = """INSERT INTO public."Visit" ("ID_Path", "Timestamp", "Creator") VALUES ('"""+pathname+"""', """+str(ts.to_julian_date())+""", '"""+username+"""')"""
         cur.execute(sql)
         sql = """SELECT max("ID") FROM public."Visit" """ #WHERE Timestamp"="""+str(ts.to_julian_date())
@@ -111,7 +117,6 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         sql = """UPDATE public."User_to_Visit" SET "User_to_Visit"."Accepted"="""+response+""" WHERE "User_to_Visit"."ID_Visit"='"""+id_visit+"""' AND "User_to_Visit"."Username"='"""+username+"""'"""
         cur.execute(sql)
         self.conn.commit()
-        ###TODO: CHIAMATA MICROSERVIZIO NOTIFY PER INVIO NOTIFICA ALL'UTENTE
         ret = visitManager_pb2.Return(Ret=1)
         return ret
 

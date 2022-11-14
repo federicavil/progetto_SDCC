@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
+	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
 )
@@ -17,18 +17,16 @@ type Args struct {
 
 type Search int
 
-const (
-	host     = "127.0.0.1"
-	port     = 5432
-	user     = "pathmanager"
-	password = "password"
-	dbname   = "PathManager"
-)
-
 func pgConnect() (*sql.DB, error) {
 	// connection string
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+	config, err := conf.LoadConfig("./conf")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
 
+	port, _ := strconv.Atoi(config.Port)
+
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Host, port, config.User, config.Password, config.Dbname)
 	// open database
 	db, err := sql.Open("postgres", psqlconn)
 	CheckError(err)
@@ -58,8 +56,12 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 			log.Fatal(err)
 		}
 	}(db) // Defer Closing the database
-
-	var query = `SELECT * FROM public."Path" WHERE name LIKE ` + `'%` + args.Name + `%'`
+	var query string
+	if args.Name == "" {
+		query = `SELECT * FROM public."Path"`
+	} else {
+		query = `SELECT * FROM public."Path" WHERE name LIKE ` + `'%` + args.Name + `%'`
+	}
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Errore query: ")

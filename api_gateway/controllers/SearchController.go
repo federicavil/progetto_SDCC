@@ -29,6 +29,7 @@ func SearchMountainPaths(name string) []byte {
 }
 
 func (this *SearchController) Post() {
+	print("AOAOAO")
 	defer this.ServeJSON()
 	var paths []byte
 	paths = SearchMountainPaths(this.Ctx.Input.Query("name"))

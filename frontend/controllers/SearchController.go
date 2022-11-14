@@ -24,7 +24,7 @@ type Field struct {
 	value string
 }
 
-func SimplePost(name string) []byte {
+func SimpleSearchPost(name string) []byte {
 	req := httplib.Post("http://127.0.0.1:5000/simplesearch")
 	req.Param("name", name)
 	data := []model.MountainPath{}
@@ -49,7 +49,7 @@ func (this *SearchController) Post() {
 	selected := this.GetString("path")
 	viewAll := this.GetString("viewAll")
 	if name != "" || viewAll != "" {
-		pathlist := SimplePost(name)
+		pathlist := SimpleSearchPost(name)
 		if pathlist != nil {
 			pathlist = pathlist[:len(pathlist)-4]
 		}
