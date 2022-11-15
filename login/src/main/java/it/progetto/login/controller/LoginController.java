@@ -13,7 +13,7 @@ import java.util.Objects;
 @Service
 public class LoginController {
 
-    private List<Integer> loggedUsers;
+    private List<String> loggedUsers;
 
     @Autowired
     private CredentialDao credentialDao;
@@ -23,46 +23,46 @@ public class LoginController {
         loggedUsers = new ArrayList<>();
     }
 
-    public LoginController(List<Integer> loggedUsers){
+    public LoginController(List<String> loggedUsers){
         this.loggedUsers = loggedUsers;
     }
 
-    public int login(String username, String password){
+    public String login(String username, String password){
         UserCredential credential = credentialDao.findByUsername(username);
-        int userId;
         if(credential == null || !Objects.equals(credential.getPassword(), password)){
             System.out.println("CREDENTIAL: "+ credential);
-            userId = -1;
+            username = String.valueOf(-1);
         }else {
-            userId = credential.getUser().getId();
-            loggedUsers.add(userId);
+            username = credential.getUsername();
+            loggedUsers.add(username);
         }
 
-        return userId;
+        return username;
     }
 
-    public int signin(String username, String password){
+    public String signin(String username, String password){
         if(credentialDao.findByUsername(username) != null){
-            return -1;
+            return String.valueOf(-1);
         }
         UserCredential credential = new UserCredential(username,password, new LoggedUser());
-        credential = credentialDao.save(credential);
-        int userId = credential.getUser().getId();
-        loggedUsers.add(userId);
-        return userId;
+        credentialDao.save(credential);
+        loggedUsers.add(username);
+        return username;
     }
 
-    public Boolean isLogged(Integer userId){
-        for(Integer id: loggedUsers){
-            if(id == userId)
+    public Boolean isLogged(String userId){
+        System.out.println(userId);
+        System.out.println(loggedUsers);
+        for(String id: loggedUsers){
+            if(Objects.equals(id, userId))
                 return true;
         }
         return false;
     }
 
-    public void logOut(Integer userId){
-        for(Integer id: loggedUsers){
-            if(id == userId){
+    public void logOut(String userId){
+        for(String id: loggedUsers){
+            if(Objects.equals(id, userId)){
                 loggedUsers.remove(id);
                 return;
             }

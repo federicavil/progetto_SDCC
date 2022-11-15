@@ -4,7 +4,6 @@ import (
 	"api_gateway/proto"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 
@@ -35,7 +34,7 @@ func AddNewVisit(visit proto.InputVisit) int {
 	conn, c, ctx, cancel := init_grpc_visit_manager_client()
 	defer conn.Close()
 	defer cancel()
-	fmt.Println("InAddVisitGRPC")
+
 	r, err := c.AddNewVisit(ctx, &visit)
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)

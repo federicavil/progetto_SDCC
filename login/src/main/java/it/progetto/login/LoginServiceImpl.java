@@ -22,9 +22,9 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
     @Override
     public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver){
         System.out.println("LOGIN SERVICE + " + request.getUsername() + request.getPassword());
-        int userId = loginController.login(request.getUsername(),request.getPassword());
+        String user = loginController.login(request.getUsername(),request.getPassword());
         LoginResponse response = LoginResponse.newBuilder()
-                .setUser(String.valueOf(userId)).build();
+                .setUser(user).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
@@ -32,9 +32,9 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
     @Override
     public void signin(LoginRequest request, StreamObserver<LoginResponse> responseObserver){
         System.out.println("SIGNIN SERVICE + " + request.getUsername() + request.getPassword());
-        int userId = loginController.signin(request.getUsername(),request.getPassword());
+        String user = loginController.signin(request.getUsername(),request.getPassword());
         LoginResponse response = LoginResponse.newBuilder()
-                .setUser(String.valueOf(userId)).build();
+                .setUser(user).build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
@@ -42,7 +42,7 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
     @Override
     public void checkLogin(CheckRequest request, StreamObserver<CheckResponse> responseObserver){
         System.out.println("CHECK SERVICE + "+ request.getUserId());
-        boolean isLogged = loginController.isLogged(Integer.valueOf(request.getUserId()));
+        boolean isLogged = loginController.isLogged(request.getUserId());
         CheckResponse response = CheckResponse.newBuilder()
                 .setIsLogged(isLogged).build();
         responseObserver.onNext(response);
@@ -52,7 +52,7 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
     @Override
     public void logOut(CheckRequest request, StreamObserver<CheckResponse> responseObserver){
         System.out.println("LOG OUT "+ request.getUserId());
-        loginController.logOut(Integer.valueOf(request.getUserId()));
+        loginController.logOut(request.getUserId());
         CheckResponse response = CheckResponse.newBuilder()
                 .setIsLogged(true).build();
         responseObserver.onNext(response);
@@ -62,7 +62,7 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
     @Override
     public void getProfile(ProfileRequest request, StreamObserver<ProfileResponse> responseObserver){
         System.out.println("GET PROFILE "+ request.getUserId());
-        String profile = profileController.getUserProfile(Integer.valueOf(request.getUserId()));
+        String profile = profileController.getUserProfile(request.getUserId());
         System.out.println("PROFILO: "+profile);
         ProfileResponse response = ProfileResponse.newBuilder()
                         .setProfile(profile).build();
@@ -73,7 +73,7 @@ public class LoginServiceImpl extends LoginServiceGrpc.LoginServiceImplBase {
     @Override
     public void updateProfile(ProfileRequest request, StreamObserver<ProfileResponse> responseObserver){
         System.out.println("UPDATE PROFILE "+ request.getProfile());
-        String profile = profileController.updateUserProfile(Integer.valueOf(request.getUserId()),request.getProfile());
+        String profile = profileController.updateUserProfile(request.getUserId(), request.getProfile());
         ProfileResponse response = ProfileResponse.newBuilder()
                 .setProfile(profile).build();
         responseObserver.onNext(response);
