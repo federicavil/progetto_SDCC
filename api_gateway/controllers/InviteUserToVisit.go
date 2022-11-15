@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"api_gateway/grpc"
+	"api_gateway/proto"
 	"github.com/beego/beego/v2/server/web"
 	"strconv"
 )
@@ -11,7 +12,7 @@ type InviteUserToVisitController struct {
 }
 
 func (this *InviteUserToVisitController) Post() {
-	var invite grpc.Invite
+	var invite proto.Invite
 	id_visit := this.Ctx.Input.Query("id_visit")
 	username := this.Ctx.Input.Query("username")
 	invite.Username = &username

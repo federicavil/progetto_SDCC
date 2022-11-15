@@ -41,6 +41,7 @@ message Visit {
 message InputVisit {
   required string Username = 1;
   required string Pathname = 2;
+  required string Timestamp = 3;
 }
 
 message Return {

@@ -21,7 +21,7 @@
         <div class="container">
             <div class="row mx-auto" style="padding-top: 6%;">
                 <div class="col-xs-1 center-block" align="center">
-                    <span class="path-name-font">{{.path.Name}}</span>
+                    <span class="path-name-font" name="pathname" value="pathname">{{.path.Name}}</span>
                 </div>
             </div>
             <div class="row mx-auto" style="padding-top: 15%;">
@@ -110,6 +110,9 @@
                                     <button type="submit" class="btn" name="addReview" value="addReview"><img src="../static/img/good-quality.png" class="img-responsive flex-item-link"></button>
                                 </div>
                                 <div class="p-2 flex-item-link">
+                                    <button type="submit" class="btn" name="addNewVisit" value="addNewVisit"><img src="../static/img/new-path.png" class="img-responsive flex-item-link"></button>
+                                </div>
+                                <div class="p-2 flex-item-link">
                                     <button type="submit" class="btn" name="viewForecast" value="viewForecast"><img src="../static/img/apple-weather.png" class="img-responsive"></button>
 
                                 </div>
@@ -118,13 +121,16 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <div class="black-text" style="text-align: center;">Add review</div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
+                                    <div class="black-text" style="text-align: center;">Organize a visit</div>
+                                </div>
+                                <div class="col-3">
                                     <div class="black-text" style="text-align: center;">View weather forecast</div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
                                     <div class="black-text" style="text-align: center;">View reviews</div>
                                 </div>
                             </div>

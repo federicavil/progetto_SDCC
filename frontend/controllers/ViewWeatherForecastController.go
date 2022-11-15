@@ -20,6 +20,7 @@ func (this *ViewWeatherForecastController) Get() {
 	path := this.StartSession().Get("selectedPath").(model.MountainPath)
 	pathJson, _ := json.Marshal(path)
 	pathString := string(pathJson)
+	fmt.Println(pathString)
 	req := httplib.Get("http://127.0.0.1:5000/viewWeatherForecast")
 	req.Param("path", pathString)
 	str, _ := req.Bytes()

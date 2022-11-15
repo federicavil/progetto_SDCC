@@ -1,9 +1,9 @@
 package grpc
 
 import (
+	"api_gateway/proto"
 	"context"
 	"encoding/json"
-	"flag"
 	"log"
 	"time"
 
@@ -12,23 +12,17 @@ import (
 )
 
 const (
-	defaultName = "world"
+	defaultNameVM = "world"
 )
 
-var (
-	addr = flag.String("addr", "localhost:50051", "the address to connect to")
-	name = flag.String("name", defaultName, "Name to greet")
-)
-
-func init_grpc_client() (*grpc.ClientConn, ManageVisitClient, context.Context, context.CancelFunc) {
-	flag.Parse()
+func init_grpc_visit_manager_client() (*grpc.ClientConn, proto.ManageVisitClient, context.Context, context.CancelFunc) {
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 
-	c := NewManageVisitClient(conn)
+	c := proto.NewManageVisitClient(conn)
 
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -36,8 +30,8 @@ func init_grpc_client() (*grpc.ClientConn, ManageVisitClient, context.Context, c
 	return conn, c, ctx, cancel
 }
 
-func AddNewVisit(visit InputVisit) int {
-	conn, c, ctx, cancel := init_grpc_client()
+func AddNewVisit(visit proto.InputVisit) int {
+	conn, c, ctx, cancel := init_grpc_visit_manager_client()
 	defer conn.Close()
 	defer cancel()
 
@@ -49,10 +43,10 @@ func AddNewVisit(visit InputVisit) int {
 }
 
 func GetAllVisits(username string) []byte {
-	conn, c, ctx, cancel := init_grpc_client()
+	conn, c, ctx, cancel := init_grpc_visit_manager_client()
 	defer conn.Close()
 	defer cancel()
-	r, err := c.GetAllVisits(ctx, &User{
+	r, err := c.GetAllVisits(ctx, &proto.User{
 		ID: &username,
 	})
 
@@ -63,8 +57,8 @@ func GetAllVisits(username string) []byte {
 	return visits
 }
 
-func InviteUserToVisit(invite Invite) int {
-	conn, c, ctx, cancel := init_grpc_client()
+func InviteUserToVisit(invite proto.Invite) int {
+	conn, c, ctx, cancel := init_grpc_visit_manager_client()
 	defer conn.Close()
 	defer cancel()
 	r, err := c.InviteUserToVisit(ctx, &invite)
