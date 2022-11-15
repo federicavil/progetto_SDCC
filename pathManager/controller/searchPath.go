@@ -18,7 +18,7 @@ type Args struct {
 type Search int
 
 const (
-	host     = "db_path_manager"
+	host     = "127.0.0.1"
 	port     = 5432
 	user     = "pathmanager"
 	password = "password"

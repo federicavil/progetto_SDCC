@@ -15,7 +15,7 @@ type SearchController struct {
 }
 
 func SearchMountainPaths(name string) []byte {
-	client, err := rpc.Dial("tcp", "path_manager:8081")
+	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
