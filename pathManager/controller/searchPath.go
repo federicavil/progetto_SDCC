@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 	"log"
 	"pathManager/model"
 	"strconv"
@@ -18,7 +17,7 @@ type Args struct {
 type Search int
 
 const (
-	host     = "127.0.0.1"
+	host     = "db_path_manager"
 	port     = 5432
 	user     = "pathmanager"
 	password = "password"

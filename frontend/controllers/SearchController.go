@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -25,7 +26,8 @@ type Field struct {
 }
 
 func SimplePost(name string) []byte {
-	req := httplib.Post("http://127.0.0.1:5000/simplesearch")
+	fmt.Println("SIMPLE POST TO API")
+	req := httplib.Post("http://api_gateway:5000/simplesearch")
 	req.Param("name", name)
 	data := []model.MountainPath{}
 	str, _ := req.Bytes()
@@ -45,6 +47,7 @@ func (this *SearchController) Get() {
 
 func (this *SearchController) Post() {
 	// Chiama il metodo di ricerca
+	fmt.Println("POST")
 	name := this.GetString("pathName")
 	selected := this.GetString("path")
 	viewAll := this.GetString("viewAll")

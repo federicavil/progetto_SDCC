@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "5000:5000"
+
+  path_manager:
+    build: ./pathManager
+    ports:
+      - "8081:8081"
+
+  db_path_manager:
+    image: postgres
+    environment:
+      DB: PathManager
+      USER: "pathmanager"
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"

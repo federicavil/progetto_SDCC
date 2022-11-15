@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"api_gateway/model"
+	"fmt"
 	"github.com/beego/beego/v2/server/web"
 
 	"log"
@@ -14,10 +15,11 @@ type SearchController struct {
 }
 
 func SearchMountainPaths(name string) []byte {
-	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
+	client, err := rpc.Dial("tcp", "path_manager:8081")
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
+	fmt.Println("DIAL")
 	param := model.SimpleSearchStruct{name}
 	var results []byte
 	//args := &search.Args{name}
@@ -29,6 +31,7 @@ func SearchMountainPaths(name string) []byte {
 }
 
 func (this *SearchController) Post() {
+	fmt.Println("POST")
 	defer this.ServeJSON()
 	var paths []byte
 	paths = SearchMountainPaths(this.Ctx.Input.Query("name"))

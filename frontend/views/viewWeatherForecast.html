@@ -13,7 +13,7 @@
 <body>
 {{template "header.html"}}
     <div class="row fill">
-        <div class="col-3 background-orange">
+        <div class="col-3 background-orange fill">
             <button onclick="window.open('viewInfo','_self')" name="backInfo" class="btn justify-content-start align-items-center" style="display: flex; justify-content: flex-start;"><img src="../static/img/back.png" onclick= "window.open('viewInfo','_self')" width="35%"></button>
             <div class="container">
                 <div class="row mx-auto" style="padding-top: 40%; padding-left: 10%; padding-right: 10%">
@@ -21,26 +21,20 @@
                 </div>
             </div>
         </div>
-        <div class="col-9">
+        <div class="col-9 fill">
             <!-- search results -->
 
             <div class="container" id="resultsContainer">
-                <div id=results class="row justify-content-center" style="padding-top:10%"></div>
-                <script> if (forecasts.length === 0){
-                        document.getElementById("results").style.display = "No matches found"
-                    }</script>
-
+        {{/*        <div id=results class="row justify-content-center">*/}}
                 {{range $val := .forecasts}}
-
-                <div class="container">
+                <div class="container" style="padding-top:3%; padding-left:3%; padding-right: 3%">
                     <div class="row card-view-simple-path rounded">
                         <div class="col align-items-center">
                             <div class="row justify-content-center" style="padding-bottom: 1%; padding-top:1%">
                                 <div class="d-flex justify-content-start align-items-center">
                                     <div class="ml-auto w-100 p-2 bd-highlight">
-                                        <div class="path-name-font" id="forecastCardView" align="left" style="padding-left: 5%;">{{$val.Date}}</div>
+                                        <div class="path-name-font" align="left" style="padding-left: 5%;">{{$val.Date}}</div>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row" style="padding-bottom: 2%;">
@@ -58,18 +52,18 @@
                                 </div>
                                 <div class="col-3" align="center" style="padding-bottom: 1%;width: 100px; margin: 0 20px">
                                     <div class="row justify-content-center" >
-                                        <img src="../static/img/rainy.png" width="64" height="64" >
+                                        <img src="../static/img/rainy.png" width="64" height="64">
                                     </div>
                                     <div class="row justify-content-center" style="margin: 10px">{{$val.Rainy}}mm</div>
                                 </div>
                                 <div class="col-3" align="center" style="padding-bottom: 1%; width: 100px; margin: 0 20px">
-                                    <div class="row justify-content-center" >
-                                        <img src="../static/img/wind.png" width="64" height="64" >
+                                    <div class="row justify-content-center">
+                                        <img src="../static/img/wind.png" width="64" height="64">
                                     </div>
                                     <div class="row justify-content-center" style="margin: 10px">{{$val.Wind}}km/h</div>
                                 </div>
                                 <div class="col-3" align="center" style="padding-bottom: 1%; width: 100px; margin: 0 20px">
-                                    <div class="row justify-content-center" >
+                                    <div class="row justify-content-center">
                                         <img src="../static/img/humidity.png" width="64" height="64">
                                     </div>
                                     <div class="row justify-content-center" style="margin: 10px">{{$val.Humidity}}%</div>
