@@ -3,6 +3,7 @@ package controllers
 import (
 	"api_gateway/grpc"
 	"api_gateway/proto"
+	"fmt"
 	"github.com/beego/beego/v2/server/web"
 	"strconv"
 )
@@ -12,6 +13,7 @@ type AddNewVisitController struct {
 }
 
 func (this *AddNewVisitController) Get() {
+	fmt.Println("InAddVisitControllerGet")
 	userId := this.Ctx.Input.Query("userId")
 	loginController := LoginController{}
 	isLogged := loginController.CheckLogin(userId)
@@ -26,6 +28,7 @@ func (this *AddNewVisitController) Post() {
 	visit.Username = &username
 	visit.Pathname = &pathname
 	visit.Timestamp = &timestamp
+	fmt.Println("InAddVisitControllerPost")
 	ret := grpc.AddNewVisit(visit)
 	defer this.ServeJSON()
 	this.Ctx.WriteString(strconv.Itoa(ret))

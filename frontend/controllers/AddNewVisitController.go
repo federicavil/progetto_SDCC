@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
@@ -42,24 +43,31 @@ func (this *AddNewVisitController) Get() {
 
 func (this *AddNewVisitController) Post() {
 	//saveBtn := this.GetString("saveVisit")
-	//name := this.GetString("name")
 	visitTime := this.GetString("visitTime")
-	fmt.Println(visitTime)
-	//if saveBtn != "" && name != "" && visitTime != "" {
-	//	newPath := model.MountainPath{}
-	//	err := this.ParseForm(&newPath)
-	//	if err != nil {
-	//		return
-	//	}
-	//	//pathJson, _ := json.Marshal(newPath)
-	//	//pathString := string(pathJson)
-	//	req := httplib.Post("http://127.0.0.1:5000/addNewVisit")
-	//	userid := this.session.Get("userId").(string)
-	//	req.Param("pathname", name)
-	//	req.Param("timestamp", visitTime)
-	//	req.Param("username", userid)
-	//	str, _ := req.Bytes()
-	//	fmt.Println(str)
-	//	this.session.Set("selectedPath", newPath)
-	//}
+
+	newPath := model.MountainVisit{}
+	err := this.ParseForm(&newPath)
+
+	if err != nil {
+		return
+	}
+	pathname := this.session.Get("selectedPath").(model.MountainPath)
+	fmt.Println(pathname.Name)
+
+	//pathJson, _ := json.Marshal(newPath)
+	//pathString := string(pathJson)
+	req := httplib.Post("http://127.0.0.1:5000/addNewVisit")
+	userid := this.session.Get("userId").(string)
+	fmt.Println("VISITTIME: " + visitTime)
+	//fmt.Println("NAME: " + pathname)
+	newPath.Username = userid
+	newPath.Pathname = pathname.Name
+	req.Param("pathname", pathname.Name)
+	req.Param("timestamp", visitTime)
+	req.Param("username", userid)
+	str, _ := req.Bytes()
+	fmt.Println(str)
+	//this.session.Set("selectedPath", newPath)
+	this.Data["pathname"] = this.session.Get("selectedPath")
+
 }

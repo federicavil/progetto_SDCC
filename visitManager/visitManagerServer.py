@@ -51,7 +51,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         username = request.Username
         pathname = request.Pathname
         timestamp = request.Timestamp
-        print(timestamp)
+        print("AddNewVisit("+username+","+pathname+","+timestamp+")")
         from datetime import datetime
         date_format = "%Y-%m-%dT%H:%M"
         ts1 = datetime.strptime(timestamp, date_format)
@@ -82,9 +82,11 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         return response
 
     def InviteUserToVisit(self, request, context):
+
         cur = self.conn.cursor()
         username = request.Username
         id_visit = request.ID_Visit
+        print("InviteUserToVisit("+username+","+id_visit+")")
         sql = """SELECT "Visit"."Creator" FROM public."Visit" WHERE "Visit"."ID"='"""+id_visit+"""'"""
         cur.execute(sql)
         creator = str(cur.fetchone()[0])
