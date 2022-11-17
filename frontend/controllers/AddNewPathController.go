@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -27,7 +28,7 @@ func (this *AddNewPathController) Get() {
 	} else {
 		userid = this.session.Get("userId").(string)
 	}
-	req := httplib.Get("http://127.0.0.1:5000/addNewPath")
+	req := httplib.Get("http://" + conf.GetApiGateway() + "/addNewPath")
 	req.Param("userId", userid)
 	str, _ := req.Bytes()
 	isLogged, _ := strconv.ParseBool(string(str))
@@ -52,7 +53,7 @@ func (this *AddNewPathController) Post() {
 		}
 		pathJson, _ := json.Marshal(newPath)
 		pathString := string(pathJson)
-		req := httplib.Post("http://127.0.0.1:5000/addNewPath")
+		req := httplib.Post("http://" + conf.GetApiGateway() + "/addNewPath")
 		req.Param("path", pathString)
 		str, _ := req.Bytes()
 		fmt.Println(str)

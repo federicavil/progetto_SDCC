@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -24,7 +25,7 @@ type AssistedResearchController struct {
 //Historical int    ` form:"historicalElements"`
 
 func AssistedPost(filters model.AssistedSearchStruct) []byte {
-	req := httplib.Post("http://127.0.0.1:5000/assistedsearch")
+	req := httplib.Post("http://" + conf.GetApiGateway() + "/assistedsearch")
 	fmt.Println(filters)
 	req.Param("city", filters.City)
 	req.Param("province", filters.Province)

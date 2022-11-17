@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -25,7 +26,7 @@ func (this *LoginController) Get() {
 
 func login(mode string, credential model.Credential) string {
 	credentialJson, _ := json.Marshal(credential)
-	req := httplib.Post("http://127.0.0.1:5000/login")
+	req := httplib.Post("http://" + conf.GetApiGateway() + "/login")
 	req.Param(mode, string(credentialJson))
 	response, _ := req.Bytes()
 	fmt.Println(string(response))

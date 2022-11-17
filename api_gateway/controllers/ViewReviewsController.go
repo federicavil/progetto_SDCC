@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"api_gateway/conf"
 	"api_gateway/proto"
 	"context"
 	"fmt"
@@ -14,7 +15,7 @@ type ViewReviewsController struct {
 func (this *ViewReviewsController) Get() {
 	mountainPathName := this.Ctx.Input.Query("mountainPathName")
 	fmt.Println("GET REVIEWS " + mountainPathName)
-	conn, _ := Dial("9091")
+	conn, _ := Dial(conf.GetConnectionConf("review_manager"))
 	client := proto.NewReviewManagerServiceClient(conn)
 	response, e := client.GetReviews(context.TODO(), &proto.GetReviewsRequest{MountainPathName: mountainPathName})
 	if e != nil {

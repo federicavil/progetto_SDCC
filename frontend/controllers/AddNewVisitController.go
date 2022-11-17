@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -26,7 +27,7 @@ func (this *AddNewVisitController) Get() {
 	} else {
 		userid = this.session.Get("userId").(string)
 	}
-	req := httplib.Get("http://127.0.0.1:5000/addNewVisit")
+	req := httplib.Get("http://" + conf.GetApiGateway() + "/addNewVisit")
 	req.Param("userId", userid)
 	str, _ := req.Bytes()
 	isLogged, _ := strconv.ParseBool(string(str))
@@ -56,7 +57,7 @@ func (this *AddNewVisitController) Post() {
 
 	//pathJson, _ := json.Marshal(newPath)
 	//pathString := string(pathJson)
-	req := httplib.Post("http://127.0.0.1:5000/addNewVisit")
+	req := httplib.Post("http://" + conf.GetApiGateway() + "/addNewVisit")
 	userid := this.session.Get("userId").(string)
 	fmt.Println("VISITTIME: " + visitTime)
 	//fmt.Println("NAME: " + pathname)

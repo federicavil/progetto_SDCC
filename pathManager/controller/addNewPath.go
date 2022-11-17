@@ -4,18 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
 )
 
 type Add int
 
-func SagaAddOnSearchDB(query string) {
-
-}
-
 func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) error {
-	db, err := pgConnect()
+	var db, err, quote = conf.DbConnect()
 	if err != nil {
 		return err
 	}
@@ -27,7 +24,7 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	}(db) // Defer Closing the database
 
 	newPath := *newPathPointer
-	query := `INSERT INTO public."Path" VALUES ('` +
+	query := `INSERT INTO ` + quote + `Path` + quote + ` VALUES ('` +
 		newPath.Name + "', '" +
 		strconv.Itoa(newPath.Altitude) + "', '" +
 		strconv.Itoa(newPath.Length) + "', '" +

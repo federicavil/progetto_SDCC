@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -26,7 +27,7 @@ func (this *ProfileController) Get() {
 	} else {
 		userid = this.session.Get("userId").(string)
 	}
-	req := httplib.Get("http://127.0.0.1:5000/profile")
+	req := httplib.Get("http://" + conf.GetApiGateway() + "/profile")
 	req.Param("userId", userid)
 	str, _ := req.Bytes()
 	fmt.Println("RESPONSE: " + string(str))
@@ -36,7 +37,7 @@ func (this *ProfileController) Get() {
 			return
 		}
 		this.Redirect("login", 302)
-	} else {
+	} else if string(str) != "" {
 		user := model.UserProfile{}
 		_ = json.Unmarshal(str, &user)
 		fmt.Println(user)
@@ -48,7 +49,7 @@ func (this *ProfileController) Post() {
 	logOutBtn := this.GetString("logOut")
 	saveEditBtn := this.GetString("save")
 	if logOutBtn != "" {
-		req := httplib.Post("http://127.0.0.1:5000/profile")
+		req := httplib.Post("http://" + conf.GetApiGateway() + "/profile")
 		userid := this.session.Get("userId").(string)
 		req.Param("userId", userid)
 		_, _ = req.Bytes()
@@ -62,7 +63,7 @@ func (this *ProfileController) Post() {
 			return
 		}
 		userJson, _ := json.Marshal(user)
-		req := httplib.Post("http://127.0.0.1:5000/profile")
+		req := httplib.Post("http://" + conf.GetApiGateway() + "/profile")
 		userid := this.session.Get("userId").(string)
 		req.Param("userId", userid)
 		req.Param("userProfile", string(userJson))

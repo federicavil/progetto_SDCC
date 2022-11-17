@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"api_gateway/conf"
 	"api_gateway/model"
 	"github.com/beego/beego/v2/server/web"
 	"log"
@@ -14,7 +15,7 @@ type AssistedSearchController struct {
 }
 
 func AssistedSearchMountainPaths(filters model.AdvancedSearchStruct) []byte {
-	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
+	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
@@ -43,11 +44,3 @@ func (this *AssistedSearchController) Post() {
 	this.Ctx.Output.Status = http.StatusOK
 	return
 }
-
-//City       string ` form:"city"`
-//Province   string ` form:"province"`
-//Region     string ` form:"region"`
-//Level      string ` form:"level"`
-//Cyclable   int    ` form:"cycleble"`
-//Family     int    ` form:"historicalElements"`
-//Historical int    ` form:"familySuitable"`

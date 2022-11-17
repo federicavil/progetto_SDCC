@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"log"
 	"pathManager/conf"
@@ -17,47 +18,8 @@ type Args struct {
 
 type Search int
 
-const (
-	host     = "127.0.0.1"
-	port     = 5432
-	user     = "pathmanager"
-	password = "password"
-	dbname   = "PathManager"
-)
-
-func pgConnect() (*sql.DB, error) {
-	// connection string
-	config, err := conf.LoadConfig("./conf")
-	if err != nil {
-		log.Fatal("cannot load config:", err)
-	}
-
-	port, _ := strconv.Atoi(config.Port)
-
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Host, port, config.User, config.Password, config.Dbname)
-	// open database
-	db, err := sql.Open("postgres", psqlconn)
-	CheckError(err)
-
-	// close database
-
-	// check db
-	err = db.Ping()
-	CheckError(err)
-
-	fmt.Println("Connected!")
-	return db, err
-}
-
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
-	var db, _ = pgConnect()
-
+	var db, _, quote = conf.DbConnect()
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
@@ -66,9 +28,9 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	}(db) // Defer Closing the database
 	var query string
 	if args.Name == "" {
-		query = `SELECT * FROM public."Path"`
+		query = `SELECT * FROM ` + quote + `Path` + quote
 	} else {
-		query = `SELECT * FROM public."Path" WHERE name LIKE ` + `'%` + args.Name + `%'`
+		query = `SELECT * FROM ` + quote + `Path` + quote + ` WHERE name LIKE ` + `'%` + args.Name + `%'`
 	}
 	row, err := db.Query(query)
 	if err != nil {
@@ -98,7 +60,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 }
 
 func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]byte) error {
-	var db, _ = pgConnect()
+	var db, _, quote = conf.DbConnect()
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
@@ -122,7 +84,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		pathreq.Historical = -1
 	}
 
-	var query = `SELECT * FROM public."Path"`
+	var query = `SELECT * FROM ` + quote + `Path` + quote
 	if pathreq.City != "" || pathreq.Province != "" || pathreq.Region != "" ||
 		pathreq.Level != "" || pathreq.Cyclable != -1 || pathreq.Family != -1 || pathreq.Historical != -1 {
 		query = query + " WHERE"

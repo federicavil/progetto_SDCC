@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/beego/beego/v2/client/httplib"
@@ -21,7 +22,7 @@ func (this *ViewWeatherForecastController) Get() {
 	pathJson, _ := json.Marshal(path)
 	pathString := string(pathJson)
 	fmt.Println(pathString)
-	req := httplib.Get("http://127.0.0.1:5000/viewWeatherForecast")
+	req := httplib.Get("http://" + conf.GetApiGateway() + "/viewWeatherForecast")
 	req.Param("path", pathString)
 	str, _ := req.Bytes()
 	fmt.Println(str)

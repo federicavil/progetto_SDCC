@@ -14,14 +14,69 @@ services:
 
   path_manager:
     build: ./pathManager
+    depends_on:
+     - db_path_manager
     ports:
       - "8081:8081"
 
-  db_path_manager:
-    image: postgres
+  login:
+    build: ./login
+    depends_on:
+      - db_login
     environment:
-      DB: PathManager
-      USER: "pathmanager"
-      POSTGRES_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_login:5432/loginservice
     ports:
-      - "5432:5432"
+      - "9090:9090"
+
+#  review_manager:
+#    build: ./reviewManager
+#    depends_on:
+#      - db_review_manager
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db_review_manager:5432/reviewmanager
+#    ports:
+#      - "9091:9091"
+
+  db_path_manager:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: PathManager
+      MYSQL_USER: pathmanager
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./data/pathManager:/docker-entrypoint-initdb.d
+    ports:
+      - "50000:3306"
+
+  db_login:
+    image: postgres
+    container_name: db_login
+    environment:
+      DB: loginservice
+      USER: login
+      PASSWORD: password
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./data/login:/docker-entrypoint-initdb.d
+    ports:
+      - "50001:5432"
+
+  db_review_manager:
+    image: postgres
+    container_name: db_review_manager
+    environment:
+      DB: reviewmanager
+      USER: reviewmanager
+      PASSWORD: password
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./data/login:/docker-entrypoint-initdb.d
+    ports:
+      - "50002:5432"
+
+volumes:
+  db_login: {}
+  db_path_manager: {}
+  db_review_manager: {}

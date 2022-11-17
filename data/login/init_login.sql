@@ -1,0 +1,17 @@
+CREATE ROLE login WITH
+    LOGIN
+    SUPERUSER
+    CREATEDB
+    CREATEROLE
+    INHERIT
+    NOREPLICATION
+    CONNECTION LIMIT -1
+    PASSWORD 'password';
+
+CREATE DATABASE "loginservice"
+    WITH
+    OWNER = login
+    ENCODING = 'UTF8'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"api_gateway/conf"
 	"api_gateway/proto"
 	"context"
 	"fmt"
@@ -15,7 +16,7 @@ func (this *ViewWeatherForecastController) Get() {
 	mountainpath := this.Ctx.Input.Query("path")
 	fmt.Println("GET FORECAST " + mountainpath)
 
-	conn, _ := Dial("50052")
+	conn, _ := Dial(conf.GetConnectionConf("weather_forecast"))
 	client := proto.NewWeatherForecastServiceClient(conn)
 	response, e := client.GetForecast(context.TODO(), &proto.ForecastInput{Path: mountainpath})
 	if e != nil {

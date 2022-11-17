@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -26,7 +27,7 @@ type Field struct {
 }
 
 func SimpleSearchPost(name string) []byte {
-	req := httplib.Post("http://127.0.0.1:5000/simplesearch")
+	req := httplib.Post("http://" + conf.GetApiGateway() + "/simplesearch")
 	req.Param("name", name)
 	data := []model.MountainPath{}
 	str, _ := req.Bytes()

@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/beego/beego/v2/client/httplib"
@@ -20,7 +21,7 @@ func (this *ViewReviewsController) Get() {
 	path := this.StartSession().Get("selectedPath").(model.MountainPath)
 	pathName := path.Name
 	fmt.Println("VIEW REVIEW " + pathName)
-	req := httplib.Get("http://127.0.0.1:5000/getReviews")
+	req := httplib.Get("http://" + conf.GetApiGateway() + "/getReviews")
 	req.Param("mountainPathName", pathName)
 	str, _ := req.Bytes()
 

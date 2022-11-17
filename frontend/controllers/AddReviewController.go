@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -27,7 +28,7 @@ func (this *AddReviewController) Get() {
 	} else {
 		userid = this.session.Get("userId").(string)
 	}
-	req := httplib.Get("http://127.0.0.1:5000/addReview")
+	req := httplib.Get("http://" + conf.GetApiGateway() + "/addReview")
 	req.Param("userId", userid)
 	str, _ := req.Bytes()
 	isLogged, _ := strconv.ParseBool(string(str))
@@ -87,7 +88,7 @@ func (this *AddReviewController) Post() {
 
 		reviewJson, _ := json.Marshal(review)
 		fmt.Println(string(reviewJson))
-		req := httplib.Post("http://127.0.0.1:5000/addReview")
+		req := httplib.Post("http://" + conf.GetApiGateway() + "/addReview")
 		req.Param("review", string(reviewJson))
 		str, _ := req.Bytes()
 		fmt.Println(str)

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"api_gateway/conf"
 	"api_gateway/model"
 	"encoding/json"
 	"fmt"
@@ -15,7 +16,7 @@ type AddNewPathController struct {
 }
 
 func AddNewPath(newPath model.MountainPath) error {
-	client, err := rpc.Dial("tcp", "127.0.0.1:8081")
+	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}

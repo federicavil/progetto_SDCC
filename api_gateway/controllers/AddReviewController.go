@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"api_gateway/conf"
 	"api_gateway/proto"
 	"context"
 	"fmt"
@@ -22,7 +23,7 @@ func (this *AddReviewController) Get() {
 func (this *AddReviewController) Post() {
 	review := this.Ctx.Input.Query("review")
 	fmt.Println("aggiunta review" + review)
-	conn, _ := Dial("9091")
+	conn, _ := Dial(conf.GetConnectionConf("review_manager"))
 	client := proto.NewReviewManagerServiceClient(conn)
 	response, err := client.AddReview(context.TODO(), &proto.AddReviewRequest{Review: review})
 	if err != nil {

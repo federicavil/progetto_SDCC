@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"api_gateway/conf"
 	"api_gateway/proto"
 	"context"
 	"fmt"
@@ -17,7 +18,8 @@ func (this *ProfileController) Prepare() {
 }
 
 func getUserProfile(userId string) string {
-	conn, _ := Dial("9090")
+	fmt.Println("get user profile")
+	conn, _ := Dial(conf.GetConnectionConf("login"))
 	client := proto.NewLoginServiceClient(conn)
 	response, e := client.GetProfile(context.TODO(), &proto.ProfileRequest{UserId: userId, Profile: ""})
 	if e != nil {
@@ -28,7 +30,8 @@ func getUserProfile(userId string) string {
 }
 
 func setUserProfile(userId string, userProfile string) {
-	conn, _ := Dial("9090")
+	fmt.Println("set user profile")
+	conn, _ := Dial(conf.GetConnectionConf("login"))
 	client := proto.NewLoginServiceClient(conn)
 	_, e := client.UpdateProfile(context.TODO(), &proto.ProfileRequest{UserId: userId, Profile: userProfile})
 	if e != nil {
