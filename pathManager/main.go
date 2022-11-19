@@ -7,10 +7,20 @@ import (
 	"net/rpc"
 	"pathManager/conf"
 	"pathManager/controller"
+	"time"
 )
 
 func main() {
-	conf.DbConnect()
+	i := 1
+	for i < 10 {
+		_, err, _ := conf.DbConnect()
+		if err != nil {
+			i++
+			time.Sleep(1)
+		} else {
+			i = 10
+		}
+	}
 	add := new(controller.Add)
 	err := rpc.Register(add)
 	if err != nil {

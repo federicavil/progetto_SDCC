@@ -106,21 +106,19 @@
             <div class="row mx-auto" style="padding-bottom: 3%;">
               <div class="col-5 green-text">Name</div>
               <div class="col-7">
-                <input type="text" class="form-control" id="name" name="name" value={{.user.Name}} placeholder="Name">
+                <input type="text" class="form-control" id="name" name="name" value={{.user.Name}}>
               </div>
             </div>
             <div class="row mx-auto" style="padding-bottom: 3%;">
               <div class="col-5 green-text">Surname</div>
               <div class="col-7">
-                <input type="text" class="form-control" id="surname" name="surname" value={{.user.Surname}} placeholder="Surname">
+                <input type="text" class="form-control" id="surname" name="surname" value={{.user.Surname}}>
               </div>
             </div>
             <div class="row mx-auto" style="padding-bottom: 3%;">
               <div class="col-5 green-text">About me</div>
               <div class="col-7">
-                <textarea maxlength="200" rows="5" cols="25" id="description" name="description" placeholder="Write a description here...">
-                  {{.user.Description}}
-                </textarea>
+                <textarea maxlength="200" rows="5" cols="25" id="description" name="description">{{.user.Description}}</textarea>
               </div>
             </div>
           </div>

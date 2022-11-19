@@ -99,7 +99,7 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     weatherForecastService_pb2_grpc.add_WeatherForecastServiceServicer_to_server(
       WeatherForecastServiceServicer(), server)
-    server.add_insecure_port('[::]:50052')
+    server.add_insecure_port('[::]:9092')
     server.start()
     server.wait_for_termination()
 

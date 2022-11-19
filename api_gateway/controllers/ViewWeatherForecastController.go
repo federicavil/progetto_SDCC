@@ -23,12 +23,6 @@ func (this *ViewWeatherForecastController) Get() {
 		fmt.Println(e)
 	}
 
-	/*result := grpc.GetForecast(proto.ForecastInput{Path: mountainpath})
-	fmt.Println(result)*/
-	//response := proto.ForecastOutput{
-	//	Forecasts: "{\"time\" : [\"11/11/2022\",\"12/11/2022\",\"13/11/2022\"],\"temperature\" : [4,7,12],\"cloud_cover\" : [40,100,75],\"precipitation\" : [9,10,0],\"wind_speed\" : [12,3,5],\"humidity\" : [4,8,2]}",
-	//}
-
 	fmt.Println(response.Forecasts)
 	this.Ctx.WriteString(response.Forecasts)
 }

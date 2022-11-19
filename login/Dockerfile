@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM eclipse-temurin:17-jdk-focal
 
 WORKDIR login
 
@@ -7,6 +7,7 @@ COPY mvnw.cmd ./
 COPY mvnw ./
 COPY pom.xml ./
 COPY login.iml ./
+RUN sed -i 's/\r$//' mvnw
 RUN ./mvnw dependency:resolve
 
 COPY src ./src

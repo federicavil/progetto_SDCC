@@ -1,6 +1,7 @@
 package grpc
 
 import (
+	"api_gateway/conf"
 	"api_gateway/proto"
 	"context"
 	"encoding/json"
@@ -17,7 +18,7 @@ const (
 
 func init_grpc_visit_manager_client() (*grpc.ClientConn, proto.ManageVisitClient, context.Context, context.CancelFunc) {
 	// Set up a connection to the server.
-	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(conf.GetConnectionConf("visit_manager"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

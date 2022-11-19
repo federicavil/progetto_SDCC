@@ -28,14 +28,27 @@ services:
     ports:
       - "9090:9090"
 
-#  review_manager:
-#    build: ./reviewManager
-#    depends_on:
-#      - db_review_manager
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db_review_manager:5432/reviewmanager
-#    ports:
-#      - "9091:9091"
+
+  review_manager:
+    build: ./reviewManager
+    depends_on:
+      - db_review_manager
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_review_manager:5432/reviewmanager
+    ports:
+      - "9091:9091"
+
+  weather_forecast:
+    build: ./weatherForecast
+    ports:
+      - "9092:9092"
+
+  visit_manager:
+    build: ./visitManager
+    depends_on:
+      - db_visit_manager
+    ports:
+      - "9093:9093"
 
   db_path_manager:
     image: mysql:5.7
@@ -72,11 +85,25 @@ services:
       PASSWORD: password
       POSTGRES_PASSWORD: password
     volumes:
-      - ./data/login:/docker-entrypoint-initdb.d
+      - ./data/reviewManager:/docker-entrypoint-initdb.d
     ports:
       - "50002:5432"
+
+  db_visit_manager:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: VisitManager
+      MYSQL_USER: visitmanager
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./data/visitManager:/docker-entrypoint-initdb.d
+    ports:
+      - "50003:3306"
 
 volumes:
   db_login: {}
   db_path_manager: {}
   db_review_manager: {}
+  db_visit_manager: {}
