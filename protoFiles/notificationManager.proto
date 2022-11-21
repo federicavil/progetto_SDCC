@@ -3,17 +3,17 @@ syntax = "proto3";
 option go_package = "api_gateway/proto";
 
 
-service WeatherForecastService {
-  rpc GetForecast(ForecastInput) returns (ForecastOutput);
+service NotificationManager {
+  rpc GetInvites(InviteInput) returns (InviteOutput);
 }
 
 //input: pathname del luogo
 //output: json con informazioni --> {time=[...], temperature=[...], humidity=[...], cloud_cover=[...], precipitation=[...], wind_speed=[...]}
 
-message ForecastInput {
-  string Path = 1;
+message InviteInput {
+  string Username = 1;
 }
 
-message ForecastOutput {
-  string Forecasts = 1;
+message InviteOutput {
+  string Invites = 1;
 }

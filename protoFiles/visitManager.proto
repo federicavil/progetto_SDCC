@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-option go_package = "api_gateway/grpc";
+option go_package = "api_gateway/proto";
 
 
 service ManageVisit {

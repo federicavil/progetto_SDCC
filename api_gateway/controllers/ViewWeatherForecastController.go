@@ -22,7 +22,7 @@ func (this *ViewWeatherForecastController) Get() {
 	if e != nil {
 		fmt.Println(e)
 	}
-
+	fmt.Println("OBTAINED FORECAST: ")
 	fmt.Println(response.Forecasts)
 	this.Ctx.WriteString(response.Forecasts)
 }

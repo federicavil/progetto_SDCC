@@ -13,6 +13,5 @@ func (this *GetAllVisitsController) Get() {
 	username := this.Ctx.Input.Query("username")
 	visits := grpc.GetAllVisits(username)
 	defer this.ServeJSON()
-	this.Ctx.WriteString(string(visits))
-
+	this.Data["json"] = string(visits)
 }

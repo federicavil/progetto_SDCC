@@ -13,14 +13,14 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cweatherForecastService.proto\"\x1d\n\rForecastInput\x12\x0c\n\x04Path\x18\x01 \x01(\t\"#\n\x0e\x46orecastOutput\x12\x11\n\tForecasts\x18\x01 \x01(\t2H\n\x16WeatherForecastService\x12.\n\x0bGetForecast\x12\x0e.ForecastInput\x1a\x0f.ForecastOutputB\x12Z\x10\x61pi_gateway/grpcb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cweatherForecastService.proto\"\x1d\n\rForecastInput\x12\x0c\n\x04Path\x18\x01 \x01(\t\"#\n\x0e\x46orecastOutput\x12\x11\n\tForecasts\x18\x01 \x01(\t2H\n\x16WeatherForecastService\x12.\n\x0bGetForecast\x12\x0e.ForecastInput\x1a\x0f.ForecastOutputB\x13Z\x11\x61pi_gateway/protob\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'weatherForecastService_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  DESCRIPTOR._serialized_options = b'Z\020api_gateway/grpc'
+  DESCRIPTOR._serialized_options = b'Z\021api_gateway/proto'
   _FORECASTINPUT._serialized_start=32
   _FORECASTINPUT._serialized_end=61
   _FORECASTOUTPUT._serialized_start=63

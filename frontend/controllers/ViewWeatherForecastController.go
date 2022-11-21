@@ -30,13 +30,12 @@ func (this *ViewWeatherForecastController) Get() {
 	path := this.StartSession().Get("selectedPath").(model.MountainPath)
 	pathJson, _ := json.Marshal(path)
 	pathString := string(pathJson)
-	fmt.Println(pathString)
 	req := httplib.Get("http://" + conf.GetApiGateway() + "/viewWeatherForecast")
 	req.Param("path", pathString)
 	str, _ := req.Bytes()
-	fmt.Println(str)
 	forecasts := model.WeatherForecasts{}
 	_ = json.Unmarshal(str, &forecasts)
+	fmt.Println(forecasts)
 	size := len(forecasts.Rainy)
 	forecastLists := []model.WeatherForecast{}
 	for i := 0; i < size; i++ {
