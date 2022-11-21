@@ -30,8 +30,9 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	if args.Name == "" {
 		query = `SELECT * FROM ` + quote + `Path` + quote
 	} else {
-		query = `SELECT * FROM ` + quote + `Path` + quote + ` WHERE name LIKE ` + `'%` + args.Name + `%'`
+		query = `SELECT * FROM ` + quote + `Path` + quote + ` WHERE UPPER(name) LIKE UPPER(` + `'%` + args.Name + `%')`
 	}
+	fmt.Println(query)
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
@@ -55,7 +56,6 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 		paths = append(paths, path)
 	}
 	*reply, _ = json.Marshal(paths)
-	fmt.Println(*reply)
 	return nil
 }
 
@@ -97,7 +97,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		} else {
 			query = query + " AND"
 		}
-		query = query + " city LIKE '%" + pathreq.City + "%'"
+		query = query + " UPPER(city) LIKE UPPER('%" + pathreq.City + "%')"
 	}
 	if pathreq.Province != "" {
 		if and == 0 {
@@ -105,7 +105,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		} else {
 			query = query + " AND"
 		}
-		query = query + " province LIKE '%" + pathreq.Province + "%'"
+		query = query + " UPPER(province) LIKE UPPER('%" + pathreq.Province + "%')"
 	}
 	if pathreq.Region != "" {
 		if and == 0 {
@@ -113,7 +113,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		} else {
 			query = query + " AND"
 		}
-		query = query + " region LIKE '%" + pathreq.Region + "%'"
+		query = query + " UPPER(region) LIKE UPPER('%" + pathreq.Region + "%')"
 	}
 
 	if pathreq.Level != "" {
@@ -122,7 +122,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		} else {
 			query = query + " AND"
 		}
-		query = query + " level LIKE '%" + pathreq.Level + "%'"
+		query = query + " UPPER(level) LIKE UPPER('%" + pathreq.Level + "%')"
 	}
 	if pathreq.Cyclable != -1 {
 		if and == 0 {
