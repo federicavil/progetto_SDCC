@@ -51,6 +51,9 @@ func (this *SearchController) Post() {
 	name := this.GetString("pathName")
 	selected := this.GetString("path")
 	viewAll := this.GetString("viewAll")
+	fmt.Println(name)
+	fmt.Println(selected)
+	fmt.Println(viewAll)
 	if name != "" || viewAll != "" {
 		pathlist := SimpleSearchPost(name)
 		if pathlist != nil {

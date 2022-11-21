@@ -9,12 +9,37 @@ import psycopg2
 import mysql.connector
 from configparser import ConfigParser
 
+from sqs_visit.sqs_utils import sendInviteRequestMessage, removeRequestMessage
+
 
 class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     """Provides methods that implement functionality of route guide server."""
 
     # def __init__(self):
     #     self.db = visitManager_resources.visitManager_guide_database()
+
+    def sendInviteRequestMessage(self, username="", visit="", partecipation="", participants="{}"):
+
+        # Send message to SQS queue
+        response = self.sqs.send_message(
+            QueueUrl=self.queue_url,
+            DelaySeconds=10,
+            MessageAttributes={
+                'InviteResponse_'+username+visit: {
+                    'DataType': 'String',
+                    'StringValue': partecipation
+                },
+                'Participants': {
+                    'DataType': 'String',
+                    'StringValue': participants
+                },
+            },
+            MessageBody=(
+                ""
+            )
+        )
+
+        print(response['MessageId'])
 
     def parse_config(self, parser, section):
         conf = {}
@@ -112,7 +137,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
-        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + "'"
+        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + "'"
         cur.execute(sql)
         data = cur.fetchall()
         visits = []
@@ -149,7 +174,13 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             ret = visitManager_pb2.Return(Ret=-2)
             return ret
         self.conn.commit()
-        ###TODO: CHIAMATA MICROSERVIZIO NOTIFY PER INVIO NOTIFICA ALL'UTENTE
+        sql = """SELECT """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_User"""+quote+""" FROM """+quote+"""User_to_Visit"""+quote+""" WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""Accepted"""+quote+"""=True AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """'"""
+        cur.execute(sql)
+        participants = cur.fetchall()
+        participantList = []
+        for p in participants:
+            participantList.append(p[0])
+        sendInviteRequestMessage(creator, username, id_visit, participantList)
         ret = visitManager_pb2.Return(Ret=1)
         return ret
 
@@ -159,10 +190,15 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         id_visit = request.ID_Visit
         response = request.Response
         quote = self.quote
-        sql = """UPDATE """+quote+"""User_to_Visit"""+quote+""" SET """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""Accepted"""+quote+"""=""" + response + """ WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """' AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""Username"""+quote+"""='""" + username + """'"""
+        sql = """UPDATE """+quote+"""User_to_Visit"""+quote+""" SET """+quote+"""Accepted"""+quote+"""=""" + response + """ WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """' AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_User"""+quote+"""='""" + username + """'"""
         cur.execute(sql)
-        self.conn.commit()
-        ret = visitManager_pb2.Return(Ret=1)
+        deleted = removeRequestMessage(username, id_visit)
+        if deleted == 1:
+            self.conn.commit()
+            ret = visitManager_pb2.Return(Ret=1)
+        else:
+            self.conn.rollback()
+            ret = visitManager_pb2.Return(Ret=0)
         return ret
 
 

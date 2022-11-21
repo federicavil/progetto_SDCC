@@ -26,7 +26,7 @@ func init_grpc_visit_manager_client() (*grpc.ClientConn, proto.ManageVisitClient
 	c := proto.NewManageVisitClient(conn)
 
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
 	return conn, c, ctx, cancel
 }
@@ -63,6 +63,18 @@ func InviteUserToVisit(invite proto.Invite) int {
 	defer conn.Close()
 	defer cancel()
 	r, err := c.InviteUserToVisit(ctx, &invite)
+
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	return int(*r.Ret)
+}
+
+func AcceptOrRefuseInvite(invite proto.InviteResponse) int {
+	conn, c, ctx, cancel := init_grpc_visit_manager_client()
+	defer conn.Close()
+	defer cancel()
+	r, err := c.AcceptOrRefuseInvite(ctx, &invite)
 
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)

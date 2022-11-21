@@ -10,11 +10,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	defaultName = "world"
-)
-
-func init_grpc_client() (*grpc.ClientConn, proto.WeatherForecastServiceClient, context.Context, context.CancelFunc) {
+func init_grpc_weather_forecast_client() (*grpc.ClientConn, proto.WeatherForecastServiceClient, context.Context, context.CancelFunc) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial("localhost:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -30,7 +26,7 @@ func init_grpc_client() (*grpc.ClientConn, proto.WeatherForecastServiceClient, c
 }
 
 func GetForecast(forecastInput proto.ForecastInput) *proto.ForecastOutput {
-	conn, c, ctx, cancel := init_grpc_client()
+	conn, c, ctx, cancel := init_grpc_weather_forecast_client()
 	defer conn.Close()
 	defer cancel()
 	r, err := c.GetForecast(ctx, &forecastInput)

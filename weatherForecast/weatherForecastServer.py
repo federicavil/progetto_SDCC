@@ -13,8 +13,9 @@ from configparser import ConfigParser
 class WeatherForecastServiceServicer(weatherForecastService_pb2_grpc.WeatherForecastServiceServicer):
     """Provides methods that implement functionality of route guide server."""
 
-    # def __init__(self):
-    #     self.db = visitManager_resources.visitManager_guide_database()
+    def __init__(self):
+        response = requests.get("https://geocoding-api.open-meteo.com/v1/search?name=Roma")
+        resp = response.content.decode()
 
     def config(self, filename='./conf/database.ini', section='postgresql'):
         # create a parser
@@ -33,20 +34,6 @@ class WeatherForecastServiceServicer(weatherForecastService_pb2_grpc.WeatherFore
 
         return db
 
-    def initt(self):
-        """ Connect to the PostgreSQL database server """
-        conn = None
-        try:
-           # read connection parameters
-           params = self.config()
-
-           # connect to the PostgreSQL server
-           print('Connecting to the PostgreSQL database...')
-           self.conn = psycopg2.connect(**params)
-           print("Connected")
-           # create a cursor
-        except (Exception, psycopg2.DatabaseError) as error:
-           print(error)
 
     def GetForecast(self, request, context):
         path = request.Path
@@ -88,7 +75,7 @@ class WeatherForecastServiceServicer(weatherForecastService_pb2_grpc.WeatherFore
 
         dict_values = [time,temperature,humidity,precipitation,cloud_cover,wind_speed]
         result_dict = {dict_keys[i]: dict_values[i] for i in range(len(dict_values))}
-        print(result_dict)
+        pprint(result_dict)
         #GEOCODING: https://geocoding-api.open-meteo.com/v1/search?name=Berlin
         #METEO: https://api.open-meteo.com/v1/forecast?latitude=51.5002&longitude=-0.1262&hourly=temperature_2m,relativehumidity_2m,precipitation,cloudcover,windspeed_10m
 
