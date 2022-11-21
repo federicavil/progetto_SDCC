@@ -63,7 +63,7 @@ def serve():
   server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
   notificationManager_pb2_grpc.add_NotificationManagerServicer_to_server(
       NotificationManagerServicer(), server)
-  server.add_insecure_port('[::]:50051')
+  server.add_insecure_port('[::]:9094')
   server.start()
   server.wait_for_termination()
 

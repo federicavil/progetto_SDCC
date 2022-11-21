@@ -6,6 +6,7 @@ option go_package = "api_gateway/proto";
 service ManageVisit {
   rpc AddNewVisit(InputVisit) returns (Return) {}
   rpc GetAllVisits(User) returns (Visits) {}
+  rpc GetVisitByID(ID_Visit) returns (Visit) {}
   rpc InviteUserToVisit(Invite) returns (Return) {}
   rpc AcceptOrRefuseInvite(InviteResponse) returns (Return) {}
 }
@@ -32,10 +33,16 @@ message Visits {
   repeated Visit Visit = 1;
 }
 
+message ID_Visit {
+  required string Value = 1;
+}
+
 message Visit {
   required uint32 ID_Visit = 1;
   required string ID_Path = 2;
-  optional double Timestamp = 3;
+  required string Creator = 3;
+  optional string Timestamp = 4;
+  repeated string Participants = 5;
 }
 
 message InputVisit {

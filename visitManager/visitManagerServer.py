@@ -134,15 +134,45 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         ret = visitManager_pb2.Return(Ret=True)
         return ret
 
+    def GetVisitByID(self, request, context):
+        cur = self.conn.cursor()
+        quote = self.quote
+        print(request.Value)
+        sql = """ SELECT * FROM """ + quote + """Visit""" + quote +""" WHERE """+quote+"""ID"""+quote+""" = """ + request.Value
+        cur.execute(sql)
+        try:
+            d = cur.fetchall()[0]
+        except IndexError:
+            return visitManager_pb2.Visit(ID_Visit=0, ID_Path="", Timestamp=-1, Creator = "")
+        from datetime import datetime
+        date_format = "%Y-%m-%dT%H:%M"
+        import pandas as pd
+        t = pd.to_datetime(d[2], origin='julian', unit='D')
+        ts1 = datetime.strptime(t, date_format)
+        print(ts1)
+        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=d[2], Creator = d[3])
+        return visit
+
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
         sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + "'"
         cur.execute(sql)
         data = cur.fetchall()
+
         visits = []
         for d in data:
-            visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=d[2])
+            sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0])
+            cur.execute(sql)
+            resPart = cur.fetchall()
+            participants = []
+            for p in resPart:
+                participants.append(p[1])
+            import pandas as pd
+            t = pd.to_datetime(d[2], origin='julian', unit='D')
+            ts = t.strftime("%d/%m/%Y, %H:%M")
+            print(participants)
+            visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator=d[3], Participants = participants)
             visits.append(visit)
         response = visitManager_pb2.Visits(Visit=visits)
         return response

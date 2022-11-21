@@ -24,6 +24,11 @@ class ManageVisitStub(object):
                 request_serializer=visitManager__pb2.User.SerializeToString,
                 response_deserializer=visitManager__pb2.Visits.FromString,
                 )
+        self.GetVisitByID = channel.unary_unary(
+                '/ManageVisit/GetVisitByID',
+                request_serializer=visitManager__pb2.ID_Visit.SerializeToString,
+                response_deserializer=visitManager__pb2.Visit.FromString,
+                )
         self.InviteUserToVisit = channel.unary_unary(
                 '/ManageVisit/InviteUserToVisit',
                 request_serializer=visitManager__pb2.Invite.SerializeToString,
@@ -46,6 +51,12 @@ class ManageVisitServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetAllVisits(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetVisitByID(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -75,6 +86,11 @@ def add_ManageVisitServicer_to_server(servicer, server):
                     servicer.GetAllVisits,
                     request_deserializer=visitManager__pb2.User.FromString,
                     response_serializer=visitManager__pb2.Visits.SerializeToString,
+            ),
+            'GetVisitByID': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetVisitByID,
+                    request_deserializer=visitManager__pb2.ID_Visit.FromString,
+                    response_serializer=visitManager__pb2.Visit.SerializeToString,
             ),
             'InviteUserToVisit': grpc.unary_unary_rpc_method_handler(
                     servicer.InviteUserToVisit,
@@ -127,6 +143,23 @@ class ManageVisit(object):
         return grpc.experimental.unary_unary(request, target, '/ManageVisit/GetAllVisits',
             visitManager__pb2.User.SerializeToString,
             visitManager__pb2.Visits.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetVisitByID(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ManageVisit/GetVisitByID',
+            visitManager__pb2.ID_Visit.SerializeToString,
+            visitManager__pb2.Visit.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
