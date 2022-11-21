@@ -8,7 +8,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
-	"strconv"
 )
 
 type AddNewPathController struct {
@@ -17,21 +16,18 @@ type AddNewPathController struct {
 }
 
 func (this *AddNewPathController) Prepare() {
-	this.TplName = "addNewPath.html"
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
+	this.TplName = "addNewPath.html"
 }
 
 func (this *AddNewPathController) Get() {
-	var userid string
-	if this.session.Get("userId") == nil {
-		userid = ""
-	} else {
-		userid = this.session.Get("userId").(string)
-	}
-	req := httplib.Get("http://" + conf.GetApiGateway() + "/addNewPath")
-	req.Param("userId", userid)
-	str, _ := req.Bytes()
-	isLogged, _ := strconv.ParseBool(string(str))
+	isLogged := CheckLogin(this.session, "/addNewPath")
 	if !isLogged {
 		err := this.session.Set("prevPage", "addPath")
 		if err != nil {
@@ -39,12 +35,10 @@ func (this *AddNewPathController) Get() {
 		}
 		this.Redirect("login", 302)
 	}
-
 }
 
 func (this *AddNewPathController) Post() {
 	saveBtn := this.GetString("savePath")
-	addReviewBtn := this.GetString("addReview")
 	if saveBtn != "" {
 		newPath := model.MountainPath{}
 		err := this.ParseForm(&newPath)
@@ -58,7 +52,6 @@ func (this *AddNewPathController) Post() {
 		str, _ := req.Bytes()
 		fmt.Println(str)
 		this.session.Set("selectedPath", newPath)
-	} else if addReviewBtn != "" {
-		this.Redirect("addReview", 302)
+		this.Redirect("viewInfo", 302)
 	}
 }

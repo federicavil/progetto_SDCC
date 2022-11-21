@@ -7,7 +7,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
-	"strconv"
 )
 
 type AddNewVisitController struct {
@@ -16,21 +15,18 @@ type AddNewVisitController struct {
 }
 
 func (this *AddNewVisitController) Prepare() {
-	this.TplName = "addNewVisit.html"
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
+	this.TplName = "addNewVisit.html"
 }
 
 func (this *AddNewVisitController) Get() {
-	var userid string
-	if this.session.Get("userId") == nil {
-		userid = ""
-	} else {
-		userid = this.session.Get("userId").(string)
-	}
-	req := httplib.Get("http://" + conf.GetApiGateway() + "/addNewVisit")
-	req.Param("userId", userid)
-	str, _ := req.Bytes()
-	isLogged, _ := strconv.ParseBool(string(str))
+	isLogged := CheckLogin(this.session, "/addNewVisit")
 	if !isLogged {
 		err := this.session.Set("prevPage", "addNewVisit")
 		if err != nil {

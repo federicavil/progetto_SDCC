@@ -8,6 +8,8 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
+	"strconv"
+	"sync"
 )
 
 type LoginController struct {
@@ -31,6 +33,20 @@ func login(mode string, credential model.Credential) string {
 	response, _ := req.Bytes()
 	fmt.Println(string(response))
 	return string(response)
+}
+
+func CheckLogin(session session.Store, page string) bool {
+	var userid string
+	if session.Get("userId") == nil {
+		userid = ""
+	} else {
+		userid = session.Get("userId").(string)
+	}
+	req := httplib.Get("http://" + conf.GetApiGateway() + page)
+	req.Param("userId", userid)
+	str, _ := req.Bytes()
+	isLogged, _ := strconv.ParseBool(string(str))
+	return isLogged
 }
 
 func (this *LoginController) Post() {
@@ -70,8 +86,9 @@ func (this *LoginController) Post() {
 			fmt.Println("Errore session")
 			return
 		}
+		this.session.Set("sessionMutex", new(sync.Mutex))
+		go NotificationPolling(userId, this.session)
 		prevPage := this.session.Get("prevPage")
 		this.Redirect(fmt.Sprint(prevPage), 302)
 	}
-
 }

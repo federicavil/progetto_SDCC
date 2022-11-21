@@ -18,6 +18,12 @@ type SearchController struct {
 
 func (this *SearchController) Prepare() {
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
 	this.TplName = "searchPath.html"
 }
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PeakLand</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/body.css" type="text/css"/>
+</head>
+<body>
+{{template "header.html"}}
+<div class="row fill">
+    <div class="col-3 background-orange">
+        <div class="container">
+            <div class="row mx-auto" style="padding-top: 40%; padding-left: 10%; padding-right: 10%">
+                <div class="col" align="center" style="font-size: 150%;">Here are your notifications</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-9">
+        <form class="form" method="post">
+            <div class="container" id="resultsContainer">
+                <div id="results" class="row justify-content-center" style="padding-top:10%"></div>
+                {{range $val := .notifications}}
+                <div class="container" style="padding-bottom: 2%">
+                        <div class="row card-view-simple-path-no-margin">
+                            <div class="col align-items-center">
+                                <div class="row justify-content-center" style="height:50px;width:500px;padding-bottom: 1%; padding-top:1%">
+                                    <div class="d-flex justify-content-start align-items-center" style="height:50px;width:600px;">
+                                        <div class="ml-auto w-100 p-2 bd-highlight" style="height:50px;width:600px;">
+                                            <div class="bold-text flex-item-text text" id="pathNameCardView" align="left">{{$val.Visit.Username}} has invited you to a visit</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col" style="height:50px;width:100px">
+                                <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
+                                    <button type="submit" class="btn btn-dark-orange" name="Accept"  value={{$val.IdVisit}}>Accept</button>
+                                </div>
+
+                            </div>
+                            <div class="col" style="height:50px;width:100px">
+                                <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
+                                    <button type="submit" class="btn btn-dark-orange" name="Decline" value={{$val.IdVisit}}>Decline</button>
+                                </div>
+
+                            </div>
+                            <div class="col" style="height:50px;width:100px">
+                                <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
+                                    <button type="submit" class="btn btn-dark-orange" name="ViewInfo" value={{$val.IdVisit}}>View info</button>
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+                {{end}}
+            </div>
+        </form>
+
+    </div>
+
+</div>
+</body>
+</html>

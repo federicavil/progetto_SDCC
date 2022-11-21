@@ -14,6 +14,12 @@ type ViewPathInfoController struct {
 
 func (this *ViewPathInfoController) Prepare() {
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
 	this.TplName = "viewPathInfo.html"
 }
 

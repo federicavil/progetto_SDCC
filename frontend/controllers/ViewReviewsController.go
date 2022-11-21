@@ -6,19 +6,28 @@ import (
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
 )
 
 type ViewReviewsController struct {
 	beego.Controller
+	session session.Store
 }
 
 func (this *ViewReviewsController) Prepare() {
+	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
 	this.TplName = "viewReviews.html"
 }
 
 func (this *ViewReviewsController) Get() {
-	path := this.StartSession().Get("selectedPath").(model.MountainPath)
+	path := this.session.Get("selectedPath").(model.MountainPath)
 	pathName := path.Name
 	fmt.Println("VIEW REVIEW " + pathName)
 	req := httplib.Get("http://" + conf.GetApiGateway() + "/getReviews")

@@ -8,7 +8,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
-	"strconv"
 )
 
 type AddReviewController struct {
@@ -18,20 +17,17 @@ type AddReviewController struct {
 
 func (this *AddReviewController) Prepare() {
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
 	this.TplName = "addReview.html"
 }
 
 func (this *AddReviewController) Get() {
-	var userid string
-	if this.session.Get("userId") == nil {
-		userid = ""
-	} else {
-		userid = this.session.Get("userId").(string)
-	}
-	req := httplib.Get("http://" + conf.GetApiGateway() + "/addReview")
-	req.Param("userId", userid)
-	str, _ := req.Bytes()
-	isLogged, _ := strconv.ParseBool(string(str))
+	isLogged := CheckLogin(this.session, "/addReview")
 	if !isLogged {
 		err := this.session.Set("prevPage", "addReview")
 		if err != nil {

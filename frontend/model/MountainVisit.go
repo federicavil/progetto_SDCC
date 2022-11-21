@@ -5,3 +5,9 @@ type MountainVisit struct {
 	Username  string `db:"Username" json:"Username"`
 	Timestamp string `db:"Timestamp" json:"Timestamp" form:"visitTime"`
 }
+
+type Participant struct {
+	IdVisit  int
+	Username string
+	Answer   bool
+}

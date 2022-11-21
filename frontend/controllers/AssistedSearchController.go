@@ -16,14 +16,6 @@ type AssistedResearchController struct {
 	session session.Store
 }
 
-//City       string ` form:"city"`
-//Province   string ` form:"province"`
-//Region     string ` form:"region"`
-//Level      string ` form:"level"`
-//Cyclable   int    ` form:"cyclable"`
-//Family     int    ` form:"familySuitable"`
-//Historical int    ` form:"historicalElements"`
-
 func AssistedPost(filters model.AssistedSearchStruct) []byte {
 	req := httplib.Post("http://" + conf.GetApiGateway() + "/assistedsearch")
 	fmt.Println(filters)
@@ -44,6 +36,12 @@ func AssistedPost(filters model.AssistedSearchStruct) []byte {
 
 func (this *AssistedResearchController) Prepare() {
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
 	this.TplName = "assistedResearch.html"
 }
 

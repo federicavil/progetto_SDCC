@@ -16,8 +16,14 @@ type ProfileController struct {
 }
 
 func (this *ProfileController) Prepare() {
-	this.TplName = "profile.html"
 	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
+	this.TplName = "profile.html"
 }
 
 func (this *ProfileController) Get() {

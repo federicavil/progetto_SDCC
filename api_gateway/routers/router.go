@@ -18,4 +18,5 @@ func init() {
 	web.Router("/addReview", &controllers.AddReviewController{})
 	web.Router("/getReviews", &controllers.ViewReviewsController{})
 	web.Router("/viewWeatherForecast", &controllers.ViewWeatherForecastController{})
+	web.Router("/notifications", &controllers.NotificationController{})
 }

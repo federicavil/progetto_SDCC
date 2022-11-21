@@ -17,4 +17,5 @@ func init() {
 	beego.Router("/addReview", &controllers.AddReviewController{})
 	beego.Router("/viewReviews", &controllers.ViewReviewsController{})
 	beego.Router("/viewWeatherForecast", &controllers.ViewWeatherForecastController{})
+	beego.Router("/notifications", &controllers.NotificationController{})
 }

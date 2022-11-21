@@ -6,14 +6,23 @@ import (
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/session"
 	"github.com/beego/beego/v2/client/httplib"
 )
 
 type ViewWeatherForecastController struct {
 	beego.Controller
+	session session.Store
 }
 
 func (this *ViewWeatherForecastController) Prepare() {
+	this.session = this.StartSession()
+	notifications := this.session.Get("notifications")
+	if notifications != nil {
+		this.Data["newNotifications"] = true
+	} else {
+		this.Data["newNotifications"] = false
+	}
 	this.TplName = "viewWeatherForecast.html"
 }
 
