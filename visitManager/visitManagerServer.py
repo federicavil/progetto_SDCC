@@ -127,13 +127,20 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         t = pd.to_datetime(d[2], origin='julian', unit='D')
         ts = t.strftime("%d/%m/%Y, %H:%M")
         print(ts)
-        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator = d[3])
+        sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0])
+        cur.execute(sql)
+        resPart = cur.fetchall()
+        participants = []
+        for p in resPart:
+            participants.append(p[1])
+        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator = d[3], Participants = participants)
+        print(visit)
         return visit
 
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
-        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + """' AND """+quote+"""Accepted"""+quote+""" = 1"""
+        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + """' AND """+quote+"""Accepted"""+quote+""" = true"""
         cur.execute(sql)
         data = cur.fetchall()
 

@@ -77,21 +77,20 @@ func (this *NotificationController) Post() {
 
 	} else if viewInfo != "" {
 		// Redirect su view visit info
-		fmt.Println("VIEW INFO")
 		req := httplib.Get("http://" + conf.GetApiGateway() + "/getVisitByID")
 		req.Param("visitId", viewInfo)
 		str, _ := req.Bytes()
-		fmt.Println(string(str))
 		visit := model.MountainVisitComplete{}
 		err := json.Unmarshal(str, &visit)
 		if err != nil {
 			return
 		}
-		fmt.Println(visit)
 		err = this.session.Set("selectedVisit", visit)
 		if err != nil {
 			return
 		}
+		print("\nSONO IN NOTIFICATION E HO: ")
+		fmt.Println(this.session.Get("selectedVisit"))
 		this.Redirect("viewVisitInfo", 200)
 	}
 }
@@ -145,6 +144,6 @@ func NotificationPolling(username string, session session.Store) {
 		session.Set("notifications", notifications)
 		fmt.Println("thread: aggiorno session")
 		mutex.Unlock()
-		time.Sleep(30 * time.Second)
+		time.Sleep(3 * time.Second)
 	}
 }
