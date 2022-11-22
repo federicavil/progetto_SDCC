@@ -1,7 +1,7 @@
 package model
 
 type Notification struct {
-	IdVisit      int
-	Visit        MountainVisit
-	Participants []Participant
+	IdVisit      string   `json:"visit"`
+	Username     string   `json:"creator"`
+	Participants []string `json:"participants"`
 }

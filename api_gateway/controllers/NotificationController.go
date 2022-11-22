@@ -3,7 +3,6 @@ package controllers
 import (
 	"api_gateway/grpc"
 	"api_gateway/proto"
-	"encoding/json"
 	"fmt"
 	"github.com/beego/beego/v2/server/web"
 	"strconv"
@@ -22,12 +21,10 @@ func (this *NotificationController) Get() {
 		this.Ctx.WriteString(isLogged)
 	} else {
 		//CIRCUIT BREAKER
+		fmt.Println("GET NOTIFY")
 		invites := grpc.GetInvites(proto.InviteInput{Username: userId})
 		fmt.Println(string(invites))
-		defer this.ServeJSON()
-		var reply []byte
-		reply, _ = json.Marshal(string(invites))
-		this.Ctx.WriteString(string(reply))
+		this.Ctx.WriteString(string(invites))
 	}
 
 }
