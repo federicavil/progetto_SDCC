@@ -26,7 +26,6 @@ func (this *ViewPathInfoController) Prepare() {
 func (this *ViewPathInfoController) Get() {
 	path := this.session.Get("selectedPath").(model.MountainPath)
 	this.Data["path"] = path
-	fmt.Println(path)
 }
 
 func (this *ViewPathInfoController) Post() {

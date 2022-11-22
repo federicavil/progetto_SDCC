@@ -5,6 +5,7 @@ import (
 	"api_gateway/proto"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -56,6 +57,22 @@ func GetAllVisits(username string) []byte {
 	}
 	visits, _ := json.Marshal(r.Visit)
 	return visits
+}
+
+func GetVisitByID(id string) []byte {
+	conn, c, ctx, cancel := init_grpc_visit_manager_client()
+	defer conn.Close()
+	defer cancel()
+	r, err := c.GetVisitByID(ctx, &proto.ID_Visit{
+		Value: &id,
+	})
+
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	visit, _ := json.Marshal(r)
+	fmt.Println(string(visit))
+	return visit
 }
 
 func InviteUserToVisit(invite proto.Invite) int {

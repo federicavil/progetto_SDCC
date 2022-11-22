@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ManageVisitClient interface {
 	AddNewVisit(ctx context.Context, in *InputVisit, opts ...grpc.CallOption) (*Return, error)
 	GetAllVisits(ctx context.Context, in *User, opts ...grpc.CallOption) (*Visits, error)
+	GetVisitByID(ctx context.Context, in *ID_Visit, opts ...grpc.CallOption) (*Visit, error)
 	InviteUserToVisit(ctx context.Context, in *Invite, opts ...grpc.CallOption) (*Return, error)
 	AcceptOrRefuseInvite(ctx context.Context, in *InviteResponse, opts ...grpc.CallOption) (*Return, error)
 }
@@ -54,6 +55,15 @@ func (c *manageVisitClient) GetAllVisits(ctx context.Context, in *User, opts ...
 	return out, nil
 }
 
+func (c *manageVisitClient) GetVisitByID(ctx context.Context, in *ID_Visit, opts ...grpc.CallOption) (*Visit, error) {
+	out := new(Visit)
+	err := c.cc.Invoke(ctx, "/ManageVisit/GetVisitByID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *manageVisitClient) InviteUserToVisit(ctx context.Context, in *Invite, opts ...grpc.CallOption) (*Return, error) {
 	out := new(Return)
 	err := c.cc.Invoke(ctx, "/ManageVisit/InviteUserToVisit", in, out, opts...)
@@ -78,6 +88,7 @@ func (c *manageVisitClient) AcceptOrRefuseInvite(ctx context.Context, in *Invite
 type ManageVisitServer interface {
 	AddNewVisit(context.Context, *InputVisit) (*Return, error)
 	GetAllVisits(context.Context, *User) (*Visits, error)
+	GetVisitByID(context.Context, *ID_Visit) (*Visit, error)
 	InviteUserToVisit(context.Context, *Invite) (*Return, error)
 	AcceptOrRefuseInvite(context.Context, *InviteResponse) (*Return, error)
 	mustEmbedUnimplementedManageVisitServer()
@@ -92,6 +103,9 @@ func (UnimplementedManageVisitServer) AddNewVisit(context.Context, *InputVisit) 
 }
 func (UnimplementedManageVisitServer) GetAllVisits(context.Context, *User) (*Visits, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllVisits not implemented")
+}
+func (UnimplementedManageVisitServer) GetVisitByID(context.Context, *ID_Visit) (*Visit, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVisitByID not implemented")
 }
 func (UnimplementedManageVisitServer) InviteUserToVisit(context.Context, *Invite) (*Return, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InviteUserToVisit not implemented")
@@ -148,6 +162,24 @@ func _ManageVisit_GetAllVisits_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ManageVisit_GetVisitByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ID_Visit)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ManageVisitServer).GetVisitByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ManageVisit/GetVisitByID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ManageVisitServer).GetVisitByID(ctx, req.(*ID_Visit))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ManageVisit_InviteUserToVisit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Invite)
 	if err := dec(in); err != nil {
@@ -198,6 +230,10 @@ var ManageVisit_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllVisits",
 			Handler:    _ManageVisit_GetAllVisits_Handler,
+		},
+		{
+			MethodName: "GetVisitByID",
+			Handler:    _ManageVisit_GetVisitByID_Handler,
 		},
 		{
 			MethodName: "InviteUserToVisit",

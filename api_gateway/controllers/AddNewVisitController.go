@@ -28,7 +28,6 @@ func (this *AddNewVisitController) Post() {
 	visit.Username = &username
 	visit.Pathname = &pathname
 	visit.Timestamp = &timestamp
-	fmt.Println("InAddVisitControllerPost")
 
 	ret := grpc.AddNewVisit(visit)
 	defer this.ServeJSON()

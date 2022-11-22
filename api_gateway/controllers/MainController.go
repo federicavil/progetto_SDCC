@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/beego/beego/v2/server/web"
 )
 
@@ -15,6 +14,4 @@ func (this *MainController) Get() {
 	//conn = httplib.GetRequest()
 	//conn.request(method="POST", url=url, body=postdata, headers=headers)
 	//resp = conn.getresponse()
-
-	fmt.Println("prova da api_maincontroller")
 }

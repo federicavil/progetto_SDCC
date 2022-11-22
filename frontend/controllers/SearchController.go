@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
@@ -35,9 +34,7 @@ type Field struct {
 func SimpleSearchPost(name string) []byte {
 	req := httplib.Post("http://" + conf.GetApiGateway() + "/simplesearch")
 	req.Param("name", name)
-	data := []model.MountainPath{}
 	str, _ := req.Bytes()
-	_ = json.Unmarshal([]byte(str), &data)
 	//fmt.Println("STRINGA OTTENUTA DA APIGW: " + str)
 	//strings.Index(str, name)
 	return str
@@ -53,16 +50,12 @@ func (this *SearchController) Get() {
 
 func (this *SearchController) Post() {
 	// Chiama il metodo di ricerca
-	fmt.Println("POST")
 	name := this.GetString("pathName")
 	selected := this.GetString("path")
 	viewAll := this.GetString("viewAll")
-	fmt.Println(name)
-	fmt.Println(selected)
-	fmt.Println(viewAll)
 	if name != "" || viewAll != "" {
 		pathlist := SimpleSearchPost(name)
-		if pathlist != nil {
+		if pathlist != nil && string(pathlist[len(pathlist)-4:]) == "null" {
 			pathlist = pathlist[:len(pathlist)-4]
 		}
 		var paths []model.MountainPath

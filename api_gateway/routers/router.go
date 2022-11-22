@@ -14,6 +14,7 @@ func init() {
 	web.Router("/acceptOrRefuseInvite", &controllers.AcceptOrRefuseInviteController{})
 	web.Router("/inviteUserToVisit", &controllers.InviteUserToVisitController{})
 	web.Router("/getAllVisits", &controllers.GetAllVisitsController{})
+	web.Router("/getVisitByID", &controllers.GetVisitByIDController{})
 	//web.Router("/getAllInvites", &controllers.GetAllInvitesController{})
 	web.Router("/profile", &controllers.ProfileController{})
 	web.Router("/login", &controllers.LoginController{})

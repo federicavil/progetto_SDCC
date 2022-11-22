@@ -25,12 +25,12 @@
     </div>
 
     <div class="col-9">
-        <script> if (login_error != null){
-                document.write("<div class=\"container\" style=\"padding-top: 3%;\">")
-                document.write("<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">")
-                document.write("<strong>Login error</strong> Check your credential")
-                document.write("<a href=\"#\" class=\"close\" style=\"float: right;\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a></div>")
-            }</script>
+        <script> if (login_error != null) {
+            document.write("<div class=\"container\" style=\"padding-top: 3%;\">")
+            document.write("<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">")
+            document.write("<strong>Login error</strong> Check your credential")
+            document.write("<a href=\"#\" class=\"close\" style=\"float: right;\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a></div>")
+        }</script>
         {{/*<%
         try {
         if (request.getParameter("login") != null) {
@@ -54,70 +54,84 @@
         }catch(EmptyMandatoryFieldsException e) {
         if (request.getParameter("login") != null) {
         %>*/}}
-{{/*        <div class="container" style="padding-top: 3%;">
+        {{/*
+        <div class="container" style="padding-top: 3%;">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Empty fields error!</strong> You need to insert username and password.
                 <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-        </div>*/}}
-{{/*        <%
+        </div>
+        */}}
+        {{/* <%
         }
         else if (request.getParameter("signin") != null) {
         %>*/}}
-{{/*        <div class="container" style="padding-top: 3%;">
+        {{/*
+        <div class="container" style="padding-top: 3%;">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Empty fields error!</strong> You need to insert username, password and confirm password.
                 <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-        </div>*/}}
-{{/*        <%
+        </div>
+        */}}
+        {{/* <%
         }
         }catch (InvalidUsernameException e) {
         %>*/}}
-{{/*        <div class="container" style="padding-top: 3%;">
+        {{/*
+        <div class="container" style="padding-top: 3%;">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Sign in error!</strong> Username not available.
                 <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-        </div>*/}}
-{{/*        <%
+        </div>
+        */}}
+        {{/* <%
         }catch (InvalidCredentialException e) {
         %>*/}}
-{{/*        <div class="container" style="padding-top: 3%;">
+        {{/*
+        <div class="container" style="padding-top: 3%;">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Login error!</strong> Credentials are not valid.
                 <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-        </div>*/}}
-{{/*        <%
+        </div>
+        */}}
+        {{/* <%
         }catch(WrongInputException e) {
         %>*/}}
-{{/*        <div class="container" style="padding-top: 3%;">
+        {{/*
+        <div class="container" style="padding-top: 3%;">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Sign in error!</strong> Password mismatch.
                 <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-        </div>*/}}
-{{/*        <%
+        </div>
+        */}}
+        {{/* <%
         }catch(DatabaseException e) {
         %>*/}}
-{{/*        <div class="container" style="padding-top: 3%;">
+        {{/*
+        <div class="container" style="padding-top: 3%;">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Database error</strong>Ops, there was an error connecting to database. Retry later
                 <a href="#" class="close" style="float: right;" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-        </div>*/}}
-{{/*        <%
+        </div>
+        */}}
+        {{/* <%
         }
         %>*/}}
         <form class="form" style="text-align: center; padding-top: 2%;" method="post">
             <div class="container">
                 <div class="d-flex flex-column justify-content-center align-items-center">
                     <div class="p-2" style="padding-bottom: 3%;">
-                        <input type="text" class="form-control" id="username" name="username" value="" placeholder="Username">
+                        <input type="text" class="form-control" id="username" name="username" value=""
+                               placeholder="Username">
                     </div>
                     <div class="p-2" style="padding-bottom: 3%;">
-                        <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password">
+                        <input type="password" class="form-control" id="password" name="password" value=""
+                               placeholder="Password">
                     </div>
                 </div>
             </div>
@@ -125,7 +139,8 @@
             <div class="container">
                 <div class="row justify-content-center align-items-center">
                     <div class="col-3">
-                        <button type="submit" id="login" name="login" value="login" class="btn btn-light-orange">Login</button>
+                        <button type="submit" id="login" name="login" value="login" class="btn btn-light-orange">Login
+                        </button>
                     </div>
                     <div class="col-1">
                         <div class="vertical"></div>
@@ -133,7 +148,8 @@
                     <div class="col-3">
                         <div class="row justify-content-center" style="padding-bottom:3%;">
                             <div class="col-10">
-                                <input type="password" class="form-control" name="confirmPassword"  placeholder="Confirm your password">
+                                <input type="password" class="form-control" name="confirmPassword"
+                                       placeholder="Confirm your password">
                             </div>
                         </div>
                         <button type="submit" name="signin" value="signin" class="btn btn-light-orange">Sign in</button>
