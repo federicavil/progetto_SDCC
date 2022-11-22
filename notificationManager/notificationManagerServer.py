@@ -1,3 +1,4 @@
+import json
 import logging
 import time
 from concurrent import futures
@@ -16,6 +17,7 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
     def __init__(self):
         self.messages = {}
         self.sqs = boto3.client('sqs', region_name='us-east-1')
+
         self.queue_url = "https://sqs.us-east-1.amazonaws.com/983687073675/Notification"
         print("SQS queue initialized.")
 
@@ -55,8 +57,10 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
         return retValues
 
     def GetInvites(self, request, context):
+        print("Get invites")
         username = request.Username
-        ret = notificationManager_pb2.InviteOutput(Invites=str(self.receiveInviteRequestMessage(username)))
+        ret = notificationManager_pb2.InviteOutput(Invites=json.dumps(self.receiveInviteRequestMessage(username)))
+        print(ret)
         return ret
 
 def serve():

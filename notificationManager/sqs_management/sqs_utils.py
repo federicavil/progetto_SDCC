@@ -3,6 +3,7 @@ from pprint import pprint
 
 import boto3 as boto3
 
+
 # def createQueue():
 #     # Get the service resource
 #     sqs = boto3.resource('sqs', region_name='us-east-1')
@@ -28,11 +29,11 @@ class NotificationManager():
             response = self.sqs.receive_message(
                 QueueUrl=self.queue_url,
                 AttributeNames=[
-                    'InviteRequest_'+username
+                    'InviteRequest_' + username
                 ],
                 MaxNumberOfMessages=1,
                 MessageAttributeNames=[
-                    'InviteRequest_'+username
+                    'InviteRequest_' + username
                 ],
                 VisibilityTimeout=5,
                 WaitTimeSeconds=0
@@ -51,10 +52,10 @@ class NotificationManager():
         for response in messages:
             if "MessageAttributes" in response['Messages'][0]:
                 msgaattrs = response['Messages'][0].get("MessageAttributes")
-                msgVisit = msgaattrs.get("InviteRequest_"+username).get("StringValue")
+                msgVisit = msgaattrs.get("InviteRequest_" + username).get("StringValue")
                 print(msgVisit)
                 # TODO: risposta GRPC a VisitManager
-        #notif.freeQueue()
+        # notif.freeQueue()
 
     #
     # def sendInviteResponseMessage(self, username="", visit="", partecipation=""):
@@ -75,8 +76,6 @@ class NotificationManager():
     #     )
     #
     #     print(response['MessageId'])
-
-
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ import boto3 as boto3
 
 
 def sendInviteRequestMessage(creator, username, visit, partecipation):
-
+    print("invite user")
     messages = {}
     sqs = boto3.client('sqs', region_name='us-east-1')
     queue_url = "https://sqs.us-east-1.amazonaws.com/983687073675/Notification"
@@ -31,7 +31,9 @@ def sendInviteRequestMessage(creator, username, visit, partecipation):
         MessageBody=(
             "Request message"
         )
+
     )
+    print("invited user")
 
 def removeRequestMessage(username, visit):
 

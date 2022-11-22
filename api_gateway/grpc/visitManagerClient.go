@@ -5,7 +5,6 @@ import (
 	"api_gateway/proto"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 
@@ -71,7 +70,6 @@ func GetVisitByID(id string) []byte {
 		log.Fatalf("could not greet: %v", err)
 	}
 	visit, _ := json.Marshal(r)
-	fmt.Println(string(visit))
 	return visit
 }
 

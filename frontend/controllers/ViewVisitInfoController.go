@@ -2,12 +2,9 @@ package controllers
 
 import (
 	"fmt"
-	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/httplib"
 	"github.com/astaxie/beego/session"
-	"strconv"
 )
 
 type ViewVisitInfoController struct {
@@ -21,16 +18,7 @@ func (this *ViewVisitInfoController) Prepare() {
 }
 
 func (this *ViewVisitInfoController) Get() {
-	var userid string
-	if this.session.Get("userId") == nil {
-		userid = ""
-	} else {
-		userid = this.session.Get("userId").(string)
-	}
-	req := httplib.Get("http://" + conf.GetApiGateway() + "/getVisitByID")
-	req.Param("userId", userid)
-	str, _ := req.Bytes()
-	isLogged, _ := strconv.ParseBool(string(str))
+	isLogged := CheckLogin(this.session, "/getVisitByID")
 	if !isLogged {
 		err := this.session.Set("prevPage", "viewVisitInfo")
 		if err != nil {
