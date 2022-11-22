@@ -18,29 +18,6 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     # def __init__(self):
     #     self.db = visitManager_resources.visitManager_guide_database()
 
-    def sendInviteRequestMessage(self, username="", visit="", partecipation="", participants="{}"):
-
-        # Send message to SQS queue
-        response = self.sqs.send_message(
-            QueueUrl=self.queue_url,
-            DelaySeconds=10,
-            MessageAttributes={
-                'InviteResponse_'+username+visit: {
-                    'DataType': 'String',
-                    'StringValue': partecipation
-                },
-                'Participants': {
-                    'DataType': 'String',
-                    'StringValue': participants
-                },
-            },
-            MessageBody=(
-                ""
-            )
-        )
-
-        print(response['MessageId'])
-
     def parse_config(self, parser, section):
         conf = {}
         if parser.has_section(section):
@@ -148,15 +125,15 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         date_format = "%Y-%m-%dT%H:%M"
         import pandas as pd
         t = pd.to_datetime(d[2], origin='julian', unit='D')
-        ts1 = datetime.strptime(t, date_format)
-        print(ts1)
-        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=d[2], Creator = d[3])
+        ts = t.strftime("%d/%m/%Y, %H:%M")
+        print(ts)
+        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator = d[3])
         return visit
 
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
-        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + "'"
+        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + """' AND """+quote+"""Accepted"""+quote+""" = 1"""
         cur.execute(sql)
         data = cur.fetchall()
 
