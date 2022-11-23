@@ -36,7 +36,21 @@ func (this *LoginController) CheckLogin(userId string) bool {
 	} else {
 		return false
 	}
+}
 
+func (this *LoginController) CheckUsername(userId string) bool {
+	fmt.Println("check username")
+	if userId != "" {
+		conn, _ := Dial(conf.GetConnectionConf("login"))
+		client := proto.NewLoginServiceClient(conn)
+		response, e := client.CheckUsername(context.TODO(), &proto.CheckUsernameRequest{Username: userId})
+		if e != nil {
+			fmt.Println(e)
+		}
+		return response.IsRegistered
+	} else {
+		return false
+	}
 }
 
 func (this *LoginController) login(credentialJson string) string {

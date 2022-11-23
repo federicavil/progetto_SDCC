@@ -141,6 +141,6 @@ func NotificationPolling(username string, session session.Store) {
 				})*/
 		session.Set("notifications", notifications)
 		mutex.Unlock()
-		time.Sleep(3 * time.Second)
+		time.Sleep(30 * time.Second)
 	}
 }
