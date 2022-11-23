@@ -148,9 +148,10 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         date_format = "%Y-%m-%dT%H:%M"
         import pandas as pd
         t = pd.to_datetime(d[2], origin='julian', unit='D')
-        ts1 = datetime.strptime(t, date_format)
-        print(ts1)
-        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=d[2], Creator = d[3])
+        ts = t.strftime("%d/%m/%Y, %H:%M")
+        print(ts)
+        visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator = d[3])
+        print(visit)
         return visit
 
     def GetAllVisits(self, request, context):
