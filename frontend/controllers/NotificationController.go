@@ -6,8 +6,8 @@ import (
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/httplib"
 	"github.com/astaxie/beego/session"
-	"github.com/beego/beego/v2/client/httplib"
 	"sync"
 	"time"
 )
@@ -91,22 +91,20 @@ func (this *NotificationController) Post() {
 		}
 		print("\nSONO IN NOTIFICATION E HO: ")
 		fmt.Println(this.session.Get("selectedVisit"))
-		this.Redirect("viewVisitInfo", 200)
+		this.Redirect("viewVisitInfo", 302)
+		print("HO FATTO REDIRECT")
 	}
 }
 
 func NotificationPolling(username string, session session.Store) {
 	for true {
-		fmt.Println("Sono il thread")
 		// chiama api_gateway per vedere se ci sono nuove notifiche
 		req := httplib.Get("http://" + conf.GetApiGateway() + "/notifications")
 		req.Param("userId", username)
 		req.Param("isLogged", "true")
 		notificationsjson, _ := req.Bytes()
-		fmt.Println(string(notificationsjson))
 		var notificationString string
 		_ = json.Unmarshal(notificationsjson, &notificationString)
-		fmt.Println(notificationString)
 		var notifications []model.Notification
 		_ = json.Unmarshal([]byte(notificationString), &notifications)
 		fmt.Println(notifications)
@@ -142,7 +140,6 @@ func NotificationPolling(username string, session session.Store) {
 					Participants: participants,
 				})*/
 		session.Set("notifications", notifications)
-		fmt.Println("thread: aggiorno session")
 		mutex.Unlock()
 		time.Sleep(3 * time.Second)
 	}

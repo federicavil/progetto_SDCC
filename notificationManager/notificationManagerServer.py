@@ -57,10 +57,8 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
         return retValues
 
     def GetInvites(self, request, context):
-        print("Get invites")
         username = request.Username
         ret = notificationManager_pb2.InviteOutput(Invites=json.dumps(self.receiveInviteRequestMessage(username)))
-        print(ret)
         return ret
 
 def serve():

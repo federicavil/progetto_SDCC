@@ -5,7 +5,6 @@ import (
 	"api_gateway/proto"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 
@@ -38,7 +37,6 @@ func GetInvites(inviteInput proto.InviteInput) []byte {
 	defer conn.Close()
 	defer cancel()
 	r, err := c.GetInvites(ctx, &inviteInput)
-	fmt.Println(r)
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
