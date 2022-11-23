@@ -37,7 +37,7 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
                     'Creator',
                     'Visit'
                 ],
-                VisibilityTimeout=5,
+                VisibilityTimeout=2,
                 WaitTimeSeconds=0
             )
             if "Messages" not in response:

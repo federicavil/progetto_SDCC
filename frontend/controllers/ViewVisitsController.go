@@ -84,6 +84,9 @@ func (this *ViewVisitsController) Post() {
 		if err != nil {
 			return
 		}
+
+		print("\nSONO IN VIEWVISITS E HO: ")
+		fmt.Println(this.session.Get("selectedVisit"))
 		this.Redirect("viewVisitInfo", 302)
 	}
 }
