@@ -112,39 +112,11 @@ func NotificationPolling(username string, session session.Store) {
 		_ = json.Unmarshal([]byte(notificationString), &notifications)
 		fmt.Println(notifications)
 		// se ci sono le mette sulla sessione
-		/*var notifications []model.Notification
-		var participants []model.Participant
-		participants = append(participants, model.Participant{
-			IdVisit:  1,
-			Username: "mattia",
-			Answer:   true,
-		})
-		notifications = append(notifications, model.Notification{
-			IdVisit: 1,
-			Visit: model.MountainVisit{
-				Pathname:  "Gran Sasso",
-				Username:  "federica",
-				Timestamp: "2459902.2131944443",
-			},
-			Participants: participants,
-		})
-		session.Set("notifications", notifications)
-		fmt.Println("Sono il thread: sto per andare in sleep")*/
 		mutex := session.Get("sessionMutex").(*sync.Mutex)
 		mutex.Lock()
-		/*		notifications = session.Get("notification").([]model.Notification)
-				notifications = append(notifications, model.Notification{
-					IdVisit: 2,
-					Visit: model.MountainVisit{
-						Pathname:  "Gran Sasso",
-						Username:  "diana",
-						Timestamp: "2459902.2131944443",
-					},
-					Participants: participants,
-				})*/
 		session.Set("notifications", notifications)
 		fmt.Println("thread: aggiorno session")
 		mutex.Unlock()
-		time.Sleep(30 * time.Second)
+		time.Sleep(10 * time.Second)
 	}
 }
