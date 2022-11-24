@@ -113,6 +113,24 @@
                                 </div>
                             </div>
                             {{end}}
+                            <br>
+                            {{if .isCreator}}
+                            <form class="form" method="post">
+                                <div class="col align-items-center">
+                                    <div class="row" style="padding-bottom: 2%;">
+                                        <div class="col-6" align="center" style="padding-bottom: 1%;">
+                                            <input type="text" class="row justify-content-center bold-text" name="invitedUser" placeholder="Invite a friend"></input>
+                                        </div>
+                                        <div class="col-6" align="center">
+                                            <input type=submit name="path" value="Invite" style="min-width: 100%;min-height: 100%"></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" align="center" style="padding-bottom: 1%;">
+                                        {{.Phrase.Value}}
+                                    </div>
+                                </div>
+                            </form>
+                            {{end}}
                         </div>
                     </div>
                 </div>
@@ -121,6 +139,8 @@
     </div>
 </div>
 <!-- Bootstrap Bundle with Popper -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

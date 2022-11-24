@@ -127,7 +127,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         t = pd.to_datetime(d[2], origin='julian', unit='D')
         ts = t.strftime("%d/%m/%Y, %H:%M")
         print(ts)
-        sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0])
+        sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0]) + """ AND """+quote+"""Accepted"""+quote+""" = true"""
         cur.execute(sql)
         resPart = cur.fetchall()
         participants = []
@@ -146,7 +146,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
 
         visits = []
         for d in data:
-            sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0])
+            sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0]) +""" AND """+quote+"""Accepted"""+quote+""" = true"""
             cur.execute(sql)
             resPart = cur.fetchall()
             participants = []

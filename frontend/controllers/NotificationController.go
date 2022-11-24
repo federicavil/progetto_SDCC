@@ -77,17 +77,14 @@ func (this *NotificationController) Post() {
 
 	} else if viewInfo != "" {
 		// Redirect su view visit info
-		fmt.Println("VIEW INFO")
 		req := httplib.Get("http://" + conf.GetApiGateway() + "/getVisitByID")
 		req.Param("visitId", viewInfo)
 		str, _ := req.Bytes()
-		fmt.Println(string(str))
 		visit := model.MountainVisitComplete{}
 		err := json.Unmarshal(str, &visit)
 		if err != nil {
 			return
 		}
-		fmt.Println(visit)
 		err = this.session.Set("selectedVisit", visit)
 		if err != nil {
 			return
@@ -95,6 +92,7 @@ func (this *NotificationController) Post() {
 		print("\nSONO IN NOTIFICATION E HO: ")
 		fmt.Println(this.session.Get("selectedVisit"))
 		this.Redirect("viewVisitInfo", 302)
+		print("HO FATTO REDIRECT")
 	}
 }
 
@@ -106,10 +104,8 @@ func NotificationPolling(username string, session session.Store) {
 		req.Param("userId", username)
 		req.Param("isLogged", "true")
 		notificationsjson, _ := req.Bytes()
-		fmt.Println(string(notificationsjson))
 		var notificationString string
 		_ = json.Unmarshal(notificationsjson, &notificationString)
-		fmt.Println(notificationString)
 		var notifications []model.Notification
 		_ = json.Unmarshal([]byte(notificationString), &notifications)
 		fmt.Println(notifications)
@@ -145,7 +141,6 @@ func NotificationPolling(username string, session session.Store) {
 					Participants: participants,
 				})*/
 		session.Set("notifications", notifications)
-		fmt.Println("thread: aggiorno session")
 		mutex.Unlock()
 		time.Sleep(10 * time.Second)
 	}
