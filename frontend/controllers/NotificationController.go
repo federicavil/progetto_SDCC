@@ -94,7 +94,7 @@ func (this *NotificationController) Post() {
 		}
 		print("\nSONO IN NOTIFICATION E HO: ")
 		fmt.Println(this.session.Get("selectedVisit"))
-		this.Redirect("viewVisitInfo", 200)
+		this.Redirect("viewVisitInfo", 302)
 	}
 }
 
