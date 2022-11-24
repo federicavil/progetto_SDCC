@@ -53,6 +53,7 @@ func (this *ProfileController) Get() {
 }
 
 func (this *ProfileController) Post() {
+	defer this.ServeJSON()
 	userId := this.Ctx.Input.Query("userId")
 	userProfile := this.Ctx.Input.Query("userProfile")
 	if userProfile == "" {

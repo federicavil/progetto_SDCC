@@ -71,7 +71,15 @@ func (this *NotificationController) Post() {
 				break
 			}
 		}
-		notifications = append(notifications[:i], notifications[i+1:]...)
+		if i == len(notifications)-1 {
+			if i == 0 {
+				notifications = nil
+			} else {
+				notifications = append(notifications[:i])
+			}
+		} else {
+			notifications = append(notifications[:i], notifications[i+1:]...)
+		}
 		this.session.Set("notification", notifications)
 		mutex.Unlock()
 
@@ -98,6 +106,9 @@ func (this *NotificationController) Post() {
 
 func NotificationPolling(username string, session session.Store) {
 	for true {
+		if session.Get("userId") == "" {
+			return
+		}
 		fmt.Println("Sono il thread")
 		// chiama api_gateway per vedere se ci sono nuove notifiche
 		req := httplib.Get("http://" + conf.GetApiGateway() + "/notifications")
