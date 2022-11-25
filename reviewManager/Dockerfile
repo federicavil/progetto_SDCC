@@ -6,7 +6,6 @@ COPY .mvn ./.mvn
 COPY mvnw.cmd ./
 COPY mvnw ./
 COPY pom.xml ./
-COPY reviewManager.iml ./
 RUN sed -i 's/\r$//' mvnw
 RUN ./mvnw dependency:resolve
 

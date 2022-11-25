@@ -7,5 +7,6 @@ RUN pip install grpcio
 RUN pip install protobuf
 RUN pip install psycopg2-binary
 RUN pip install requests
+RUN pip install boto3
 
-CMD [ "python", "./weatherForecastServer.py" ]
+CMD [ "python", "./notificationManagerServer.py" ]
