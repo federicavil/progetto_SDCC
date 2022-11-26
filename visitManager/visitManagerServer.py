@@ -34,7 +34,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         # read config file
         parser.read(filename)
         section = self.parse_config(parser, "app_mode")["app_mode"]
-        print("SECTION" + section)
+        print("SECTION " + section)
         db = self.parse_config(parser, section)
 
         # get section, default to postgresql
@@ -53,8 +53,9 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         params = self.config()
         dbtype = params["dbtype"]
         cond = dbtype == "postgres"
+        print(cond)
         params.pop("dbtype")
-        quote = dbtype = params["quote"]
+        quote = params["quote"]
         params.pop("quote")
         print(params)
         conn = None
@@ -76,6 +77,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
 
     def __init__(self):
         """ Connect to the PostgreSQL database server """
+        self.conn = None
         i = 1
         while i < 10:
             try:
@@ -83,7 +85,10 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
                 i = 10
             except:
                 i = i+1
-                time.sleep(1)
+                time.sleep(5)
+        if self.conn is None:
+            print("Not connected")
+            return
 
 
     def AddNewVisit(self, request, context):
@@ -140,7 +145,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
-        sql = """ SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."ID"=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + """' AND """+quote+"""Accepted"""+quote+""" = true"""
+        sql = """SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."""+quote+"""ID"""+quote+"""=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + """' AND """+quote+"""Accepted"""+quote+""" = true"""
         cur.execute(sql)
         data = cur.fetchall()
 
