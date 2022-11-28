@@ -15,6 +15,11 @@ type AddNewPathController struct {
 	web.Controller
 }
 
+/*
+* Effettua la chiamata goRPC al microservizio PathManager per aggiungere un nuovo path al sistema.
+* @param {model.MountainPath}: Informazioni relative al path da salvare
+* @returns {error}
+ */
 func AddNewPath(newPath model.MountainPath) error {
 	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
@@ -29,26 +34,31 @@ func AddNewPath(newPath model.MountainPath) error {
 	return err
 }
 
+/*
+* Gestione chiamata GET: verifica che l'utente che esegue la chiamata sia loggato.
+* @returns {string}: 1 se utente loggato, 0 se utente non loggato
+ */
 func (this *AddNewPathController) Get() {
 	userId := this.Ctx.Input.Query("userId")
 	loginController := LoginController{}
 	isLogged := loginController.CheckLogin(userId)
 	this.Ctx.WriteString(strconv.FormatBool(isLogged))
 }
+
+/*
+* Gestione chiamata POST: recupera parametro "path" dalla chiamata REST e richiama la funzione AddNewPath.
+ */
 func (this *AddNewPathController) Post() {
 	defer this.ServeJSON()
 	newPathJson := this.Ctx.Input.Query("path")
-	fmt.Println(newPathJson)
 	newPath := model.MountainPath{}
 	err := json.Unmarshal([]byte(newPathJson), &newPath)
 	if err != nil {
 		fmt.Println("Unmarshal error")
 	}
-	fmt.Println(newPath)
-	// Controllo se già c'è un sentiero con quel nome
+	// Controllo se già c'è un sentiero con quel nome TODO: OCCHIO
 	err = AddNewPath(newPath)
 	if err != nil {
 		fmt.Println("Add error")
 	}
-	this.Ctx.WriteString("OKAY")
 }

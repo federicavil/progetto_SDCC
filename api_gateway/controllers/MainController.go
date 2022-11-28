@@ -9,9 +9,4 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	//this.TplName = "home.html"
-
-	//conn = httplib.GetRequest()
-	//conn.request(method="POST", url=url, body=postdata, headers=headers)
-	//resp = conn.getresponse()
 }

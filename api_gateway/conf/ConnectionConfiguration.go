@@ -6,6 +6,11 @@ import (
 	"os"
 )
 
+/*
+- Legge la configurazione nel file host.ini e restituisce indirizzo e porta di un servizio specifico.
+- @param {string}: Il servizio di cui vogliamo conoscere ip e porta
+- @returns {string}: Stringa della forma "indirizzo:porta"
+*/
 func GetConnectionConf(service string) string {
 	cfg, err := ini.Load("conf/host.ini")
 	if err != nil {

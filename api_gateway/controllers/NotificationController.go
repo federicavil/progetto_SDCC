@@ -14,6 +14,14 @@ type NotificationController struct {
 	web.Controller
 }
 
+/*
+* Gestione chiamata GET: in base all'input, verifica che l'utente che esegue la chiamata sia loggato, oppure
+* tramite circuit breaker chiama la funzione grpc.GetInvites per ottenere notifiche di inviti da parte di altri
+* utenti
+* @returns {string}:
+    * isLogged: 1 se utente loggato, 0 se utente non loggato
+    * invites: json con informazioni sugli inviti ricevuti
+*/
 func (this *NotificationController) Get() {
 	userId := this.Ctx.Input.Query("userId")
 	isLogged := this.Ctx.Input.Query("isLogged")
@@ -32,8 +40,6 @@ func (this *NotificationController) Get() {
 			fmt.Println("Notification error")
 			invites, _ = json.Marshal("[]")
 		}
-		fmt.Println("GET NOTIFY")
-		fmt.Println(string(invites.([]byte)))
 		this.Ctx.WriteString(string(invites.([]byte)))
 	}
 

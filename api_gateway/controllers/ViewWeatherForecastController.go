@@ -12,9 +12,12 @@ type ViewWeatherForecastController struct {
 	web.Controller
 }
 
+/*
+* Gestione chiamata GET: effettua chiamata grpc per recuperare le previsioni del tempo settimanali di un dato percorso
+* @returns {string}: lista delle previsioni, giorno per giorno, per una settimana in json
+ */
 func (this *ViewWeatherForecastController) Get() {
 	mountainpath := this.Ctx.Input.Query("path")
-	fmt.Println("GET FORECAST " + mountainpath)
 
 	conn, _ := Dial(conf.GetConnectionConf("weather_forecast"))
 	client := proto.NewWeatherForecastServiceClient(conn)
@@ -22,7 +25,5 @@ func (this *ViewWeatherForecastController) Get() {
 	if e != nil {
 		fmt.Println(e)
 	}
-	fmt.Println("OBTAINED FORECAST: ")
-	fmt.Println(response.Forecasts)
 	this.Ctx.WriteString(response.Forecasts)
 }

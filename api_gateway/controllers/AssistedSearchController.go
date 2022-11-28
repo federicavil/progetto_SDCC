@@ -14,6 +14,11 @@ type AssistedSearchController struct {
 	web.Controller
 }
 
+/*
+* Effettua la chiamata goRPC al microservizio PathManager per eseguire una ricerca avanzata di percorsi
+* @param {model.AdvancedSearchStruct}: Informazioni relative al path da cercare
+* @returns {[]byte]}: risultato della chiamata goRPC in formato []byte
+ */
 func AssistedSearchMountainPaths(filters model.AdvancedSearchStruct) []byte {
 	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
@@ -28,6 +33,10 @@ func AssistedSearchMountainPaths(filters model.AdvancedSearchStruct) []byte {
 	return results
 }
 
+/*
+* Gestione chiamata POST: recupera parametri dalla chiamata REST ed esegue la funzione AssistedSearchMountainPaths
+* @returns {string}: risultato della chiamata goRPC in formato string
+ */
 func (this *AssistedSearchController) Post() {
 	defer this.ServeJSON()
 	var paths []byte
@@ -42,5 +51,4 @@ func (this *AssistedSearchController) Post() {
 	paths = AssistedSearchMountainPaths(filters)
 	this.Ctx.WriteString(string(paths))
 	this.Ctx.Output.Status = http.StatusOK
-	return
 }

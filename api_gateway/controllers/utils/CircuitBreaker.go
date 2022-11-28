@@ -13,6 +13,10 @@ var (
 	instance *gobreaker.CircuitBreaker
 )
 
+/*
+- Crea un'istanza di circuit breaker
+- @returns {*gobreaker.CircuitBreaker}: istanza di circuit breaker creata
+*/
 func GetCircuitBreaker() *gobreaker.CircuitBreaker {
 
 	if instance == nil {

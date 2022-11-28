@@ -12,6 +12,14 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+/*
+* Inizializza le strutture dati usate nella chiamata gRPC al microservizio NotificationManager
+* @returns {*grpc.ClientConn}: connessione gRPC al microservizio NotificationManager
+* @returns {proto.NotificationManagerClient}: istanza di client generata da file ".proto" con protobuf
+* @returns {context.Context}: permette di contattare il server gRPC
+* @returns {context.CancelFunc}: usato con defer per terminare il lavoro a fine funzione
+* @returns {error}
+ */
 func init_grpc_notification_manager_client() (*grpc.ClientConn, proto.NotificationManagerClient, context.Context, context.CancelFunc, error) {
 	// Set up a connection to the server.
 	var c proto.NotificationManagerClient
@@ -32,8 +40,13 @@ func init_grpc_notification_manager_client() (*grpc.ClientConn, proto.Notificati
 	return conn, c, ctx, cancel, err
 }
 
+/*
+* Effettua chiamata gRPC per ricevere lista degli inviti
+* @param {proto.InviteInput}: contiene userId dell'utente di cui vogliamo ottenere tutti gli inviti
+* @returns {[]byte}: lista di inviti in json
+* @returns {error}
+ */
 func GetInvites(inviteInput proto.InviteInput) ([]byte, error) {
-	fmt.Println("GET INVITES GRPC")
 	conn, c, ctx, cancel, err := init_grpc_notification_manager_client()
 	var invites []byte
 	if err == nil {

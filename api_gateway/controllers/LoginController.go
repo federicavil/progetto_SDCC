@@ -15,16 +15,26 @@ type LoginController struct {
 	web.Controller
 }
 
+/*
+* Funzione di utility che prepara la connessione grpc
+* @param {string}: stringa contenente ip e porta da contattare
+* @returns {*grpc.ClientConn}: connessione grpc
+* @returns {error}
+ */
 func Dial(host string) (*grpc.ClientConn, error) {
-	fmt.Println("Dialing " + host)
 	conn, err := grpc.Dial(host, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		fmt.Println("")
+		fmt.Println("Dial connection error")
 	}
-	return conn, nil
+	return conn, err
 }
+
+/*
+* Verifica che un utente sia loggato
+* @param {string}: userId dell'utente da verificare
+* @returns {bool}: true se loggato, false se non loggato
+ */
 func (this *LoginController) CheckLogin(userId string) bool {
-	fmt.Println("check login")
 	if userId != "" {
 		conn, _ := Dial(conf.GetConnectionConf("login"))
 		client := proto.NewLoginServiceClient(conn)
@@ -38,8 +48,12 @@ func (this *LoginController) CheckLogin(userId string) bool {
 	}
 }
 
+/*
+* Verifica che un utente sia registrato
+* @param {string}: userId dell'utente da verificare
+* @returns {bool}: true se registrato, false se non registrato
+ */
 func (this *LoginController) CheckUsername(userId string) bool {
-	fmt.Println("check username")
 	if userId != "" {
 		conn, _ := Dial(conf.GetConnectionConf("login"))
 		client := proto.NewLoginServiceClient(conn)
@@ -53,40 +67,45 @@ func (this *LoginController) CheckUsername(userId string) bool {
 	}
 }
 
+/*
+* Effettua operazione di login dell'utente
+* @param {string}: credenziali dell'utente che deve effettuare il login
+* @returns {string}: userId dell'utente se il login è avvenuto con successo #TODO: verificare
+ */
 func (this *LoginController) login(credentialJson string) string {
-	fmt.Println("LOGIN")
 	conn, _ := Dial(conf.GetConnectionConf("login"))
 	client := proto.NewLoginServiceClient(conn)
-	fmt.Println("CONNECTION")
 	var credential = model.Credential{}
 	_ = json.Unmarshal([]byte(credentialJson), &credential)
 	response, e := client.Login(context.TODO(), &proto.LoginRequest{Username: credential.Username, Password: credential.Password})
 	if e != nil {
 		fmt.Println(e)
 	}
-	fmt.Println("SERVIZIO")
-	fmt.Println(response.User)
 	return response.User
 }
 
+/*
+* Effettua operazione di registrazione dell'utente
+* @param {string}: credenziali dell'utente che deve effettuare la registrazione
+* @returns {string}: userId dell'utente se la registrazione è avvenuta con successo #TODO: verificare
+ */
 func (this *LoginController) signIn(credentialJson string) string {
-	fmt.Println("SIGNIN")
 	conn, _ := Dial(conf.GetConnectionConf("login"))
 	client := proto.NewLoginServiceClient(conn)
-	fmt.Println("CONNECTION")
 	var credential = model.Credential{}
 	_ = json.Unmarshal([]byte(credentialJson), &credential)
 	response, e := client.Signin(context.TODO(), &proto.LoginRequest{Username: credential.Username, Password: credential.Password})
 	if e != nil {
 		fmt.Println(e)
 	}
-	fmt.Println("SERVIZIO")
-	fmt.Println(response.User)
 	return response.User
 }
 
+/*
+* Effettua operazione di logout dell'utente
+* @param {string}: userId dell'utente che deve effettuare il logout
+ */
 func (this *LoginController) LogOut(userId string) {
-	fmt.Println("logout " + userId)
 	conn, _ := Dial(conf.GetConnectionConf("login"))
 	client := proto.NewLoginServiceClient(conn)
 	_, e := client.LogOut(context.TODO(), &proto.CheckRequest{UserId: userId})
@@ -97,22 +116,22 @@ func (this *LoginController) LogOut(userId string) {
 }
 
 func (this *LoginController) Get() {
-
 }
 
+/*
+* Gestione chiamata POST: recupera parametri dalla chiamata REST e, in base ai parametri, permette di fare login o
+* registrazione alla piattaforma.
+* @returns {string}: userID dell'utente loggato/registrato
+ */
 func (this *LoginController) Post() {
-	fmt.Println("POST API GATEWAY")
 	var credentialJson string
 	var userId string
 	if this.Ctx.Input.Query("signin") != "" {
-		fmt.Println("SIGN IN")
 		credentialJson = this.Ctx.Input.Query("signin")
 		userId = this.signIn(credentialJson)
 	} else if this.Ctx.Input.Query("login") != "" {
-		fmt.Println("LOG IN")
 		credentialJson = this.Ctx.Input.Query("login")
 		userId = this.login(credentialJson)
 	}
-	fmt.Println(userId)
 	this.Ctx.WriteString(userId)
 }
