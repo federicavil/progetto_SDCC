@@ -17,11 +17,19 @@ type NotificationController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: imposta la view da mostrare all'utente
+ */
 func (this *NotificationController) Prepare() {
 	this.session = this.StartSession()
 	this.TplName = "notifications.html"
 }
 
+/*
+* Gestione chiamata GET: richiama CheckLogin per contattare API Gateway al fine di verificare che l'utente sia loggato
+* Se non lo è, effettua redirect alla pagina di login.
+* Altrimenti, riceve informazioni sulle notifiche dalla sessione e le mostra sulla view
+ */
 func (this *NotificationController) Get() {
 	isLogged := CheckLogin(this.session, "/notifications")
 	if !isLogged {
@@ -38,14 +46,16 @@ func (this *NotificationController) Get() {
 	}
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di effettuare
+* l'operazione di accept/decline di una certo invito
+ */
 func (this *NotificationController) Post() {
-	fmt.Println("POST")
 	accept := this.GetString("Accept")
 	decline := this.GetString("Decline")
 	viewInfo := this.GetString("ViewInfo")
 	var visitId string
 	if accept != "" || decline != "" {
-		fmt.Println("ACCEPT")
 		var response string
 		// Chiamo api_gateway
 		if accept != "" {
@@ -104,22 +114,26 @@ func (this *NotificationController) Post() {
 	}
 }
 
-func NotificationPolling(username string, session session.Store) {
+/*
+* Funzione eseguita come goroutine per ricevere notifiche relative agli inviti a visite da parte di altri utenti.
+* Ogni 30 secondi si comunica con l'API Gateway per ricevere notifiche e mantenerle nella sessione.
+* @param {string}: userId dell'utente ricevente (appena loggato) di cui si vogliono recuperare gli inviti
+* @param {session.Store}: identificatore della sessione, usata per mantenere info sugli inviti ricevuti
+ */
+func NotificationPolling(userId string, session session.Store) {
 	for true {
 		if session.Get("userId") == "" {
 			return
 		}
-		fmt.Println("Sono il thread")
 		// chiama api_gateway per vedere se ci sono nuove notifiche
 		req := httplib.Get("http://" + conf.GetApiGateway() + "/notifications")
-		req.Param("userId", username)
+		req.Param("userId", userId)
 		req.Param("isLogged", "true")
 		notificationsjson, _ := req.Bytes()
 		var notificationString string
 		_ = json.Unmarshal(notificationsjson, &notificationString)
 		var notifications []model.Notification
 		_ = json.Unmarshal([]byte(notificationString), &notifications)
-		fmt.Println(notifications)
 		// se ci sono le mette sulla sessione
 		/*var notifications []model.Notification
 		var participants []model.Participant

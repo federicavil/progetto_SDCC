@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"frontend/model"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/session"
@@ -12,6 +11,9 @@ type ViewPathInfoController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *ViewPathInfoController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -23,23 +25,29 @@ func (this *ViewPathInfoController) Prepare() {
 	this.TplName = "viewPathInfo.html"
 }
 
+/*
+* Gestione chiamata GET: recupera informazioni su un percorso specifico e le mostra sulla view
+ */
 func (this *ViewPathInfoController) Get() {
 	path := this.session.Get("selectedPath").(model.MountainPath)
 	this.Data["path"] = path
 }
 
+/*
+* Gestione chiamata POST: effettua redirect a una pagina specifica in base al pulsante premuto nella view:
+*	- Lista recensioni di un certo percorso
+*	- Aggiunta di una nuova visita nel percorso specifico
+*	- Aggiunta di una nuova recensione del percorso specifico
+*	- Visualizzazione delle previsioni del tempo dell'arco di una settimana nel percorso specifico
+ */
 func (this *ViewPathInfoController) Post() {
 	if this.GetString("viewReviews") != "" {
-		fmt.Println("btn view review")
 		this.Redirect("viewReviews", 302)
 	} else if this.GetString("addNewVisit") != "" {
-		fmt.Println("btn add visit")
 		this.Redirect("addNewVisit", 302)
 	} else if this.GetString("addReview") != "" {
-		fmt.Println("btn add review")
 		this.Redirect("addReview", 302)
 	} else if this.GetString("viewForecast") != "" {
-		fmt.Println("btn view forecast")
 		this.Redirect("viewWeatherForecast", 302)
 	}
 

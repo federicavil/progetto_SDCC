@@ -15,6 +15,9 @@ type ViewWeatherForecastController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *ViewWeatherForecastController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -26,6 +29,9 @@ func (this *ViewWeatherForecastController) Prepare() {
 	this.TplName = "viewWeatherForecast.html"
 }
 
+/*
+* Gestione chiamata GET: contatta API Gateway per ottenere le previsioni del tempo, dopodiché le mostra sulla view
+ */
 func (this *ViewWeatherForecastController) Get() {
 	path := this.StartSession().Get("selectedPath").(model.MountainPath)
 	pathJson, _ := json.Marshal(path)

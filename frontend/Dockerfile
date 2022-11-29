@@ -9,14 +9,15 @@ WORKDIR frontend
 # Download necessary Go modules
 COPY go.mod ./
 COPY go.sum ./
-COPY conf ./conf
-COPY controllers ./controllers
+RUN go mod download
 COPY model ./model
 COPY routers ./routers
 COPY static ./static
 COPY views ./views
+COPY conf ./conf
+COPY controllers ./controllers
 
-RUN go mod download
+
 
 COPY *.go ./
 

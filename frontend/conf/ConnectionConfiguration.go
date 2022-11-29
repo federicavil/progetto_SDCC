@@ -6,6 +6,10 @@ import (
 	"os"
 )
 
+/*
+- Legge la configurazione nel file host.ini e restituisce indirizzo e porta del servizio di API_Gateway.
+- @returns {string}: Stringa della forma "indirizzo:porta"
+*/
 func GetApiGateway() string {
 	cfg, err := ini.Load("conf/host.ini")
 	if err != nil {

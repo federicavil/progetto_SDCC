@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
@@ -15,6 +14,9 @@ type AddNewPathController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *AddNewPathController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -26,6 +28,10 @@ func (this *AddNewPathController) Prepare() {
 	this.TplName = "addNewPath.html"
 }
 
+/*
+* Gestione chiamata GET: richiama CheckLogin per contattare API Gateway al fine di verificare che l'utente sia loggato
+* Se non lo è, effettua redirect alla pagina di login
+ */
 func (this *AddNewPathController) Get() {
 	isLogged := CheckLogin(this.session, "/addNewPath")
 	if !isLogged {
@@ -37,6 +43,10 @@ func (this *AddNewPathController) Get() {
 	}
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di aggiungere
+* un nuovo percorso al sistema
+ */
 func (this *AddNewPathController) Post() {
 	saveBtn := this.GetString("savePath")
 	if saveBtn != "" {
@@ -49,8 +59,10 @@ func (this *AddNewPathController) Post() {
 		pathString := string(pathJson)
 		req := httplib.Post("http://" + conf.GetApiGateway() + "/addNewPath")
 		req.Param("path", pathString)
-		str, _ := req.Bytes()
-		fmt.Println(str)
+		_, err = req.Bytes()
+		if err != nil {
+			return //TODO: popup?
+		}
 		this.session.Set("selectedPath", newPath)
 		this.Redirect("viewInfo", 302)
 	}

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
@@ -14,6 +13,9 @@ type AddNewVisitController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *AddNewVisitController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -25,6 +27,11 @@ func (this *AddNewVisitController) Prepare() {
 	this.TplName = "addNewVisit.html"
 }
 
+/*
+* Gestione chiamata GET: richiama CheckLogin per contattare API Gateway al fine di verificare che l'utente sia loggato
+* Se non lo è, effettua redirect alla pagina di login.
+* Mantiene anche informazioni sul percorso interessato alla visita da aggiungere
+ */
 func (this *AddNewVisitController) Get() {
 	isLogged := CheckLogin(this.session, "/addNewVisit")
 	if !isLogged {
@@ -35,35 +42,28 @@ func (this *AddNewVisitController) Get() {
 		this.Redirect("login", 302)
 	}
 	this.Data["pathname"] = this.session.Get("selectedPath")
-
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di aggiungere
+* una nuova visita al sistema
+ */
 func (this *AddNewVisitController) Post() {
 	//saveBtn := this.GetString("saveVisit")
 	visitTime := this.GetString("visitTime")
 
-	newPath := model.MountainVisit{}
-	err := this.ParseForm(&newPath)
-
-	if err != nil {
-		return
-	}
 	pathname := this.session.Get("selectedPath").(model.MountainPath)
-	fmt.Println(pathname.Name)
 
-	//pathJson, _ := json.Marshal(newPath)
-	//pathString := string(pathJson)
 	req := httplib.Post("http://" + conf.GetApiGateway() + "/addNewVisit")
 	userid := this.session.Get("userId").(string)
-	fmt.Println("VISITTIME: " + visitTime)
-	//fmt.Println("NAME: " + pathname)
-	newPath.Username = userid
-	newPath.Pathname = pathname.Name
+
 	req.Param("pathname", pathname.Name)
 	req.Param("timestamp", visitTime)
 	req.Param("username", userid)
-	str, _ := req.Bytes()
-	fmt.Println(str)
+	_, err := req.Bytes()
+	if err != nil {
+		return
+	}
 	//this.session.Set("selectedPath", newPath)
 	this.Data["pathname"] = this.session.Get("selectedPath")
 

@@ -16,6 +16,11 @@ type ViewVisitsController struct {
 	session session.Store
 }
 
+/*
+* Funzione che chiama API Gateway per ricevere tutte le visite relative a un utente
+* @param {string}: userId dell'utente da invitare
+* @returns {[]byte}: lista delle visite in json
+ */
 func GetAllVisits(id string) []byte {
 	req := httplib.Post("http://" + conf.GetApiGateway() + "/getAllVisits")
 	req.Param("id_visit", id)
@@ -23,11 +28,19 @@ func GetAllVisits(id string) []byte {
 	return str
 }
 
+/*
+* Prepare del client: imposta la view da mostrare all'utente
+ */
 func (this *ViewVisitsController) Prepare() {
 	this.session = this.StartSession()
 	this.TplName = "viewVisits.html"
 }
 
+/*
+* Gestione chiamata GET: richiama CheckLogin per contattare API Gateway al fine di verificare che l'utente sia loggato
+* Se non lo è, effettua redirect alla pagina di login.
+* Altrimenti, contatta API Gateway per ottenere tutte le visite relative a un userId e le mostra nella view
+ */
 func (this *ViewVisitsController) Get() {
 	var userid string
 	if this.session.Get("userId") == nil {
@@ -68,9 +81,12 @@ func (this *ViewVisitsController) Get() {
 
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di ricevere
+* il dettaglio di una certa visita. Dopodiché viene fatto redirect alla view che mostra il dettaglio
+ */
 func (this *ViewVisitsController) Post() {
 	visitId := this.GetString("visitId")
-	print("POST DI VIEWVISITS con id: " + visitId)
 	if visitId != "" {
 		selectedVisit := model.MountainVisitComplete{}
 		visitlist := this.session.Get("visitList").([]model.MountainVisitComplete)
@@ -85,9 +101,6 @@ func (this *ViewVisitsController) Post() {
 			return
 		}
 
-		print("\nSONO IN VIEWVISITS E HO: ")
-		fmt.Println(this.session.Get("selectedVisit"))
 		this.Redirect("viewVisitInfo", 302)
-		print("HO FATTO REDIRECT")
 	}
 }

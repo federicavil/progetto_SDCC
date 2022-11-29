@@ -15,6 +15,9 @@ type SearchController struct {
 	session  session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *SearchController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -26,11 +29,11 @@ func (this *SearchController) Prepare() {
 	this.TplName = "searchPath.html"
 }
 
-type Field struct {
-	name  string
-	value string
-}
-
+/*
+* Funzione che chiama API Gateway per effettuare ricerca per nome dei percorsi
+* @param {string}: parametro di ricerca
+* @returns {[]byte}: lista dei percorsi risultanti dalla ricerca in json
+ */
 func SimpleSearchPost(name string) []byte {
 	req := httplib.Post("http://" + conf.GetApiGateway() + "/simplesearch")
 	req.Param("name", name)
@@ -40,6 +43,9 @@ func SimpleSearchPost(name string) []byte {
 	return str
 }
 
+/*
+* Gestione chiamata GET: recupera lista di percorsi dalla sessione e le mostra sulla view
+ */
 func (this *SearchController) Get() {
 	paths := this.session.Get("pathList")
 	if paths != nil {
@@ -48,6 +54,11 @@ func (this *SearchController) Get() {
 	}
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di effettuare
+* una ricerca dei percorsi basate sul nome del percorso, oppure al fine di ottenere informazioni su un percorso
+* specifico per poi mostrarle in una nuova view.
+ */
 func (this *SearchController) Post() {
 	// Chiama il metodo di ricerca
 	name := this.GetString("pathName")

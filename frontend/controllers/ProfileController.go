@@ -15,6 +15,9 @@ type ProfileController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *ProfileController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -26,6 +29,11 @@ func (this *ProfileController) Prepare() {
 	this.TplName = "profile.html"
 }
 
+/*
+* Gestione chiamata GET: contatta API Gateway al fine di verificare che l'utente sia loggato
+* Se non lo è, effettua redirect alla pagina di login.
+* Altrimenti, riceve informazioni sull'utente e le mostra sulla view
+ */
 func (this *ProfileController) Get() {
 	var userid string
 	if this.session.Get("userId") == nil {
@@ -36,7 +44,6 @@ func (this *ProfileController) Get() {
 	req := httplib.Get("http://" + conf.GetApiGateway() + "/profile")
 	req.Param("userId", userid)
 	str, _ := req.Bytes()
-	fmt.Println("RESPONSE: " + string(str))
 	if string(str) == "false" {
 		err := this.session.Set("prevPage", "profile")
 		if err != nil {
@@ -51,6 +58,10 @@ func (this *ProfileController) Get() {
 	}
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di effettuare
+* l'operazione di logout oppure di modifica delle informazioni del profilo in base al pulsante premuto sulla view
+ */
 func (this *ProfileController) Post() {
 	logOutBtn := this.GetString("logOut")
 	saveEditBtn := this.GetString("save")

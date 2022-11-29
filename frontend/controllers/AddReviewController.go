@@ -15,6 +15,9 @@ type AddReviewController struct {
 	session session.Store
 }
 
+/*
+* Prepare del client: verifica la presenza di nuove notifiche e imposta la view da mostrare all'utente
+ */
 func (this *AddReviewController) Prepare() {
 	this.session = this.StartSession()
 	notifications := this.session.Get("notifications")
@@ -26,6 +29,10 @@ func (this *AddReviewController) Prepare() {
 	this.TplName = "addReview.html"
 }
 
+/*
+* Gestione chiamata GET: richiama CheckLogin per contattare API Gateway al fine di verificare che l'utente sia loggato
+* Se non lo è, effettua redirect alla pagina di login.
+ */
 func (this *AddReviewController) Get() {
 	isLogged := CheckLogin(this.session, "/addReview")
 	if !isLogged {
@@ -37,6 +44,10 @@ func (this *AddReviewController) Get() {
 	}
 }
 
+/*
+* Gestione chiamata POST: Recupera informazioni da un form sulla view e invoca API Gateway al fine di aggiungere
+* una nuova recensione relativa a un percorso al sistema
+ */
 func (this *AddReviewController) Post() {
 	if this.GetString("backInfo") != "" {
 		fmt.Println("back")

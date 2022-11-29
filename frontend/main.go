@@ -8,7 +8,7 @@ import (
 
 func main() {
 	sessionconf := &session.ManagerConfig{
-		CookieName:     "begoosessionID",
+		CookieName:     "beegosessionID",
 		Gclifetime:     3600,
 		ProviderConfig: "./tmp",
 	}
