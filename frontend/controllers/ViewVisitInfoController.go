@@ -87,6 +87,8 @@ func (this *ViewVisitInfoController) Post() {
 			phrase = "User already invited"
 		} else if string(resp) == "-3" {
 			phrase = "You can't invite yourself!"
+		} else if string(resp) == "-4" {
+			phrase = "SQS error. Retry later."
 		} else if string(resp) == "0" {
 			phrase = "User not found"
 		} else if string(resp) == "1" {
