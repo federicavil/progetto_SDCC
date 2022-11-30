@@ -3,6 +3,7 @@ package controller
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"log"
@@ -29,7 +30,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-			log.Fatal(err)
+			print(err)
 		}
 	}(db) // Defer Closing the database
 	var query string
@@ -41,12 +42,13 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	}
 	row, err := db.Query(query)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Errore query: ")
+		print(err)
 	}
 	defer func(row *sql.Rows) {
 		err := row.Close()
 		if err != nil {
-			log.Fatal(err)
+			print(err)
 		}
 	}(row)
 	var path = model.MountainPath{}
@@ -75,7 +77,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-			log.Fatal(err)
+			print(err)
 		}
 	}(db) // Defer Closing the database
 
@@ -166,12 +168,13 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 
 	row, err := db.Query(query)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Errore query: ")
+		print(err)
 	}
 	defer func(row *sql.Rows) {
 		err := row.Close()
 		if err != nil {
-			log.Fatal(err)
+			print(err)
 		}
 	}(row)
 	var path = model.MountainPath{}

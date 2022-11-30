@@ -25,35 +25,35 @@
                 <div id="results" class="row justify-content-center" style="padding-top:10%"></div>
                 {{range $val := .notifications}}
                 <div class="container" style="padding-bottom: 2%">
-                        <div class="row card-view-simple-path-no-margin">
-                            <div class="col align-items-center">
-                                <div class="row justify-content-center" style="height:50px;width:500px;padding-bottom: 1%; padding-top:1%">
-                                    <div class="d-flex justify-content-start align-items-center" style="height:50px;width:600px;">
-                                        <div class="ml-auto w-100 p-2 bd-highlight" style="height:50px;width:600px;">
-                                            <div class="bold-text flex-item-text text" id="pathNameCardView" align="left">{{$val.Username}} has invited you to a visit</div>
-                                        </div>
+                    <div class="row card-view-simple-path-no-margin">
+                        <div class="col align-items-center">
+                            <div class="row justify-content-center" style="height:50px;width:500px;padding-bottom: 1%; padding-top:1%">
+                                <div class="d-flex justify-content-start align-items-center" style="height:50px;width:600px;">
+                                    <div class="ml-auto w-100 p-2 bd-highlight" style="height:50px;width:600px;">
+                                        <div class="bold-text flex-item-text text" id="pathNameCardView" align="left">{{$val.Username}} has invited you to a visit</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col" style="height:50px;width:100px">
-                                <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
-                                    <button type="submit" class="btn btn-dark-orange" name="Accept"  value={{$val.IdVisit}}>Accept</button>
-                                </div>
-
-                            </div>
-                            <div class="col" style="height:50px;width:100px">
-                                <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
-                                    <button type="submit" class="btn btn-dark-orange" name="Decline" value={{$val.IdVisit}}>Decline</button>
-                                </div>
-
-                            </div>
-                            <div class="col" style="height:50px;width:100px">
-                                <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
-                                    <button type="submit" class="btn btn-dark-orange" name="ViewInfo" value={{$val.IdVisit}}>View info</button>
-                                </div>
-
-                            </div>
                         </div>
+                        <div class="col" style="height:50px;width:100px">
+                            <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
+                                <button type="submit" class="btn btn-dark-orange" name="Accept"  value={{$val.IdVisit}}>Accept</button>
+                            </div>
+
+                        </div>
+                        <div class="col" style="height:50px;width:100px">
+                            <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
+                                <button type="submit" class="btn btn-dark-orange" name="Decline" value={{$val.IdVisit}}>Decline</button>
+                            </div>
+
+                        </div>
+                        <div class="col" style="height:50px;width:100px">
+                            <div class="row" style="padding-bottom: 1%; padding-top:1%;height:50px;width:100px">
+                                <button type="submit" class="btn btn-dark-orange" name="ViewInfo" value={{$val.IdVisit}}>View info</button>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
                 {{end}}
             </div>
