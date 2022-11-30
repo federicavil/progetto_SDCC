@@ -19,7 +19,6 @@ public class ReviewManagerServiceImpl extends ReviewManagerServiceGrpc.ReviewMan
     // Aggiunge una nuova recensione
     @Override
     public void addReview(AddReviewRequest request, StreamObserver<AddReviewResponse> responseObserver){
-        System.out.println("AGGIUNTA REVIEW "+request.getReview());
         String review = reviewController.addReview(request.getReview());
         AddReviewResponse response = AddReviewResponse.newBuilder()
                 .setAddedReview(review).build();
@@ -30,9 +29,7 @@ public class ReviewManagerServiceImpl extends ReviewManagerServiceGrpc.ReviewMan
     // Restituisce tutte le recensioni di un sentiero
     @Override
     public void getReviews(GetReviewsRequest request, StreamObserver<GetReviewsResponse> responseObserver){
-        System.out.println("GET REVIEWS "+request.getMountainPathName());
         String reviews = reviewController.getReviews(request.getMountainPathName());
-        System.out.println(reviews);
         GetReviewsResponse response = GetReviewsResponse.newBuilder()
                 .setReviewsList(reviews).build();
         responseObserver.onNext(response);

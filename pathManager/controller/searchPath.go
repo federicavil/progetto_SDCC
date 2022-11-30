@@ -3,7 +3,6 @@ package controller
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"log"
@@ -40,10 +39,8 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 		args.Name = strings.ReplaceAll(args.Name, "'", "''")
 		query = `SELECT * FROM ` + quote + `Path` + quote + ` WHERE UPPER(name) LIKE UPPER(` + `'%` + args.Name + `%')`
 	}
-	fmt.Println(query)
 	row, err := db.Query(query)
 	if err != nil {
-		fmt.Println("Errore query: ")
 		log.Fatal(err)
 	}
 	defer func(row *sql.Rows) {
@@ -169,7 +166,6 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 
 	row, err := db.Query(query)
 	if err != nil {
-		fmt.Println("Errore query: ")
 		log.Fatal(err)
 	}
 	defer func(row *sql.Rows) {

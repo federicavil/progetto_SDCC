@@ -2,7 +2,6 @@ package controller
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"pathManager/conf"
 	"pathManager/model"
@@ -49,7 +48,6 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 
 	_, err = db.Exec(query)
 	if err != nil {
-		fmt.Println("Errore query: ")
 		log.Fatal(err)
 	}
 	*reply = []byte("Okay")

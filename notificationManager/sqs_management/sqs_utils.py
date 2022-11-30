@@ -3,18 +3,6 @@ from pprint import pprint
 
 import boto3 as boto3
 
-
-# def createQueue():
-#     # Get the service resource
-#     sqs = boto3.resource('sqs', region_name='us-east-1')
-#
-#     # Create the queue. This returns an SQS.Queue instance
-#     queue = sqs.create_queue(QueueName='prova', Attributes={'DelaySeconds': '5'})
-#
-#     # You can now access identifiers and attributes
-#     print(queue.url)
-#     print(queue.attributes.get('DelaySeconds'))
-
 class NotificationManager():
 
     def __init__(self):

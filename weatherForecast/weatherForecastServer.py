@@ -1,7 +1,6 @@
 import json
 import logging
 from concurrent import futures
-from pprint import pprint
 
 import grpc
 import weatherForecastService_pb2
@@ -17,24 +16,13 @@ class WeatherForecastServiceServicer(weatherForecastService_pb2_grpc.WeatherFore
         response = requests.get("https://geocoding-api.open-meteo.com/v1/search?name=Roma")
         resp = response.content.decode()
 
-    def config(self, filename='./conf/database.ini', section='postgresql'):
-        # create a parser
-        parser = ConfigParser()
-        # read config file
-        parser.read(filename)
 
-        # get section, default to postgresql
-        db = {}
-        if parser.has_section(section):
-            params = parser.items(section)
-            for param in params:
-                db[param[0]] = param[1]
-        else:
-            raise Exception('Section {0} not found in the {1} file'.format(section, filename))
-
-        return db
-
-
+    """
+        Implementa il servizio di restituzione delle previsioni meteo definito nel file proto.
+        Restituisce una stringa rappresentante un json array con le previsioni trovate.
+        @:param request: richiesta grpc contenente il sentiero di cui trovare le previsioni
+        @:param context: contesto di chiamata
+    """
     def GetForecast(self, request, context):
         path = request.Path
         parsedPath = json.loads(path)
@@ -75,13 +63,15 @@ class WeatherForecastServiceServicer(weatherForecastService_pb2_grpc.WeatherFore
 
         dict_values = [time,temperature,humidity,precipitation,cloud_cover,wind_speed]
         result_dict = {dict_keys[i]: dict_values[i] for i in range(len(dict_values))}
-        pprint(result_dict)
         #GEOCODING: https://geocoding-api.open-meteo.com/v1/search?name=Berlin
         #METEO: https://api.open-meteo.com/v1/forecast?latitude=51.5002&longitude=-0.1262&hourly=temperature_2m,relativehumidity_2m,precipitation,cloudcover,windspeed_10m
 
         ret = weatherForecastService_pb2.ForecastOutput(Forecasts=str(json.dumps(result_dict)))
         return ret
 
+"""
+    Definisce il server grpc tramite il quale è possibile invocare il servizio
+"""
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     weatherForecastService_pb2_grpc.add_WeatherForecastServiceServicer_to_server(

@@ -16,9 +16,13 @@ from sqs_visit.sqs_utils import sendInviteRequestMessage, removeRequestMessage
 class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     """Provides methods that implement functionality of route guide server."""
 
-    # def __init__(self):
-    #     self.db = visitManager_resources.visitManager_guide_database()
 
+    """
+        Esegue il parsing del file ini di configurazione accedendo ad una determinata sezione
+        Ritorna un dizionario con i campi letti dal file
+        @:param parser: config parser del file
+        @:param section: sezione alla quale accedere
+    """
     def parse_config(self, parser, section):
         conf = {}
         if parser.has_section(section):
@@ -29,53 +33,45 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             raise Exception('Section {0} not found in the file'.format(section))
         return conf
 
+    """   
+        Ritorna le configurazioni lette dal file in input
+        @:param filename: path del file di configurazione
+    """
     def config(self, filename='./conf/database.ini'):
         # create a parser
         parser = ConfigParser()
         # read config file
         parser.read(filename)
         section = self.parse_config(parser, "app_mode")["app_mode"]
-        print("SECTION " + section)
         db = self.parse_config(parser, section)
 
         # get section, default to postgresql
-        """ db = {}
-        if parser.has_section(section):
-            params = parser.items(section)
-            for param in params:
-                db[param[0]] = param[1]
-        else:
-            raise Exception('Section {0} not found in the {1} file'.format(section, filename)) """
-        print(db)
         return db
 
+    """
+        Esegue la connessione al database
+    """
     def dbConnection(self):
         # read connection parameters
         params = self.config()
         dbtype = params["dbtype"]
         cond = dbtype == "postgres"
-        print(cond)
         params.pop("dbtype")
         quote = params["quote"]
         params.pop("quote")
-        print(params)
         conn = None
         try:
             if cond:
-                print("postgres")
                 conn = psycopg2.connect(**params)
-                print("Connected")
             else:
-                print("mysql")
                 conn = mysql.connector.connect(**params)
-                print("Connected")
         except (Exception, psycopg2.DatabaseError, mysql.connector.DatabaseError) as error:
-            print("CONNECTION ERROR")
-            print(error)
             raise Exception
         return conn, quote
 
-
+    """
+        Per prima cosa chiama la funzione che si connette al database, dopodiché inizializza la coda SQS
+    """
     def __init__(self):
         """ Connect to the PostgreSQL database server """
         self.conn = None
@@ -88,7 +84,6 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
                 i = i+1
                 time.sleep(5)
         if self.conn is None:
-            print("Not connected")
             return
 
         sqs = boto3.resource('sqs', region_name='us-east-1')
@@ -102,18 +97,22 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         self.queue_url = queue.url
 
 
+    """
+        Implementa il servizio di aggiunta di una nuova visita
+        @:param request: richiesta contenente la nuova visita da aggiungere
+        @:param context: contesto
+    """
     def AddNewVisit(self, request, context):
         cur = self.conn.cursor()
         username = request.Username
         pathname = request.Pathname
         timestamp = request.Timestamp
-        print("AddNewVisit(" + username + "," + pathname + "," + timestamp + ")")
         from datetime import datetime
         date_format = "%Y-%m-%dT%H:%M"
         ts1 = datetime.strptime(timestamp, date_format)
         import pandas as pd
         ts = pd.Timestamp(ts1)
-        print(ts)
+
         quote = self.quote
         sql = """INSERT INTO """ + quote + """Visit""" + quote + """ (""" + quote + """ID_Path"""+quote + """, """ + quote +"""Timestamp"""+quote+""", """+quote+"""Creator"""+quote+""") VALUES ('""" + pathname + """', """ + str(
             ts.to_julian_date()) + """, '""" + username + """')"""
@@ -126,11 +125,14 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         self.conn.commit()
         ret = visitManager_pb2.Return(Ret=True)
         return ret
-
+    """
+        Implementa il servizio che recupera le informazioni di una visita dato il suo id
+        @:param request: richiesta contenente l'id della visita
+        @:param context: contesto
+    """
     def GetVisitByID(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
-        print(request.Value)
         sql = """ SELECT * FROM """ + quote + """Visit""" + quote +""" WHERE """+quote+"""ID"""+quote+""" = """ + request.Value
         cur.execute(sql)
         try:
@@ -142,7 +144,6 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         import pandas as pd
         t = pd.to_datetime(d[2], origin='julian', unit='D')
         ts = t.strftime("%d/%m/%Y, %H:%M")
-        print(ts)
         sql = """ SELECT * FROM """ + quote + """User_to_Visit"""+quote +""" WHERE """+quote+"""ID_Visit"""+quote+"""=""" + str(d[0]) + """ AND """+quote+"""Accepted"""+quote+""" = true"""
         cur.execute(sql)
         resPart = cur.fetchall()
@@ -150,9 +151,13 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         for p in resPart:
             participants.append(p[1])
         visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator = d[3], Participants = participants)
-        print(visit)
         return visit
 
+    """
+        Implementa il servizio che recupera tutte le visite relative ad uno specifico utente
+        @:param request: richiesta contenente l'id dell'utente di cui recuperare le visite
+        @:param context: contesto
+    """
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
@@ -171,18 +176,21 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             import pandas as pd
             t = pd.to_datetime(d[2], origin='julian', unit='D')
             ts = t.strftime("%d/%m/%Y, %H:%M")
-            print(participants)
             visit = visitManager_pb2.Visit(ID_Visit=d[0], ID_Path=d[1], Timestamp=ts, Creator=d[3], Participants = participants)
             visits.append(visit)
         response = visitManager_pb2.Visits(Visit=visits)
         return response
 
+    """
+        Implementa il servizio di invito di un utente ad una visita
+        @:param request: richiesta contenente l'id della visita e dell'utente da invitare
+        @:param context: contesto
+    """
     def InviteUserToVisit(self, request, context):
 
         cur = self.conn.cursor()
         username = request.Username
         id_visit = request.ID_Visit
-        print("InviteUserToVisit(" + username + "," + id_visit + ")")
         quote = self.quote
         sql = """SELECT """+quote+"""Visit"""+quote+"""."""+quote+"""Creator"""+quote+""" FROM """+quote+"""Visit"""+quote+""" WHERE """+quote+"""Visit"""+quote+"""."""+quote+"""ID"""+quote+"""='""" + id_visit + """'"""
         cur.execute(sql)
@@ -219,6 +227,11 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             ret = visitManager_pb2.Return(Ret=-4)
         return ret
 
+    """
+        Implementa il servizio di accettazione o no di un invito
+        @:param request: richiesta contenente l'id della visita, l'id dell'utente e la risposta
+        @:param context: contesto
+    """
     def AcceptOrRefuseInvite(self, request, context):
         cur = self.conn.cursor()
         username = request.Username
@@ -240,7 +253,9 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             ret = visitManager_pb2.Return(Ret=-1)
         return ret
 
-
+"""
+    Definisce il server grpc tramite il quale è possibile invocare il servizio
+"""
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     visitManager_pb2_grpc.add_ManageVisitServicer_to_server(
