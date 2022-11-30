@@ -10,6 +10,7 @@ import (
 	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
+	"strings"
 )
 
 type Args struct {
@@ -36,6 +37,7 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	if args.Name == "" {
 		query = `SELECT * FROM ` + quote + `Path` + quote
 	} else {
+		args.Name = strings.ReplaceAll(args.Name, "'", "''")
 		query = `SELECT * FROM ` + quote + `Path` + quote + ` WHERE UPPER(name) LIKE UPPER(` + `'%` + args.Name + `%')`
 	}
 	fmt.Println(query)
@@ -104,6 +106,8 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 	var and int
 
 	if pathreq.City != "" {
+
+		pathreq.City = strings.ReplaceAll(pathreq.City, "'", "''")
 		if and == 0 {
 			and = 1
 		} else {
@@ -112,6 +116,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		query = query + " UPPER(city) LIKE UPPER('%" + pathreq.City + "%')"
 	}
 	if pathreq.Province != "" {
+		pathreq.Province = strings.ReplaceAll(pathreq.Province, "'", "''")
 		if and == 0 {
 			and = 1
 		} else {
@@ -120,6 +125,7 @@ func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]by
 		query = query + " UPPER(province) LIKE UPPER('%" + pathreq.Province + "%')"
 	}
 	if pathreq.Region != "" {
+		pathreq.Region = strings.ReplaceAll(pathreq.Region, "'", "''")
 		if and == 0 {
 			and = 1
 		} else {
