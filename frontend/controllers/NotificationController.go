@@ -81,8 +81,9 @@ func (this *NotificationController) Post() {
 				newNotifications = append(newNotifications, notifications[i])
 			}
 		}
-		this.session.Set("notification", newNotifications)
+		this.session.Set("notifications", newNotifications)
 		mutex.Unlock()
+		this.Redirect("notifications", 302)
 
 	} else if viewInfo != "" {
 		// Redirect su view visit info
@@ -95,6 +96,7 @@ func (this *NotificationController) Post() {
 			return
 		}
 		err = this.session.Set("selectedVisit", visit)
+		this.session.Set("prevPage", "notifications")
 		if err != nil {
 			return
 		}
