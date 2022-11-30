@@ -57,7 +57,7 @@ services:
     ports:
       - "9094:9094"
     volumes:
-      - $HOST_HOME_ADDRESS/.aws/credentials:/root/.aws/credentials:ro
+      - $HOST_HOME_ADDRESS/.aws/:/root/.aws:ro
 
   db_path_manager:
     image: mysql:5.7
