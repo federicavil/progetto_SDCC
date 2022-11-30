@@ -5,7 +5,10 @@ from concurrent import futures
 from pprint import pprint
 
 import boto3
+import botocore
 import grpc
+from botocore.exceptions import ClientError
+
 import notificationManager_pb2
 import notificationManager_pb2_grpc
 import psycopg2
@@ -17,11 +20,19 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
     def __init__(self):
         self.messages = {}
         self.sqs = boto3.client('sqs', region_name='us-east-1')
+        sqs = boto3.resource('sqs', region_name='us-east-1')
 
-        self.queue_url = "https://sqs.us-east-1.amazonaws.com/983687073675/Notification"
-        print("SQS queue initialized.")
+        #Crea coda se non esiste e ne estrae il link per l'utilizzo
+        try:
+            queue = sqs.get_queue_by_name(
+                QueueName='SDCC_Antonangeli_Villani_Notification',
+            )
+        except Exception:
+            queue = sqs.create_queue(QueueName='SDCC_Antonangeli_Villani_Notification', Attributes={'DelaySeconds': '5'})
+        self.queue_url = queue.url
 
-    def receiveInviteRequestMessage(self, username):
+
+    def receiveInviteRequestMessage(self, userId):
         # Create SQS client
         messages = []
         retValues = []
@@ -33,7 +44,7 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
                 ],
                 MaxNumberOfMessages=1,
                 MessageAttributeNames=[
-                    'InviteRequest_'+username,
+                    'InviteRequest_'+userId,
                     'Creator',
                     'Visit'
                 ],
@@ -47,7 +58,7 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
 
             if "MessageAttributes" in response['Messages'][0]:
                 msgattrs = response['Messages'][0].get("MessageAttributes")
-                participants = msgattrs.get("InviteRequest_"+username)
+                participants = msgattrs.get("InviteRequest_"+userId)
                 if not participants:
                     continue
                 visit = msgattrs.get("Visit")
@@ -57,8 +68,8 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
         return retValues
 
     def GetInvites(self, request, context):
-        username = request.Username
-        ret = notificationManager_pb2.InviteOutput(Invites=json.dumps(self.receiveInviteRequestMessage(username)))
+        userId = request.Username
+        ret = notificationManager_pb2.InviteOutput(Invites=json.dumps(self.receiveInviteRequestMessage(userId)))
         return ret
 
 def serve():

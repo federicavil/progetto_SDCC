@@ -2,6 +2,7 @@ import logging
 import time
 from concurrent import futures
 
+import boto3
 import grpc
 import visitManager_pb2
 import visitManager_pb2_grpc
@@ -89,6 +90,16 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         if self.conn is None:
             print("Not connected")
             return
+
+        sqs = boto3.resource('sqs', region_name='us-east-1')
+        #Crea coda se non esiste e ne estrae il link per l'utilizzo
+        try:
+            queue = sqs.get_queue_by_name(
+                QueueName='SDCC_Antonangeli_Villani_Notification',
+            )
+        except Exception:
+            queue = sqs.create_queue(QueueName='SDCC_Antonangeli_Villani_Notification', Attributes={'DelaySeconds': '5'})
+        self.queue_url = queue.url
 
 
     def AddNewVisit(self, request, context):
@@ -199,7 +210,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         participantList = []
         for p in participants:
             participantList.append(p[0])
-        sendInviteRequestMessage(creator, username, id_visit, participantList)
+        sendInviteRequestMessage(self.queue_url, creator, username, id_visit, participantList)
         ret = visitManager_pb2.Return(Ret=1)
         return ret
 
@@ -211,7 +222,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         quote = self.quote
         sql = """UPDATE """+quote+"""User_to_Visit"""+quote+""" SET """+quote+"""Accepted"""+quote+"""=""" + response + """ WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """' AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_User"""+quote+"""='""" + username + """'"""
         cur.execute(sql)
-        deleted = removeRequestMessage(username, id_visit)
+        deleted = removeRequestMessage(self.queue_url, username, id_visit)
         if deleted == 1:
             self.conn.commit()
             ret = visitManager_pb2.Return(Ret=1)

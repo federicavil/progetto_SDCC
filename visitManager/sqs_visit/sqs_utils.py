@@ -4,11 +4,11 @@ from pprint import pprint
 import boto3 as boto3
 
 
-def sendInviteRequestMessage(creator, username, visit, partecipation):
-    print("invite user")
-    messages = {}
+def sendInviteRequestMessage(queue_url, creator, username, visit, partecipation):
+
+
+
     sqs = boto3.client('sqs', region_name='us-east-1')
-    queue_url = "https://sqs.us-east-1.amazonaws.com/983687073675/Notification"
 
     # Send message to SQS queue
     sqs.send_message(
@@ -33,13 +33,10 @@ def sendInviteRequestMessage(creator, username, visit, partecipation):
         )
 
     )
-    print("invited user")
 
-def removeRequestMessage(username, visit):
+def removeRequestMessage(queue_url, username, visit):
 
-    messages = []
     sqs = boto3.client('sqs', region_name='us-east-1')
-    queue_url = "https://sqs.us-east-1.amazonaws.com/983687073675/Notification"
 
     # Send message to SQS queue
     while True:
