@@ -75,22 +75,13 @@ func (this *NotificationController) Post() {
 		mutex := this.session.Get("sessionMutex").(*sync.Mutex)
 		mutex.Lock()
 		notifications := this.session.Get("notifications").([]model.Notification)
-		i := 0
-		for i = 0; i < len(notifications); i++ {
-			if notifications[i].IdVisit == accept || notifications[i].IdVisit == decline {
-				break
+		var newNotifications []model.Notification
+		for i := 0; i < len(notifications); i++ {
+			if notifications[i].IdVisit != visitId {
+				newNotifications = append(newNotifications, notifications[i])
 			}
 		}
-		if i == len(notifications)-1 {
-			if i == 0 {
-				notifications = nil
-			} else {
-				notifications = append(notifications[:i])
-			}
-		} else {
-			notifications = append(notifications[:i], notifications[i+1:]...)
-		}
-		this.session.Set("notification", notifications)
+		this.session.Set("notification", newNotifications)
 		mutex.Unlock()
 
 	} else if viewInfo != "" {
