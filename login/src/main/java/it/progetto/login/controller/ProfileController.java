@@ -46,12 +46,10 @@ public class ProfileController {
     public String updateUserProfile(String username, String userProfile){
         Integer userId = credentialDao.findByUsername(username).getUser().getId();
         userProfile = "{\"id\": " + userId +","+userProfile.substring(1);
-        System.out.println(userProfile);
         Gson gson = new Gson();
         LoggedUser user = gson.fromJson(userProfile, LoggedUser.class);
         LoggedUser updateUser = userDao.save(user);
         String json = updateUser.toString();
-        System.out.println(json);
         return json;
     }
 }

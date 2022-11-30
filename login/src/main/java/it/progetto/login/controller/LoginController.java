@@ -41,7 +41,6 @@ public class LoginController {
     public String login(String username, String password){
         UserCredential credential = credentialDao.findByUsername(username);
         if(credential == null || !Objects.equals(credential.getPassword(), password)){
-            System.out.println("CREDENTIAL: "+ credential);
             username = String.valueOf(-1);
         }else {
             username = credential.getUsername();
@@ -74,8 +73,6 @@ public class LoginController {
         * @return true se l'utente è loggato, false altrimenti
          */
     public Boolean isLogged(String userId){
-        System.out.println(userId);
-        System.out.println(loggedUsers);
         for(String id: loggedUsers){
             if(Objects.equals(id, userId))
                 return true;

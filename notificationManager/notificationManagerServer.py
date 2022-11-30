@@ -2,7 +2,6 @@ import json
 import logging
 import time
 from concurrent import futures
-from pprint import pprint
 
 import boto3
 import botocore
@@ -17,6 +16,9 @@ from configparser import ConfigParser
 class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManagerServicer):
     """Provides methods that implement functionality of route guide server."""
 
+    """
+        Inizializza la coda di messaggi SQS
+    """
     def __init__(self):
         self.messages = {}
         self.sqs = boto3.client('sqs', region_name='us-east-1')
@@ -27,15 +29,16 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
             queue = sqs.get_queue_by_name(
                 QueueName='SDCC_Antonangeli_Villani_Notification',
             )
-            print("Found existing queue: ")
+
         except Exception:
             queue = sqs.create_queue(QueueName='SDCC_Antonangeli_Villani_Notification', Attributes={'DelaySeconds': '5'})
-            print("Created new queue:")
         self.queue_url = queue.url
-        print(self.queue_url)
 
 
-
+    """
+        Recupera gli inviti relativi ad un utente dalla coda SQS e li restituisce
+        @Param: userId: id dell'utente del quale restituire gli inviti
+    """
     def receiveInviteRequestMessage(self, userId):
         # Create SQS client
         messages = []
@@ -71,11 +74,19 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
                 retValues.append(myJson)
         return retValues
 
+    """
+        Implementa il servizio di restituzione degli inviti associati ad un utente definito nel file proto
+        @:param request: richiesta grpc
+        @:param context: contesto di chiamata
+    """
     def GetInvites(self, request, context):
         userId = request.Username
         ret = notificationManager_pb2.InviteOutput(Invites=json.dumps(self.receiveInviteRequestMessage(userId)))
         return ret
 
+"""
+    Definisce il server grpc tramite il quale è possibile invocare il servizio
+"""
 def serve():
   server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
   notificationManager_pb2_grpc.add_NotificationManagerServicer_to_server(

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	"log"
 	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
@@ -39,7 +40,6 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 		args.Name = strings.ReplaceAll(args.Name, "'", "''")
 		query = `SELECT * FROM ` + quote + `Path` + quote + ` WHERE UPPER(name) LIKE UPPER(` + `'%` + args.Name + `%')`
 	}
-	fmt.Println(query)
 	row, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
