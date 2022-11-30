@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"log"
 	"net"
 	"net/rpc"
 	"pathManager/conf"
@@ -11,12 +10,13 @@ import (
 )
 
 func main() {
+	time.Sleep(3 * time.Second)
 	i := 1
 	for i < 10 {
 		_, err, _ := conf.DbConnect()
 		if err != nil {
 			i++
-			time.Sleep(1)
+			time.Sleep(time.Second)
 		} else {
 			i = 10
 		}
@@ -33,7 +33,7 @@ func main() {
 	}
 	l, e := net.Listen("tcp", ":8081")
 	if e != nil {
-		log.Fatal("listen error: ", e)
+		print("listen error: ", e)
 	}
 	rpc.Accept(l)
 }

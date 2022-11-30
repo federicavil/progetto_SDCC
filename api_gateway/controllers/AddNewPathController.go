@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/beego/beego/v2/server/web"
-	"log"
 	"net/rpc"
 	"strconv"
 )
@@ -23,13 +22,13 @@ type AddNewPathController struct {
 func AddNewPath(newPath model.MountainPath) error {
 	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
-		log.Fatal("dialing:", err)
+		fmt.Printf("dialing:", err)
 	}
 	var results []byte
 	//args := &search.Args{name}
 	err = client.Call("Add.AddNewPath", &newPath, &results)
 	if err != nil {
-		log.Fatal("AddPath error:", err)
+		fmt.Printf("AddPath error:", err)
 	}
 	return err
 }

@@ -5,7 +5,6 @@ import (
 	"api_gateway/model"
 	"github.com/beego/beego/v2/server/web"
 
-	"log"
 	"net/http"
 	"net/rpc"
 )
@@ -22,14 +21,14 @@ type SearchController struct {
 func SearchMountainPaths(name string) []byte {
 	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
-		log.Fatal("dialing:", err)
+		print("dialing:", err)
 	}
 	param := model.SimpleSearchStruct{name}
 	var results []byte
 	//args := &search.Args{name}
 	err = client.Call("Search.SimpleSearch", &param, &results)
 	if err != nil {
-		log.Fatal("SimpleSearch error:", err)
+		print("SimpleSearch error:", err)
 	}
 	return results
 }

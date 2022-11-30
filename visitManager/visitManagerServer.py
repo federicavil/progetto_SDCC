@@ -156,7 +156,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     def GetAllVisits(self, request, context):
         cur = self.conn.cursor()
         quote = self.quote
-        sql = """SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."""+quote+"""ID"""+quote+"""=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID + """' AND """+quote+"""Accepted"""+quote+""" = true"""
+        sql = """SELECT * FROM """ + quote + """Visit""" + quote + """ JOIN """ + quote + """User_to_Visit""" + quote + """ on """ + quote + """Visit""" + quote + """."""+quote+"""ID"""+quote+"""=""" + quote + """User_to_Visit""" + quote + """.""" +quote + """ID_Visit"""+quote +""" WHERE """+quote+"""ID_User"""+quote+""" LIKE '""" + request.ID.replace("'", "''") + """' AND """+quote+"""Accepted"""+quote+""" = true"""
         cur.execute(sql)
         data = cur.fetchall()
 
@@ -180,7 +180,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     def InviteUserToVisit(self, request, context):
 
         cur = self.conn.cursor()
-        username = request.Username
+        username = request.Username.replace("'", "''")
         id_visit = request.ID_Visit
         print("InviteUserToVisit(" + username + "," + id_visit + ")")
         quote = self.quote
@@ -221,7 +221,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
 
     def AcceptOrRefuseInvite(self, request, context):
         cur = self.conn.cursor()
-        username = request.Username
+        username = request.Username.replace("'", "''")
         id_visit = request.ID_Visit
         response = request.Response
         quote = self.quote

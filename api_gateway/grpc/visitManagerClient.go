@@ -5,7 +5,7 @@ import (
 	"api_gateway/proto"
 	"context"
 	"encoding/json"
-	"log"
+	"fmt"
 	"time"
 
 	"google.golang.org/grpc"
@@ -28,7 +28,7 @@ func init_grpc_visit_manager_client() (*grpc.ClientConn, proto.ManageVisitClient
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(conf.GetConnectionConf("visit_manager"), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		fmt.Printf("did not connect: %v", err)
 	}
 
 	c := proto.NewManageVisitClient(conn)
@@ -51,7 +51,7 @@ func AddNewVisit(visit proto.InputVisit) int {
 
 	r, err := c.AddNewVisit(ctx, &visit)
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		fmt.Printf("could not greet: %v", err)
 	}
 	return int(*r.Ret)
 }
@@ -70,7 +70,7 @@ func GetAllVisits(userId string) []byte {
 	})
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		fmt.Printf("could not greet: %v", err)
 	}
 	visits, _ := json.Marshal(r.Visit)
 	return visits
@@ -90,7 +90,7 @@ func GetVisitByID(id string) []byte {
 	})
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		fmt.Printf("could not greet: %v", err)
 	}
 	visit, _ := json.Marshal(r)
 	return visit
@@ -108,7 +108,7 @@ func InviteUserToVisit(invite proto.Invite) int {
 	r, err := c.InviteUserToVisit(ctx, &invite)
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		fmt.Printf("could not greet: %v", err)
 	}
 	return int(*r.Ret)
 }
@@ -125,7 +125,7 @@ func AcceptOrRefuseInvite(invite proto.InviteResponse) int {
 	r, err := c.AcceptOrRefuseInvite(ctx, &invite)
 
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		fmt.Printf("could not greet: %v", err)
 	}
 	return int(*r.Ret)
 }

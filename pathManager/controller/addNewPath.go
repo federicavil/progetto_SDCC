@@ -3,7 +3,6 @@ package controller
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
@@ -26,7 +25,7 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-			log.Fatal(err)
+			print(err)
 		}
 	}(db) // Defer Closing the database
 
@@ -50,7 +49,7 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	_, err = db.Exec(query)
 	if err != nil {
 		fmt.Println("Errore query: ")
-		log.Fatal(err)
+		print(err)
 	}
 	*reply = []byte("Okay")
 	return err

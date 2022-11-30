@@ -6,7 +6,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"gopkg.in/ini.v1"
-	"log"
 	"os"
 	"strconv"
 )
@@ -44,7 +43,7 @@ func DbConnect() (*sql.DB, error, string) {
 	// connection string
 	config, err := LoadIni("conf/database.ini")
 	if err != nil {
-		log.Fatal("cannot load config:", err)
+		print("cannot load config:", err)
 	}
 
 	port, _ := strconv.Atoi(config.Port)

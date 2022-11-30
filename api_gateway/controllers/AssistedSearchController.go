@@ -3,8 +3,8 @@ package controllers
 import (
 	"api_gateway/conf"
 	"api_gateway/model"
+	"fmt"
 	"github.com/beego/beego/v2/server/web"
-	"log"
 	"net/http"
 	"net/rpc"
 	"strconv"
@@ -22,13 +22,13 @@ type AssistedSearchController struct {
 func AssistedSearchMountainPaths(filters model.AdvancedSearchStruct) []byte {
 	client, err := rpc.Dial("tcp", conf.GetConnectionConf("path_manager"))
 	if err != nil {
-		log.Fatal("dialing:", err)
+		fmt.Printf("dialing:", err)
 	}
 	var results []byte
 	//args := &search.Args{name}
 	err = client.Call("Search.AdvancedSearch", &filters, &results)
 	if err != nil {
-		log.Fatal("AdvancedSearch error:", err)
+		fmt.Printf("AdvancedSearch error:", err)
 	}
 	return results
 }
