@@ -195,6 +195,7 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         sql = """SELECT """+quote+"""Visit"""+quote+"""."""+quote+"""Creator"""+quote+""" FROM """+quote+"""Visit"""+quote+""" WHERE """+quote+"""Visit"""+quote+"""."""+quote+"""ID"""+quote+"""='""" + id_visit + """'"""
         cur.execute(sql)
         creator = str(cur.fetchone()[0])
+        ret = visitManager_pb2.Return(Ret=-10)
         if creator == username:
             ret = visitManager_pb2.Return(Ret=-3)
             return ret
@@ -211,7 +212,11 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             self.conn.commit()
             ret = visitManager_pb2.Return(Ret=-2)
             return ret
-
+        except Exception:
+            cur.execute("ROLLBACK")
+            self.conn.commit()
+            ret = visitManager_pb2.Return(Ret=-2)
+            return ret
         sql = """SELECT """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_User"""+quote+""" FROM """+quote+"""User_to_Visit"""+quote+""" WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""Accepted"""+quote+"""=True AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """'"""
         cur.execute(sql)
         participants = cur.fetchall()

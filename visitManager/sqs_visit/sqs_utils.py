@@ -50,7 +50,7 @@ def removeRequestMessage(queue_url, username, visit):
                 'InviteRequest_'+username,
                 'Visit'
             ],
-            VisibilityTimeout=5,
+            VisibilityTimeout=3,
             WaitTimeSeconds=0
         )
         if "Messages" not in response:

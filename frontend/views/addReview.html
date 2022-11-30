@@ -60,54 +60,32 @@
                 %>
 */}}
 
-{{/*                <form class="form-inline" method="post">*/}}
-                    <div class="d-flex justify-content-start align-items-center">
-                        <div class="p-2 flex-item-text pull-left black-text">Vote</div>
-{{/*                        <%
-                        if (vote != null) {
-                        for (j = 1; j < vote+1; j++) {
-                        %>*/}}
-{{/*                        <div class="p-2 flex-item-stars">
-                            <button type="submit" name="<%=j.toString()%>" value="<%=j.toString()%>" class="btn">
-                                <img src="../static/img/star.png" class="img-responsive icons" width="30%">
-                            </button>
-                        </div>*/}}
-                        <script>
-                            function setVotes(id){
-                                var vote = parseInt(id)
-                                document.getElementById(id).value = id;
-                                for(let j = 1; j <= vote; j++){
-                                    document.getElementById(j.toString()).src = "../static/img/star.png";
-                                }
-                                for (let k = vote+1; k <= 5; k++) {
-                                    document.getElementById(k.toString()).src = "../static/img/emptystar.png";
-                                }
-                            }
-                        </script>
-
-                        <script>
-                            for(let i = 1; i<= 5; i++){
-                                document.write("<div class=\"p-2 flex-item-stars\">")
-                                document.write("<button type=\"submit\" name=\""+i+"\" value=\""+i+"\" class=\"btn\">")
-                                document.write("<img id=\""+i+"\" src=\"../static/img/emptystar.png\" class=\"img-responsive icons\" width=\"30%\" onclick=\"setVotes("+i+")\">")
-                                document.write("</button></div>")
-                            }
-                        </script>
-
-
-
-{{/*                        <div class="p-2 flex-item-stars">
-                            <button type="submit" name="<%=k.toString()%>" value="<%=k.toString()%>" class="btn">
-                                <img src="../static/img/emptystar.png" class="img-responsive icons" width="30%">
-                            </button>
-                        </div>*/}}
-{{/*                        <%
-                        }
-                        %>*/}}
-                    </div>
-{{/*                </form>*/}}
 
                 <form class="form-inline" method="post">
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="p-2 flex-item-text pull-left black-text">Vote</div>
+                        <div class="form-check form-check-inline">
+                            <input name="vote" type="radio" id="1" value="1">
+                            <label>1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input name="vote" type="radio" id="2" value="2">
+                            <label>2</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input name="vote" type="radio" id="3" value="3">
+                            <label>3</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input name="vote" type="radio" id="4" value="4">
+                            <label>4</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input name="vote" type="radio" id="5" value="5">
+                            <label>5</label>
+                        </div>
+                        
+                    </div>
                     <div class="d-flex justify-content-start align-items-center">
                         <div class="p-2 flex-item-text pull-left black-text">Title </div>
                         <div class="p-2 flex-item-text pull-left text">

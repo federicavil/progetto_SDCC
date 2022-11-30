@@ -58,7 +58,16 @@ func (this *ViewVisitInfoController) Get() {
 		} else {
 			this.Data["isCreator"] = false
 		}
-		this.Data["phrase"] = ""
+		fmt.Println(this.Data["Phrase"])
+		var phrase Phrase
+		if this.session.Get("phrase") != nil {
+			phrase = this.session.Get("phrase").(Phrase)
+		} else {
+			phrase = Phrase{Value: ""}
+		}
+
+		this.Data["Phrase"] = phrase
+		fmt.Println(this.Data["Phrase"])
 	}
 }
 
@@ -74,15 +83,18 @@ func (this *ViewVisitInfoController) Post() {
 	// Chiama il metodo di ricerca
 	invitedUser := this.GetString("invitedUser")
 	visit := this.session.Get("selectedVisit").(model.MountainVisitComplete)
-
+	this.session.Set("phrase", "")
 	this.session.Set("selectedVisit", visit)
 	if invitedUser != "" {
 		resp := InviteUserPost(invitedUser, strconv.Itoa(visit.ID_Visit))
+		fmt.Println("\n\nGUARDA QUI1: " + string(resp) + "\n\n")
+
 		if resp != nil && string(resp[len(resp)-4:]) == "null" {
 			resp = resp[:len(resp)-4]
 		}
 		phrase := ""
 
+		fmt.Println("\n\nGUARDA QUI2: " + string(resp) + "\n\n")
 		if string(resp) == "-2" {
 			phrase = "User already invited"
 		} else if string(resp) == "-3" {
@@ -94,10 +106,7 @@ func (this *ViewVisitInfoController) Post() {
 		} else if string(resp) == "1" {
 			phrase = "User invited correctly"
 		}
-		fmt.Println(this.Data["Phrase"])
-		this.Data["Phrase"] = Phrase{Value: phrase}
-		fmt.Println(this.Data["Phrase"])
-
+		this.session.Set("phrase", Phrase{phrase})
 	}
 
 	this.Redirect("viewVisitInfo", 302)

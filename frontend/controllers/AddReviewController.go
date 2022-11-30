@@ -6,8 +6,8 @@ import (
 	"frontend/conf"
 	"frontend/model"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/httplib"
 	"github.com/astaxie/beego/session"
-	"github.com/beego/beego/v2/client/httplib"
 )
 
 type AddReviewController struct {
@@ -50,46 +50,20 @@ func (this *AddReviewController) Get() {
  */
 func (this *AddReviewController) Post() {
 	if this.GetString("backInfo") != "" {
-		fmt.Println("back")
 		this.Redirect("viewInfo", 302)
 	} else {
-		fmt.Println("POST REVIEW")
-		var vote int
-		/*for i := 5; i >= 1; i-- {
-			star := string(i)
-			if this.GetString(star) != "" {
-				vote = i
-				break
-			}
-		}*/
-		btn1 := this.GetString("1")
-		btn2 := this.GetString("2")
-		btn3 := this.GetString("3")
-		btn4 := this.GetString("4")
-		btn5 := this.GetString("5")
-		if btn5 != "" {
-			vote = 5
-		}
-		if btn4 != "" {
-			vote = 4
-		}
-		if btn3 != "" {
-			vote = 3
-		}
-		if btn2 != "" {
-			vote = 2
-		}
-		if btn1 != "" {
-			vote = 1
+		var formResult model.ReviewForm
+		err := this.ParseForm(&formResult)
+		if err != nil {
+			return
 		}
 
-		fmt.Println(vote)
 		path := this.session.Get("selectedPath").(model.MountainPath)
 
 		review := model.Review{}
-		review.Vote = vote
-		review.Title = this.GetString("title")
-		review.Comment = this.GetString("comment")
+		review.Vote = formResult.Vote
+		review.Title = formResult.Title
+		review.Comment = formResult.Comment
 		review.Author = this.session.Get("userId").(string)
 		review.MountainPathName = path.Name
 

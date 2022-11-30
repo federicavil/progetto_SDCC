@@ -29,7 +29,7 @@ func (this *InviteUserToVisitController) Post() {
 	invite.Username = &username
 	invite.ID_Visit = &id_visit
 	isRegistrated := this.loginController.CheckUsername(username)
-	ret := -1
+	ret := -10
 	if isRegistrated {
 		ret = grpc.InviteUserToVisit(invite)
 	} else {

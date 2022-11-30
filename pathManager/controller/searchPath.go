@@ -6,7 +6,6 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	"log"
 	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
