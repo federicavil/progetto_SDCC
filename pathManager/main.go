@@ -31,7 +31,8 @@ func main() {
 	if err != nil {
 		return
 	}
-	l, e := net.Listen("tcp", ":8081")
+	config, _ := conf.LoadIni("conf/database.ini")
+	l, e := net.Listen("tcp", ":"+config.Host_port)
 	if e != nil {
 		log.Fatal("listen error: ", e)
 	}

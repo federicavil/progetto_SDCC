@@ -135,7 +135,6 @@ func NotificationPolling(userId string, session session.Store) {
 		mutex := session.Get("sessionMutex").(*sync.Mutex)
 		mutex.Lock()
 
-		session.Set("notifications", notifications)
 		if session.Get("notifications") != nil {
 			if len(notifications) != 0 {
 				session.Set("notifications", notifications)

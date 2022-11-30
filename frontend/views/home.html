@@ -10,13 +10,37 @@
 
     <!-- import our CSS for header of our site -->
     <link rel="stylesheet" href="../static/css/header.css" type="text/css"/>
+
+    <!-- import our CSS for body of the page -->
+    <link rel="stylesheet" href="../static/css/body.css" type="text/css"/>
 </head>
 
 <body>
 
 <div>
     {{template "header.html"}}
+    <div class="row fill">
+        <div class="col-3 background-orange">
+            <div class="container">
+                <div class="row mx-auto" style="padding-top: 40%; padding-left: 20%; padding-right: 20%">
+                    <div class="col" align="center" style="font-size: 150%;">Welcome to our community!
+                    </div>
+                </div>
+                <div class="row mx-auto" style="padding-top: 50%; padding-left: 2%; padding-right: 2%">
+                    <div class="col" align="center" style="font-size: 150%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="container" style="padding-top: 10%; padding-left: 20%; font-size: 150%; padding-right: 20%">
+                Discover new paths, let us know your experiences, invite your friend!
+            </div>
+        </div>
+    </div>
+
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

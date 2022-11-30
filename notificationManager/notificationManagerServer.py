@@ -13,6 +13,32 @@ import notificationManager_pb2_grpc
 import psycopg2
 from configparser import ConfigParser
 
+def parse_config(parser, section):
+    conf = {}
+    if parser.has_section(section):
+        params = parser.items(section)
+        for param in params:
+            conf[param[0]] = param[1]
+    else:
+        raise Exception('Section {0} not found in the file'.format(section))
+    return conf
+
+"""   
+    Ritorna le configurazioni lette dal file in input
+    @:param filename: path del file di configurazione
+"""
+def config(filename='./conf/conf.ini'):
+    # create a parser
+    parser = ConfigParser()
+    # read config file
+    parser.read(filename)
+    section = parse_config(parser, "app_mode")["app_mode"]
+    db = parse_config(parser, section)
+
+    # get section, default to postgresql
+    return db
+
+
 class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManagerServicer):
     """Provides methods that implement functionality of route guide server."""
 
@@ -91,7 +117,8 @@ def serve():
   server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
   notificationManager_pb2_grpc.add_NotificationManagerServicer_to_server(
       NotificationManagerServicer(), server)
-  server.add_insecure_port('[::]:9094')
+  configurations = config()
+  server.add_insecure_port('[::]:'+configurations["host_port"])
   server.start()
   server.wait_for_termination()
 

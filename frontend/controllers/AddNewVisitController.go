@@ -66,5 +66,6 @@ func (this *AddNewVisitController) Post() {
 	}
 	//this.session.Set("selectedPath", newPath)
 	this.Data["pathname"] = this.session.Get("selectedPath")
+	this.Redirect("viewVisits", 302)
 
 }

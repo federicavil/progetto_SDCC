@@ -9,6 +9,32 @@ import psycopg2
 import requests
 from configparser import ConfigParser
 
+def parse_config(parser, section):
+    conf = {}
+    if parser.has_section(section):
+        params = parser.items(section)
+        for param in params:
+            conf[param[0]] = param[1]
+    else:
+        raise Exception('Section {0} not found in the file'.format(section))
+    return conf
+
+"""   
+    Ritorna le configurazioni lette dal file in input
+    @:param filename: path del file di configurazione
+"""
+def config(filename='./conf/conf.ini'):
+    # create a parser
+    parser = ConfigParser()
+    # read config file
+    parser.read(filename)
+    section = parse_config(parser, "app_mode")["app_mode"]
+    db = parse_config(parser, section)
+
+    # get section, default to postgresql
+    return db
+
+
 class WeatherForecastServiceServicer(weatherForecastService_pb2_grpc.WeatherForecastServiceServicer):
     """Provides methods that implement functionality of route guide server."""
 
@@ -76,7 +102,8 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     weatherForecastService_pb2_grpc.add_WeatherForecastServiceServicer_to_server(
       WeatherForecastServiceServicer(), server)
-    server.add_insecure_port('[::]:9092')
+    configurations = config()
+    server.add_insecure_port('[::]:'+configurations["host_port"])
     server.start()
     server.wait_for_termination()
 
