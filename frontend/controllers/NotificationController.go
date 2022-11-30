@@ -116,7 +116,7 @@ func (this *NotificationController) Post() {
 
 /*
 * Funzione eseguita come goroutine per ricevere notifiche relative agli inviti a visite da parte di altri utenti.
-* Ogni 30 secondi si comunica con l'API Gateway per ricevere notifiche e mantenerle nella sessione.
+* Ogni 10 secondi si comunica con l'API Gateway per ricevere notifiche e mantenerle nella sessione.
 * @param {string}: userId dell'utente ricevente (appena loggato) di cui si vogliono recuperare gli inviti
 * @param {session.Store}: identificatore della sessione, usata per mantenere info sugli inviti ricevuti
  */
@@ -165,7 +165,13 @@ func NotificationPolling(userId string, session session.Store) {
 					},
 					Participants: participants,
 				})*/
-		session.Set("notifications", notifications)
+		if session.Get("notifications") != nil {
+			if len(notifications) != 0 {
+				session.Set("notifications", notifications)
+			}
+		} else {
+			session.Set("notifications", notifications)
+		}
 		mutex.Unlock()
 		time.Sleep(10 * time.Second)
 	}

@@ -18,6 +18,12 @@ type Args struct {
 
 type Search int
 
+/*
+* Esegue una ricerca per nome di un sentiero
+* @Param {args}: puntatore alla struttura contenente il nome del sentieor da cercare
+* @Param {reply}: puntatore alla struttura in cui inserire la risposta
+* @returns {error}
+ */
 func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	var db, _, quote = conf.DbConnect()
 	defer func(db *sql.DB) {
@@ -59,6 +65,12 @@ func (t *Search) SimpleSearch(args *Args, reply *[]byte) error {
 	return nil
 }
 
+/*
+* Esegue una ricerca per filtri di un sentiero
+* @Param {pathreq}: puntatore alla struttura contenente la definizione dei filtri da applicare nella ricerca
+* @Param {reply}: puntatore alla struttura in cui inserire la risposta
+* @returns {error}
+ */
 func (t *Search) AdvancedSearch(pathreq *model.AdvancedSearchStruct, reply *[]byte) error {
 	var db, _, quote = conf.DbConnect()
 	defer func(db *sql.DB) {
