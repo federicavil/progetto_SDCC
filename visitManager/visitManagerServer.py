@@ -13,52 +13,53 @@ from configparser import ConfigParser
 from sqs_visit.sqs_utils import sendInviteRequestMessage, removeRequestMessage
 
 
+"""
+    Esegue il parsing del file ini di configurazione accedendo ad una determinata sezione
+    Ritorna un dizionario con i campi letti dal file
+    @:param parser: config parser del file
+    @:param section: sezione alla quale accedere
+"""
+def parse_config(parser, section):
+    conf = {}
+    if parser.has_section(section):
+        params = parser.items(section)
+        for param in params:
+            conf[param[0]] = param[1]
+    else:
+        raise Exception('Section {0} not found in the file'.format(section))
+    return conf
+
+"""   
+    Ritorna le configurazioni lette dal file in input
+    @:param filename: path del file di configurazione
+"""
+def config(filename='./conf/database.ini'):
+    # create a parser
+    parser = ConfigParser()
+    # read config file
+    parser.read(filename)
+    section = parse_config(parser, "app_mode")["app_mode"]
+    db = parse_config(parser, section)
+
+    # get section, default to postgresql
+    return db
+
+
 class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
     """Provides methods that implement functionality of route guide server."""
-
-
-    """
-        Esegue il parsing del file ini di configurazione accedendo ad una determinata sezione
-        Ritorna un dizionario con i campi letti dal file
-        @:param parser: config parser del file
-        @:param section: sezione alla quale accedere
-    """
-    def parse_config(self, parser, section):
-        conf = {}
-        if parser.has_section(section):
-            params = parser.items(section)
-            for param in params:
-                conf[param[0]] = param[1]
-        else:
-            raise Exception('Section {0} not found in the file'.format(section))
-        return conf
-
-    """   
-        Ritorna le configurazioni lette dal file in input
-        @:param filename: path del file di configurazione
-    """
-    def config(self, filename='./conf/database.ini'):
-        # create a parser
-        parser = ConfigParser()
-        # read config file
-        parser.read(filename)
-        section = self.parse_config(parser, "app_mode")["app_mode"]
-        db = self.parse_config(parser, section)
-
-        # get section, default to postgresql
-        return db
 
     """
         Esegue la connessione al database
     """
     def dbConnection(self):
         # read connection parameters
-        params = self.config()
+        params = config()
         dbtype = params["dbtype"]
         cond = dbtype == "postgres"
         params.pop("dbtype")
         quote = params["quote"]
         params.pop("quote")
+        params.pop("host_port")
         conn = None
         try:
             if cond:
@@ -265,7 +266,8 @@ def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     visitManager_pb2_grpc.add_ManageVisitServicer_to_server(
         ManageVisitServicer(), server)
-    server.add_insecure_port('[::]:9093')
+    configurations = config()
+    server.add_insecure_port('[::]:'+configurations["host_port"])
     server.start()
     server.wait_for_termination()
 

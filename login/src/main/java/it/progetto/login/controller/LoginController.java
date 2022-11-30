@@ -61,7 +61,7 @@ public class LoginController {
         if(credentialDao.findByUsername(username) != null){
             return String.valueOf(-1);
         }
-        UserCredential credential = new UserCredential(username,password, new LoggedUser());
+        UserCredential credential = new UserCredential(username,password, new LoggedUser("Insert your name","Insert your surname","Insert a description"));
         credentialDao.save(credential);
         loggedUsers.add(username);
         return username;

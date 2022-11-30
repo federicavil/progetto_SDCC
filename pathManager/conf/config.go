@@ -11,13 +11,14 @@ import (
 )
 
 type Config struct {
-	Host     string `mapstructure:"host"`
-	Dbname   string `mapstructure:"dbname"`
-	User     string `mapstructure:"user"`
-	Password string `mapstructure:"password"`
-	Port     string `mapstructure:"port"`
-	Quote    string `mapstructure:"quote"`
-	Dbtype   string `mapstructure:"dbtype"`
+	Host      string `mapstructure:"host"`
+	Dbname    string `mapstructure:"dbname"`
+	User      string `mapstructure:"user"`
+	Password  string `mapstructure:"password"`
+	Port      string `mapstructure:"port"`
+	Quote     string `mapstructure:"quote"`
+	Dbtype    string `mapstructure:"dbtype"`
+	Host_port string `mapstructure:"host_port"`
 }
 
 func LoadIni(path string) (config Config, err error) {
@@ -35,6 +36,7 @@ func LoadIni(path string) (config Config, err error) {
 		section.Key("port").String(),
 		section.Key("quote").String(),
 		section.Key("dbtype").String(),
+		section.Key("host_port").String(),
 	}
 	return
 }
