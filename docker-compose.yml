@@ -50,7 +50,7 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - HOST_HOME_ADDRESS/.aws:/root/.aws:ro
+      - $HOST_HOME_ADDRESS/.aws:/root/.aws:ro
 
   notification_manager:
     build: ./notificationManager
