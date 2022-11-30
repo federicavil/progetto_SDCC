@@ -49,13 +49,15 @@ services:
       - db_visit_manager
     ports:
       - "9093:9093"
+    volumes:
+      - C:/Users/Federica/.aws/credentials:/root/.aws/credentials:ro
 
   notification_manager:
     build: ./notificationManager
     ports:
       - "9094:9094"
     volumes:
-      - $HOME/.aws/credentials:/home/app/.aws/credentials:ro
+      - C:/Users/Federica/.aws/credentials:/root/.aws/credentials:ro
 
   db_path_manager:
     image: mysql:5.7

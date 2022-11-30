@@ -9,4 +9,5 @@ RUN pip install psycopg2-binary
 RUN pip install requests
 RUN pip install boto3
 
+
 CMD [ "python", "./notificationManagerServer.py" ]

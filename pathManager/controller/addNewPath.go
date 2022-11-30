@@ -12,6 +12,12 @@ import (
 
 type Add int
 
+/*
+* Aggiunge un nuovo sentiero all'interno del database
+* @Param {newPathPointer}: puntatore alla struttura contenente il il nuovo sentiero da aggiungere
+* @Param {reply}: puntatore alla struttura in cui inserire la risposta
+* @returns {error}
+ */
 func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) error {
 	var db, err, quote = conf.DbConnect()
 	if err != nil {

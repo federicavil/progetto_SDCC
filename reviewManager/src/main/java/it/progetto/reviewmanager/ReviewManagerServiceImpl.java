@@ -7,6 +7,8 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+// Implementazione dei servizi grpc definiti
+
 @RestController
 @GrpcService()
 public class ReviewManagerServiceImpl extends ReviewManagerServiceGrpc.ReviewManagerServiceImplBase{
@@ -14,6 +16,7 @@ public class ReviewManagerServiceImpl extends ReviewManagerServiceGrpc.ReviewMan
     @Autowired
     ReviewController reviewController;
 
+    // Aggiunge una nuova recensione
     @Override
     public void addReview(AddReviewRequest request, StreamObserver<AddReviewResponse> responseObserver){
         System.out.println("AGGIUNTA REVIEW "+request.getReview());
@@ -24,6 +27,7 @@ public class ReviewManagerServiceImpl extends ReviewManagerServiceGrpc.ReviewMan
         responseObserver.onCompleted();
     }
 
+    // Restituisce tutte le recensioni di un sentiero
     @Override
     public void getReviews(GetReviewsRequest request, StreamObserver<GetReviewsResponse> responseObserver){
         System.out.println("GET REVIEWS "+request.getMountainPathName());
