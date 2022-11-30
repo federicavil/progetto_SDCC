@@ -50,14 +50,14 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - $HOST_ADDRESS/.aws/credentials:/root/.aws/credentials:ro
+      - HOST_HOME_ADDRESS/.aws:/root/.aws:ro
 
   notification_manager:
     build: ./notificationManager
     ports:
       - "9094:9094"
     volumes:
-      - $HOST_ADDRESS/.aws/:/root/.aws:ro
+      - HOST_HOME_ADDRESS/.aws/:/root/.aws:ro
 
   db_path_manager:
     image: mysql:5.7
