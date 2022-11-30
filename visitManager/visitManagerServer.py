@@ -203,15 +203,20 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
             self.conn.commit()
             ret = visitManager_pb2.Return(Ret=-2)
             return ret
-        self.conn.commit()
+
         sql = """SELECT """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_User"""+quote+""" FROM """+quote+"""User_to_Visit"""+quote+""" WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""Accepted"""+quote+"""=True AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """'"""
         cur.execute(sql)
         participants = cur.fetchall()
         participantList = []
         for p in participants:
             participantList.append(p[0])
-        sendInviteRequestMessage(self.queue_url, creator, username, id_visit, participantList)
-        ret = visitManager_pb2.Return(Ret=1)
+        try:
+            sendInviteRequestMessage(self.queue_url, creator, username, id_visit, participantList)
+            self.conn.commit()
+            ret = visitManager_pb2.Return(Ret=1)
+        except Exception:
+            self.conn.rollback()
+            ret = visitManager_pb2.Return(Ret=-4)
         return ret
 
     def AcceptOrRefuseInvite(self, request, context):
@@ -222,13 +227,17 @@ class ManageVisitServicer(visitManager_pb2_grpc.ManageVisitServicer):
         quote = self.quote
         sql = """UPDATE """+quote+"""User_to_Visit"""+quote+""" SET """+quote+"""Accepted"""+quote+"""=""" + response + """ WHERE """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_Visit"""+quote+"""='""" + id_visit + """' AND """+quote+"""User_to_Visit"""+quote+"""."""+quote+"""ID_User"""+quote+"""='""" + username + """'"""
         cur.execute(sql)
-        deleted = removeRequestMessage(self.queue_url, username, id_visit)
-        if deleted == 1:
-            self.conn.commit()
-            ret = visitManager_pb2.Return(Ret=1)
-        else:
+        try:
+            deleted = removeRequestMessage(self.queue_url, username, id_visit)
+            if deleted == 1:
+                self.conn.commit()
+                ret = visitManager_pb2.Return(Ret=1)
+            else:
+                self.conn.rollback()
+                ret = visitManager_pb2.Return(Ret=0)
+        except Exception:
             self.conn.rollback()
-            ret = visitManager_pb2.Return(Ret=0)
+            ret = visitManager_pb2.Return(Ret=-1)
         return ret
 
 

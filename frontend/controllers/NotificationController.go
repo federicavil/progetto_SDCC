@@ -107,10 +107,7 @@ func (this *NotificationController) Post() {
 		if err != nil {
 			return
 		}
-		print("\nSONO IN NOTIFICATION E HO: ")
-		fmt.Println(this.session.Get("selectedVisit"))
 		this.Redirect("viewVisitInfo", 302)
-		print("HO FATTO REDIRECT")
 	}
 }
 
@@ -134,37 +131,11 @@ func NotificationPolling(userId string, session session.Store) {
 		_ = json.Unmarshal(notificationsjson, &notificationString)
 		var notifications []model.Notification
 		_ = json.Unmarshal([]byte(notificationString), &notifications)
-		// se ci sono le mette sulla sessione
-		/*var notifications []model.Notification
-		var participants []model.Participant
-		participants = append(participants, model.Participant{
-			IdVisit:  1,
-			Username: "mattia",
-			Answer:   true,
-		})
-		notifications = append(notifications, model.Notification{
-			IdVisit: 1,
-			Visit: model.MountainVisit{
-				Pathname:  "Gran Sasso",
-				Username:  "federica",
-				Timestamp: "2459902.2131944443",
-			},
-			Participants: participants,
-		})
-		session.Set("notifications", notifications)
-		fmt.Println("Sono il thread: sto per andare in sleep")*/
+
 		mutex := session.Get("sessionMutex").(*sync.Mutex)
 		mutex.Lock()
-		/*		notifications = session.Get("notification").([]model.Notification)
-				notifications = append(notifications, model.Notification{
-					IdVisit: 2,
-					Visit: model.MountainVisit{
-						Pathname:  "Gran Sasso",
-						Username:  "diana",
-						Timestamp: "2459902.2131944443",
-					},
-					Participants: participants,
-				})*/
+
+		session.Set("notifications", notifications)
 		if session.Get("notifications") != nil {
 			if len(notifications) != 0 {
 				session.Set("notifications", notifications)

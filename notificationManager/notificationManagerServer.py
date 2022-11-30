@@ -27,9 +27,13 @@ class NotificationManagerServicer(notificationManager_pb2_grpc.NotificationManag
             queue = sqs.get_queue_by_name(
                 QueueName='SDCC_Antonangeli_Villani_Notification',
             )
+            print("Found existing queue: ")
         except Exception:
             queue = sqs.create_queue(QueueName='SDCC_Antonangeli_Villani_Notification', Attributes={'DelaySeconds': '5'})
+            print("Created new queue:")
         self.queue_url = queue.url
+        print(self.queue_url)
+
 
 
     def receiveInviteRequestMessage(self, userId):
