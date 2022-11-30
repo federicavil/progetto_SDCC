@@ -7,6 +7,7 @@ import (
 	"pathManager/conf"
 	"pathManager/model"
 	"strconv"
+	"strings"
 )
 
 type Add int
@@ -24,6 +25,10 @@ func (t *Add) AddNewPath(newPathPointer *model.MountainPath, reply *[]byte) erro
 	}(db) // Defer Closing the database
 
 	newPath := *newPathPointer
+	newPath.Name = strings.ReplaceAll(newPath.Name, "'", "''")
+	newPath.Region = strings.ReplaceAll(newPath.Region, "'", "''")
+	newPath.Province = strings.ReplaceAll(newPath.Province, "'", "''")
+	newPath.City = strings.ReplaceAll(newPath.City, "'", "''")
 	query := `INSERT INTO ` + quote + `Path` + quote + ` VALUES ('` +
 		newPath.Name + "', '" +
 		strconv.Itoa(newPath.Altitude) + "', '" +
